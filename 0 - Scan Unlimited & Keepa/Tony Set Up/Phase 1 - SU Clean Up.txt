@@ -1,0 +1,343 @@
+https://chatgpt.com/share/685c682a-4558-8009-9fe7-7a29ffd4c46c
+
+
+Please write a python script that will auto detect a CSV or excel file located in the same directory as the script. The file name will contain "ScanUnlimited" 
+
+
+I would like the script to delete the following columns if the headers are present in the file
+
+UPC  
+Sales Rank  
+Title  
+Variation Parent  
+Price  
+Size  
+Color  
+Estimated Sales  
+Offers  
+Average90  
+Average180  
+Package Quantity  
+Review Count  
+Review Stars  
+Category  
+Package Height  
+Package Length  
+Package Width  
+Package Weight  
+Amazon Last Seen  
+FBA Fee  
+Referral Fee  
+Closing Fee  
+Fixed Additional Cost  
+Shipping Cost  
+Percent Additional Cost  
+Margin  
+Brand  
+Variations  
+Average30  
+
+One of the columns that should remain should be called Source, its possible that its labeled something else. Check to see if any ROWS contain .com or https or www if it does then rename that column Source. 
+Make sure that column is always the last to appear in the sequence. 
+Have the script be dynamic as it might result in column 4 in one output or column 7 in another. Source should always be the last column
+
+These columns should always be present and be listed in this order 
+ASIN
+Cost
+Profit
+ROI
+
+Save the output file as a CSV file named "SU Cleaned" overwrite it if it already exists
+
+***********************************************
+***********************************************
+
+import os
+import pandas as pd
+
+# 1. Auto-detect the file containing "ScanUnlimited" in the script's directory
+def find_input_file():
+    candidates = [f for f in os.listdir() if "ScanUnlimited" in f and f.lower().endswith(('.csv', '.xls', '.xlsx'))]
+    if not candidates:
+        raise FileNotFoundError("No file containing 'ScanUnlimited' found in directory.")
+    return candidates[0]
+
+input_file = find_input_file()
+print(f"Loading file: {input_file}")
+
+# 2. Load the file into a DataFrame (CSV or Excel)
+if input_file.lower().endswith('.csv'):
+    df = pd.read_csv(input_file, dtype=str)
+else:
+    df = pd.read_excel(input_file, dtype=str)
+
+# 3. Drop unwanted columns if they exist
+cols_to_delete = [
+    "UPC", "Sales Rank", "Title", "Variation Parent", "Price", "Size", "Color",
+    "Estimated Sales", "Offers", "Average90", "Average180", "Package Quantity",
+    "Review Count", "Review Stars", "Category", "Package Height", "Package Length",
+    "Package Width", "Package Weight", "Amazon Last Seen", "FBA Fee", "Referral Fee",
+    "Closing Fee", "Fixed Additional Cost", "Shipping Cost", "Percent Additional Cost",
+    "Margin", "Brand", "Variations", "Average30"
+]
+for col in cols_to_delete:
+    if col in df.columns:
+        df.drop(columns=col, inplace=True)
+
+# 4. Detect and rename the Source column (any column with URLs)
+source_col = None
+for col in df.columns:
+    if df[col].astype(str).str.contains(r'https?://|www\.|\.com', na=False).any():
+        source_col = col
+        break
+if source_col:
+    df.rename(columns={source_col: 'Source'}, inplace=True)
+    print(f"Renamed column '{source_col}' to 'Source'.")
+else:
+    print("No URL-containing column found to rename to 'Source'.")
+
+# 5. Ensure required columns exist and order them
+required = ['ASIN', 'Cost', 'Profit', 'ROI']
+for col in required:
+    if col not in df.columns:
+        df[col] = ''  # create empty column if missing
+
+# Build final column order: required first, then any other, then Source last
+other_cols = [c for c in df.columns if c not in required + ['Source']]
+final_order = required + other_cols
+if 'Source' in df.columns:
+    final_order.append('Source')
+
+df = df[final_order]
+
+# 6. Save output
+output_file = "SU Cleaned.csv"
+df.to_csv(output_file, index=False)
+print(f"Saved cleaned file as: {output_file}")
+
+
+***********************************************
+***********************************************
+
+This is the current output of SU Cleaned below, please update the script to delete values based on the ROI column. Delete the rows if the ROI is between -95% to -2% 
+
+ASIN	Cost	Profit	ROI	 Tags	Source
+B0D618V9CZ	49.99	-13.70999836	-27.43%	$40 TO $60, 10001 5BN, Classic Clog, Clogs, CROCS, eligible-discount, eligible-discount-clearance, eligible-discount-employee, eligible-discount-friends, festival2025, full-price-eligible-discount, Lifestyle, md2-exclusion, PURPLE, Slides, Slides and Thong	https://www.shopwss.com/products/10001_5bn?variant=41083645034551
+B0D61L67NL	49.99	-14.65999817	-29.33%	$40 TO $60, 10001 5BN, Classic Clog, Clogs, CROCS, eligible-discount, eligible-discount-clearance, eligible-discount-employee, eligible-discount-friends, festival2025, full-price-eligible-discount, Lifestyle, md2-exclusion, PURPLE, Slides, Slides and Thong	https://www.shopwss.com/products/10001_5bn?variant=41083645132855
+B0D619RMRY	49.99	0		$40 TO $60, 10001 5BN, Classic Clog, Clogs, CROCS, eligible-discount, eligible-discount-clearance, eligible-discount-employee, eligible-discount-friends, festival2025, full-price-eligible-discount, Lifestyle, md2-exclusion, PURPLE, Slides, Slides and Thong	https://www.shopwss.com/products/10001_5bn?variant=41083645067319
+B0D61KWFPJ	49.99	-14.57999825	-29.17%	$40 TO $60, 10001 5BN, Classic Clog, Clogs, CROCS, eligible-discount, eligible-discount-clearance, eligible-discount-employee, eligible-discount-friends, festival2025, full-price-eligible-discount, Lifestyle, md2-exclusion, PURPLE, Slides, Slides and Thong	https://www.shopwss.com/products/10001_5bn?variant=41083645165623
+B0D613PJ1H	49.99	-14.49999832	-29.01%	$40 TO $60, 10001 5BN, Classic Clog, Clogs, CROCS, eligible-discount, eligible-discount-clearance, eligible-discount-employee, eligible-discount-friends, festival2025, full-price-eligible-discount, Lifestyle, md2-exclusion, PURPLE, Slides, Slides and Thong	https://www.shopwss.com/products/10001_5bn?variant=41083645100087
+
+***********************************************
+***********************************************
+
+import os
+import pandas as pd
+
+# 1. Auto-detect the file containing "ScanUnlimited" in the script's directory
+def find_input_file():
+    candidates = [f for f in os.listdir() if "ScanUnlimited" in f and f.lower().endswith(('.csv', '.xls', '.xlsx'))]
+    if not candidates:
+        raise FileNotFoundError("No file containing 'ScanUnlimited' found in directory.")
+    return candidates[0]
+
+input_file = find_input_file()
+print(f"Loading file: {input_file}")
+
+# 2. Load the file into a DataFrame (CSV or Excel)
+if input_file.lower().endswith('.csv'):
+    df = pd.read_csv(input_file, dtype=str)
+else:
+    df = pd.read_excel(input_file, dtype=str)
+
+# 3. Drop unwanted columns if they exist
+cols_to_delete = [
+    "UPC", "Sales Rank", "Title", "Variation Parent", "Price", "Size", "Color",
+    "Estimated Sales", "Offers", "Average90", "Average180", "Package Quantity",
+    "Review Count", "Review Stars", "Category", "Package Height", "Package Length",
+    "Package Width", "Package Weight", "Amazon Last Seen", "FBA Fee", "Referral Fee",
+    "Closing Fee", "Fixed Additional Cost", "Shipping Cost", "Percent Additional Cost",
+    "Margin", "Brand", "Variations", "Average30"
+]
+for col in cols_to_delete:
+    if col in df.columns:
+        df.drop(columns=col, inplace=True)
+
+# 4. Detect and rename the Source column (any column with URLs)
+source_col = None
+for col in df.columns:
+    if df[col].astype(str).str.contains(r'https?://|www\.|\.com', na=False).any():
+        source_col = col
+        break
+if source_col:
+    df.rename(columns={source_col: 'Source'}, inplace=True)
+    print(f"Renamed column '{source_col}' to 'Source'.")
+else:
+    print("No URL-containing column found to rename to 'Source'.")
+
+# 5. Drop rows based on ROI between -95% and -2%
+if 'ROI' in df.columns:
+    # Convert 'ROI' from percentage string to numeric float
+    df['ROI_numeric'] = pd.to_numeric(df['ROI'].str.rstrip('%'), errors='coerce')
+    # Keep only rows NOT in the [-95, -2] range
+    df = df[~((df['ROI_numeric'] >= -95) & (df['ROI_numeric'] <= -2))]
+    # Remove helper column
+    df.drop(columns='ROI_numeric', inplace=True)
+
+# 6. Ensure required columns exist and order them
+required = ['ASIN', 'Cost', 'Profit', 'ROI']
+for col in required:
+    if col not in df.columns:
+        df[col] = ''  # create empty column if missing
+
+# Build final column order: required first, then any other, then Source last
+other_cols = [c for c in df.columns if c not in required + ['Source']]
+final_order = required + other_cols
+if 'Source' in df.columns:
+    final_order.append('Source')
+
+df = df[final_order]
+
+# 7. Save output
+output_file = "SU Cleaned.csv"
+df.to_csv(output_file, index=False)
+print(f"Saved cleaned file as: {output_file}")
+
+
+***********************************************
+***********************************************
+
+Please update the script to copy all of the values in the ASIN column to the windows clipboard And include a print statement in the console says 
+
+X ASIN's copied to the clipboard
+
+Example
+3951 ASINs copied to the clipboard
+
+***********************************************
+***********************************************
+
+import os
+import pandas as pd
+
+# 1. Auto-detect the file containing "ScanUnlimited" in the script's directory
+def find_input_file():
+    candidates = [f for f in os.listdir() if "ScanUnlimited" in f and f.lower().endswith(('.csv', '.xls', '.xlsx'))]
+    if not candidates:
+        raise FileNotFoundError("No file containing 'ScanUnlimited' found in directory.")
+    return candidates[0]
+
+input_file = find_input_file()
+print(f"Loading file: {input_file}")
+
+# 2. Load the file into a DataFrame (CSV or Excel)
+if input_file.lower().endswith('.csv'):
+    df = pd.read_csv(input_file, dtype=str)
+else:
+    df = pd.read_excel(input_file, dtype=str)
+
+# 3. Drop unwanted columns if they exist
+cols_to_delete = [
+    "UPC", "Sales Rank", "Title", "Variation Parent", "Price", "Size", "Color",
+    "Estimated Sales", "Offers", "Average90", "Average180", "Package Quantity",
+    "Review Count", "Review Stars", "Category", "Package Height", "Package Length",
+    "Package Width", "Package Weight", "Amazon Last Seen", "FBA Fee", "Referral Fee",
+    "Closing Fee", "Fixed Additional Cost", "Shipping Cost", "Percent Additional Cost",
+    "Margin", "Brand", "Variations", "Average30"
+]
+for col in cols_to_delete:
+    if col in df.columns:
+        df.drop(columns=col, inplace=True)
+
+# 4. Detect and rename the Source column (any column with URLs)
+source_col = None
+for col in df.columns:
+    if df[col].astype(str).str.contains(r'https?://|www\.|\.com', na=False).any():
+        source_col = col
+        break
+if source_col:
+    df.rename(columns={source_col: 'Source'}, inplace=True)
+    print(f"Renamed column '{source_col}' to 'Source'.")
+else:
+    print("No URL-containing column found to rename to 'Source'.")
+
+# 5. Drop rows based on ROI between -95% and -2%
+if 'ROI' in df.columns:
+    # Convert 'ROI' from percentage string to numeric float
+    df['ROI_numeric'] = pd.to_numeric(df['ROI'].str.rstrip('%'), errors='coerce')
+    # Keep only rows NOT in the [-95, -2] range
+    df = df[~((df['ROI_numeric'] >= -95) & (df['ROI_numeric'] <= -2))]
+    # Remove helper column
+    df.drop(columns='ROI_numeric', inplace=True)
+
+# 6. Ensure required columns exist and order them
+required = ['ASIN', 'Cost', 'Profit', 'ROI']
+for col in required:
+    if col not in df.columns:
+        df[col] = ''  # create empty column if missing
+
+# Build final column order: required first, then any other, then Source last
+other_cols = [c for c in df.columns if c not in required + ['Source']]
+final_order = required + other_cols
+if 'Source' in df.columns:
+    final_order.append('Source')
+
+df = df[final_order]
+
+# 7. Save output
+output_file = "SU Cleaned.csv"
+df.to_csv(output_file, index=False)
+print(f"Saved cleaned file as: {output_file}")
+
+# 8. Copy ASIN column to the Windows clipboard and report count
+if 'ASIN' in df.columns:
+    asin_series = df['ASIN'].dropna()
+    # Copy to clipboard (one ASIN per line)
+    asin_series.to_clipboard(index=False, header=False)
+    count = len(asin_series)
+    print(f"{count} ASINs copied to the clipboard")
+else:
+    print("No ASIN column found to copy to clipboard.")
+
+
+https://chatgpt.com/share/685c682a-4558-8009-9fe7-7a29ffd4c46c
+
+***********************************************
+***********************************************
+***********************************************
+***********************************************
+***********************************************
+***********************************************
+***********************************************
+***********************************************
+***********************************************
+***********************************************
+***********************************************
+***********************************************
+***********************************************
+***********************************************
+***********************************************
+***********************************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

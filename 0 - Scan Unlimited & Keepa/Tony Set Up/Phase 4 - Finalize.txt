@@ -1,0 +1,1431 @@
+Current Version
+https://chatgpt.com/share/685d8635-ea5c-8009-89cd-9986a9682093
+
+
+Old version
+https://chatgpt.com/share/685d7b5d-259c-8009-a6fd-a51a2f0da875
+
+******************************************
+
+Please write a python script that opens the CSV file named "Keepa Cleaned". 
+
+I am attaching the file for you to reference so you can analyze it. 
+
+Here are the first 4 rows of data from the input file
+ASIN	Title	Cost	List	Profit	ROI	Offer	Rank	# Sold	30/90 BB	30/90 Profit	Rating	T Rating	%	Return	BB/SUP	CPT	CPT Profit	CPT ROI	Amz	Amz OOS	Tags	Source	Amazon
+B0C53TL383	Crocs Women's Getaway Strappy Sandals, Black, 9	$39.99 	$63.39 	$6.65 	17%	4	906	2,000	$39.95 	($13.27)	239	2,697	9%		SUP	39.99	($13.24)	-33%		95%	$20 TO $40, 209587 001, BLACK, CROCS, eligible-discount, eligible-discount-clearance, eligible-discount-employee, eligible-discount-friends, full-price-eligible-discount, Life, md2-exclusion, Slides and Thongs, Womens, womens-shoes, womens-shoes-slides-and	https://www.shopwss.com/products/209587_001?variant=41186872950839	https://www.amazon.com/dp/B0C53TL383?th=1&psc=1
+B0014C5S7S	Crocs Unisex-Adult Classic Clogs, Black, 10 Men/12 Women	$49.99 	$74.99 	$6.11 	12%	3	1	600	$37.72 	($25.57)	23,256	626,458	4%		SUP	49.95	($15.17)	-30%		98%	$40 TO $60, 10001-001, BLACK, Classic Clog, Clogs, CROCS, eligible-discount, eligible-discount-clearance, eligible-discount-employee, eligible-discount-friends, full-family-holiday-2024, full-price-eligible-discount, Lifestyle, md2-exclusion, Mens, mens-sh	https://www.shopwss.com/products/10001-001?variant=40942213398583	https://www.amazon.com/dp/B0014C5S7S?th=1&psc=1
+B00B3Z2TB4	Nike Men's Benassi Just Do It Athletic Sandal, Black/White Noir/Blanc, 12.0 Regular US	$29.99 	$44.97 	$3.68 	12%	13	29,355	400	$40.83 	$0.17 	2,192	21,671	10%		BB					99%	$20 TO $40, 343880 090, BLACK, eligible-discount, eligible-discount-clearance, eligible-discount-employee, eligible-discount-friends, full-price-eligible-discount, Lifestyle, md2-exclusion, Mens, mens-shoes, mens-shoes-slides-and-thongs, NIKE, qty-limit-2,	https://www.shopwss.com/products/343880_090?variant=41203495206967	https://www.amazon.com/dp/B00B3Z2TB4?th=1&psc=1
+
+
+Please remember to maintain the formatting for these columns. None of them should be stored as text as part of the excel output
+
+These columns should output as Currency set to 2 decimals:
+Cost	
+List	
+Profit
+30/90 BB	
+30/90 Profit
+CPT	
+CPT Profit
+Amz
+
+These columns should output as % set to 0 decimals:
+ROI
+%
+CPT ROI
+Amz OOS
+
+These columns should output as number with a , set to 0 decimals:
+Rank
+# Sold
+Rating	
+T Rating
+Offer
+
+
+Please apply the following green highlight in these columns based on these conditions
+Here is the RGB/Hex values for the green I want used	RGB: (0, 255, 0)	Hex: #00FF00
+
+Profit > $10
+ROI > 25%
+BB if the value = BB highlight green
+Amz OOS if its >70% highlight green
+CPT ROI > 10% 
+
+Source and Amazon should be clickable hyperlinks
+
+Remember, all of the formatting should be preserved for $ and % values. Do not change any of it. 
+
+Please bold and freeze the top row. There should be no borders
+
+Please save the output file as an excel file. Overwrite it if it already exists. 
+
+Have the script be able to dynamically name it based on the source url's domain. 
+This is an example of the output file name
+06.25.25 ShopWSS. Which would also be the tab name. This is 2 digit Month/Day/Year format
+
+Analyze the input file and verify your script will work with it before outputting it to me. 
+
+Please output the full python script so I can test it
+
+******************************************
+******************************************
+******************************************
+******************************************
+
+import pandas as pd
+import urllib.parse
+from datetime import datetime
+from openpyxl import Workbook
+from openpyxl.utils.dataframe import dataframe_to_rows
+from openpyxl.styles import Font, PatternFill
+import os
+
+# --- 1. Load the CSV ---
+INPUT_FILE = "Keepa Cleaned.csv"
+if not os.path.exists(INPUT_FILE):
+    raise FileNotFoundError(f"Could not find {INPUT_FILE}")
+
+df = pd.read_csv(INPUT_FILE, dtype=str)
+
+# --- 2. Define column groups ---
+currency_cols = ["Cost", "List", "Profit", "30/90 BB", "30/90 Profit", "CPT", "CPT Profit", "Amz"]
+percent_cols  = ["ROI", "%", "CPT ROI", "Amz OOS"]
+int_cols      = ["Offer", "Rank", "# Sold", "Rating", "T Rating"]
+hyperlink_cols = ["Source", "Amazon"]
+
+# --- 3. Convert to true numerics ---
+# 3a) Currency (handles parentheses as negatives)
+for col in currency_cols:
+    df[col] = (
+        df[col]
+          .fillna("")
+          .replace(r"\(([^)]+)\)", r"-\1", regex=True)
+          .replace(r"[\$,]", "", regex=True)
+          .astype(float)
+    )
+
+# 3b) Percent (handles parentheses as negatives)
+for col in percent_cols:
+    df[col] = (
+        df[col]
+          .fillna("")
+          .astype(str)
+          .replace(r"\(([^)]+)\)", r"-\1", regex=True)
+          .str.rstrip("%")
+          .astype(float)
+          .div(100)
+    )
+
+# 3c) Integers (strip commas)
+for col in int_cols:
+    df[col] = (
+        df[col]
+          .fillna("0")
+          .replace(",", "", regex=True)
+          .astype(int)
+    )
+
+# --- 4. Build dynamic output name & sheet name ---
+first_source = df.loc[0, "Source"]
+netloc = urllib.parse.urlparse(first_source).netloc.replace("www.", "")
+domain = netloc.split(".")[0]  # e.g. "shopwss"
+# special-case ending in "wss" to get "ShopWSS" instead of "Shopwss"
+if domain.lower().endswith("wss"):
+    domain_title = domain[:-3].capitalize() + domain[-3:].upper()
+else:
+    domain_title = domain.capitalize()
+
+date_str = datetime.now().strftime("%m.%d.%y")  # e.g. "06.25.25"
+outfile_base = f"{date_str} {domain_title}"
+OUTPUT_FILE = f"{outfile_base}.xlsx"
+SHEET_NAME  = outfile_base if len(outfile_base) <= 31 else outfile_base[:31]
+
+# --- 5. Create workbook & sheet ---
+wb = Workbook()
+ws = wb.active
+ws.title = SHEET_NAME
+ws.freeze_panes = "A2"  # freeze top row
+
+# --- 6. Header row formatting ---
+for idx, header in enumerate(df.columns, start=1):
+    cell = ws.cell(row=1, column=idx, value=header)
+    cell.font = Font(bold=True)
+
+# --- 7. Fill data + formatting + conditional highlights ---
+green_fill = PatternFill(start_color="00FF00", end_color="00FF00", fill_type="solid")
+
+for r, row in enumerate(dataframe_to_rows(df, index=False, header=False), start=2):
+    for c, (col_name, value) in enumerate(zip(df.columns, row), start=1):
+        cell = ws.cell(row=r, column=c)
+        # hyperlinks
+        if col_name in hyperlink_cols:
+            cell.value = value
+            cell.hyperlink = value
+            cell.style = "Hyperlink"
+        else:
+            cell.value = value
+            # number formats
+            if col_name in currency_cols:
+                cell.number_format = "$#,##0.00"
+            elif col_name in percent_cols:
+                cell.number_format = "0%"
+            elif col_name in int_cols:
+                cell.number_format = "#,##0"
+        # conditional highlighting
+        try:
+            # Profit > $10
+            if col_name == "Profit" and cell.value > 10:
+                cell.fill = green_fill
+            # ROI > 25%
+            if col_name == "ROI" and cell.value > 0.25:
+                cell.fill = green_fill
+            # CPT ROI > 10%
+            if col_name == "CPT ROI" and cell.value > 0.10:
+                cell.fill = green_fill
+            # Amz OOS > 70%
+            if col_name == "Amz OOS" and cell.value > 0.70:
+                cell.fill = green_fill
+        except TypeError:
+            pass
+        # BB/SUP == "BB"
+        if col_name == "BB/SUP" and value == "BB":
+            cell.fill = green_fill
+
+# --- 8. Save (overwrites if exists) ---
+wb.save(OUTPUT_FILE)
+print(f"✓ Saved formatted file as: {OUTPUT_FILE}")
+
+
+******************************************
+******************************************
+
+ERROR TROUBLE SHOOTING
+
+******************************************
+******************************************
+
+"C:\Users\Fernando Lebeis\Google Drive\Chat GBT\5.3.23 RackRoomShoes\Pycharm\venv\Scripts\python.exe" "C:\Users\Fernando Lebeis\Google Drive\Web Scraping\0 6.17.25 June 2025 v5 CURRENT\6.26.25 - Day 4 Leads List - Scan Unlimited & Keepa\Tony Set Up\Phase 4 - Finalize.py" 
+Traceback (most recent call last):
+  File "C:\Users\Fernando Lebeis\Google Drive\Web Scraping\0 6.17.25 June 2025 v5 CURRENT\6.26.25 - Day 4 Leads List - Scan Unlimited & Keepa\Tony Set Up\Phase 4 - Finalize.py", line 30, in <module>
+    .astype(float)
+  File "C:\Users\Fernando Lebeis\Google Drive\Chat GBT\5.3.23 RackRoomShoes\Pycharm\venv\lib\site-packages\pandas\core\generic.py", line 6324, in astype
+    new_data = self._mgr.astype(dtype=dtype, copy=copy, errors=errors)
+  File "C:\Users\Fernando Lebeis\Google Drive\Chat GBT\5.3.23 RackRoomShoes\Pycharm\venv\lib\site-packages\pandas\core\internals\managers.py", line 451, in astype
+    return self.apply(
+  File "C:\Users\Fernando Lebeis\Google Drive\Chat GBT\5.3.23 RackRoomShoes\Pycharm\venv\lib\site-packages\pandas\core\internals\managers.py", line 352, in apply
+    applied = getattr(b, f)(**kwargs)
+  File "C:\Users\Fernando Lebeis\Google Drive\Chat GBT\5.3.23 RackRoomShoes\Pycharm\venv\lib\site-packages\pandas\core\internals\blocks.py", line 511, in astype
+    new_values = astype_array_safe(values, dtype, copy=copy, errors=errors)
+  File "C:\Users\Fernando Lebeis\Google Drive\Chat GBT\5.3.23 RackRoomShoes\Pycharm\venv\lib\site-packages\pandas\core\dtypes\astype.py", line 242, in astype_array_safe
+    new_values = astype_array(values, dtype, copy=copy)
+  File "C:\Users\Fernando Lebeis\Google Drive\Chat GBT\5.3.23 RackRoomShoes\Pycharm\venv\lib\site-packages\pandas\core\dtypes\astype.py", line 187, in astype_array
+    values = _astype_nansafe(values, dtype, copy=copy)
+  File "C:\Users\Fernando Lebeis\Google Drive\Chat GBT\5.3.23 RackRoomShoes\Pycharm\venv\lib\site-packages\pandas\core\dtypes\astype.py", line 138, in _astype_nansafe
+    return arr.astype(dtype, copy=True)
+ValueError: could not convert string to float: ''
+
+Process finished with exit code 1
+
+******************************************
+******************************************
+
+import pandas as pd
+import urllib.parse
+from datetime import datetime
+from openpyxl import Workbook
+from openpyxl.utils.dataframe import dataframe_to_rows
+from openpyxl.styles import Font, PatternFill
+import os
+
+# --- 1. Load the CSV ---
+INPUT_FILE = "Keepa Cleaned.csv"
+if not os.path.exists(INPUT_FILE):
+    raise FileNotFoundError(f"Could not find {INPUT_FILE}")
+
+df = pd.read_csv(INPUT_FILE, dtype=str)
+
+# --- 2. Define column groups ---
+currency_cols   = ["Cost", "List", "Profit", "30/90 BB", "30/90 Profit", "CPT", "CPT Profit", "Amz"]
+percent_cols    = ["ROI", "%", "CPT ROI", "Amz OOS"]
+int_cols        = ["Offer", "Rank", "# Sold", "Rating", "T Rating"]
+hyperlink_cols = ["Source", "Amazon"]
+
+# --- 3. Convert to true numerics using to_numeric (coerce blanks to 0) ---
+# 3a) Currency (handles parentheses as negatives)
+for col in currency_cols:
+    tmp = df[col].fillna("")
+    tmp = tmp.replace(r"\(([^)]+)\)", r"-\1", regex=True)
+    tmp = tmp.replace(r"[\$,]", "", regex=True)
+    df[col] = pd.to_numeric(tmp, errors='coerce').fillna(0.0)
+
+# 3b) Percent (handles parentheses, strips '%')
+for col in percent_cols:
+    tmp = df[col].fillna("").astype(str)
+    tmp = tmp.replace(r"\(([^)]+)\)", r"-\1", regex=True)
+    tmp = tmp.str.rstrip('%')
+    df[col] = pd.to_numeric(tmp, errors='coerce').fillna(0.0) / 100.0
+
+# 3c) Integers (strip commas)
+for col in int_cols:
+    tmp = df[col].fillna("0").replace(",", "", regex=True)
+    df[col] = pd.to_numeric(tmp, errors='coerce').fillna(0).astype(int)
+
+# --- 4. Build dynamic output name & sheet name ---
+first_source = df.loc[0, "Source"]
+netloc = urllib.parse.urlparse(first_source).netloc.replace("www.", "")
+domain = netloc.split(".")[0]
+if domain.lower().endswith("wss"):
+    domain_title = domain[:-3].capitalize() + domain[-3:].upper()
+else:
+    domain_title = domain.capitalize()
+
+date_str    = datetime.now().strftime("%m.%d.%y")
+outfile_base = f"{date_str} {domain_title}"
+OUTPUT_FILE  = f"{outfile_base}.xlsx"
+SHEET_NAME   = outfile_base if len(outfile_base) <= 31 else outfile_base[:31]
+
+# --- 5. Create workbook & sheet ---
+wb = Workbook()
+ws = wb.active
+ws.title = SHEET_NAME
+ws.freeze_panes = "A2"  # freeze top row
+
+# --- 6. Header row formatting ---
+for idx, header in enumerate(df.columns, start=1):
+    cell = ws.cell(row=1, column=idx, value=header)
+    cell.font = Font(bold=True)
+
+# --- 7. Fill data + formatting + conditional highlights ---
+green_fill = PatternFill(start_color="00FF00", end_color="00FF00", fill_type="solid")
+for r, row in enumerate(dataframe_to_rows(df, index=False, header=False), start=2):
+    for c, (col_name, value) in enumerate(zip(df.columns, row), start=1):
+        cell = ws.cell(row=r, column=c)
+        if col_name in hyperlink_cols:
+            cell.value = value
+            cell.hyperlink = value
+            cell.style = "Hyperlink"
+        else:
+            cell.value = value
+            if col_name in currency_cols:
+                cell.number_format = "$#,##0.00"
+            elif col_name in percent_cols:
+                cell.number_format = "0%"
+            elif col_name in int_cols:
+                cell.number_format = "#,##0"
+        # Conditional highlights
+        try:
+            if col_name == "Profit"    and cell.value > 10:
+                cell.fill = green_fill
+            if col_name == "ROI"       and cell.value > 0.25:
+                cell.fill = green_fill
+            if col_name == "CPT ROI"   and cell.value > 0.10:
+                cell.fill = green_fill
+            if col_name == "Amz OOS"   and cell.value > 0.70:
+                cell.fill = green_fill
+        except TypeError:
+            pass
+        if col_name == "BB/SUP" and value == "BB":
+            cell.fill = green_fill
+
+# --- 8. Save (overwrites if exists) ---
+wb.save(OUTPUT_FILE)
+print(f"✓ Saved formatted file as: {OUTPUT_FILE}")
+
+
+******************************************
+******************************************
+
+Please update the script to make some cosmetic updates
+
+Set these two columns to currency
+30/90 Profit
+CPT Profit
+
+The values are currently outputting like this
+-$13.24 and I want them output like this ($13.24) which also turns their text red when they are negative values in execel
+
+Update these columns to output blank if their values are 0 or 0%
+# Sold
+CPT
+CPT Profit
+CPT ROI
+Amz
+
+Please output the fully updated script so I can test it
+
+
+******************************************
+******************************************
+
+import pandas as pd
+import urllib.parse
+from datetime import datetime
+from openpyxl import Workbook
+from openpyxl.utils.dataframe import dataframe_to_rows
+from openpyxl.styles import Font, PatternFill
+import os
+
+# --- 1. Load the CSV ---
+INPUT_FILE = "Keepa Cleaned.csv"
+if not os.path.exists(INPUT_FILE):
+    raise FileNotFoundError(f"Could not find {INPUT_FILE}")
+
+df = pd.read_csv(INPUT_FILE, dtype=str)
+
+# --- 2. Define column groups ---
+currency_cols   = ["Cost", "List", "Profit", "30/90 BB", "30/90 Profit", "CPT", "CPT Profit", "Amz"]
+percent_cols    = ["ROI", "%", "CPT ROI", "Amz OOS"]
+int_cols        = ["Offer", "Rank", "# Sold", "Rating", "T Rating"]
+hyperlink_cols  = ["Source", "Amazon"]
+# columns to blank if zero
+blank_zero_cols = ["# Sold", "CPT", "CPT Profit", "CPT ROI", "Amz"]
+
+# --- 3. Convert to true numerics using to_numeric (coerce blanks to 0) ---
+for col in currency_cols:
+    tmp = df[col].fillna("")
+    tmp = tmp.replace(r"\(([^)]+)\)", r"-\1", regex=True)
+    tmp = tmp.replace(r"[\$,]", "", regex=True)
+    df[col] = pd.to_numeric(tmp, errors='coerce').fillna(0.0)
+
+for col in percent_cols:
+    tmp = df[col].fillna("").astype(str)
+    tmp = tmp.replace(r"\(([^)]+)\)", r"-\1", regex=True)
+    tmp = tmp.str.rstrip('%')
+    df[col] = pd.to_numeric(tmp, errors='coerce').fillna(0.0) / 100.0
+
+for col in int_cols:
+    tmp = df[col].fillna("0").replace(",", "", regex=True)
+    df[col] = pd.to_numeric(tmp, errors='coerce').fillna(0).astype(int)
+
+# --- 4. Build dynamic output name & sheet name ---
+first_source = df.loc[0, "Source"]
+netloc = urllib.parse.urlparse(first_source).netloc.replace("www.", "")
+domain = netloc.split(".")[0]
+if domain.lower().endswith("wss"):
+    domain_title = domain[:-3].capitalize() + domain[-3:].upper()
+else:
+    domain_title = domain.capitalize()
+
+date_str    = datetime.now().strftime("%m.%d.%y")
+outfile_base = f"{date_str} {domain_title}"
+OUTPUT_FILE  = f"{outfile_base}.xlsx"
+SHEET_NAME   = outfile_base if len(outfile_base) <= 31 else outfile_base[:31]
+
+# --- 5. Create workbook & sheet ---
+wb = Workbook()
+ws = wb.active
+ws.title = SHEET_NAME
+ws.freeze_panes = "A2"
+
+# --- 6. Header formatting ---
+for idx, header in enumerate(df.columns, start=1):
+    cell = ws.cell(row=1, column=idx, value=header)
+    cell.font = Font(bold=True)
+
+# --- 7. Data rows with formatting and blanks ---
+green_fill = PatternFill(start_color="00FF00", end_color="00FF00", fill_type="solid")
+
+for r, row in enumerate(dataframe_to_rows(df, index=False, header=False), start=2):
+    for c, (col_name, value) in enumerate(zip(df.columns, row), start=1):
+        cell = ws.cell(row=r, column=c)
+        # blank if zero
+        if col_name in blank_zero_cols and value == 0:
+            cell.value = None
+            continue
+
+        # hyperlinks
+        if col_name in hyperlink_cols:
+            cell.value = value
+            cell.hyperlink = value
+            cell.style = "Hyperlink"
+        else:
+            cell.value = value
+            # number formats
+            if col_name in currency_cols:
+                # special currency with parentheses/red for two columns
+                if col_name in ["30/90 Profit", "CPT Profit"]:
+                    cell.number_format = '$#,##0.00;[Red]($#,##0.00)'
+                else:
+                    cell.number_format = '$#,##0.00'
+            elif col_name in percent_cols:
+                cell.number_format = "0%"
+            elif col_name in int_cols:
+                cell.number_format = "#,##0"
+
+        # conditional highlights
+        try:
+            if col_name == "Profit" and cell.value > 10:
+                cell.fill = green_fill
+            if col_name == "ROI" and cell.value > 0.25:
+                cell.fill = green_fill
+            if col_name == "CPT ROI" and cell.value > 0.10:
+                cell.fill = green_fill
+            if col_name == "Amz OOS" and cell.value > 0.70:
+                cell.fill = green_fill
+        except TypeError:
+            pass
+        if col_name == "BB/SUP" and value == "BB":
+            cell.fill = green_fill
+
+# --- 8. Save workbook ---
+wb.save(OUTPUT_FILE)
+print(f"✓ Saved formatted file as: {OUTPUT_FILE}")
+
+
+******************************************
+******************************************
+
+Can we adjust the script to modify the column widths for ONLY the following columns along with their excel column width value?
+
+ASIN - 15
+Title - 40
+Cost - 7
+List - 7
+Profit - 6
+ROI - 5
+Offer - 5
+Rank - 6
+# Sold - 6
+30/90 BB - 8
+30/90 Profit - 11
+Rating - 8	
+T Rating - 8
+% - 5
+Return - 7
+BB/SUP - 7
+CPT - 7
+CPT Profit - 9
+CPT ROI - 8
+Amz - 6
+Amz OOS - 9
+
+Please output the fully updated script so I can test it
+
+
+******************************************
+******************************************
+
+import pandas as pd
+import urllib.parse
+from datetime import datetime
+from openpyxl import Workbook
+from openpyxl.utils.dataframe import dataframe_to_rows, get_column_letter
+from openpyxl.styles import Font, PatternFill
+import os
+
+# --- 1. Load the CSV ---
+INPUT_FILE = "Keepa Cleaned.csv"
+if not os.path.exists(INPUT_FILE):
+    raise FileNotFoundError(f"Could not find {INPUT_FILE}")
+
+df = pd.read_csv(INPUT_FILE, dtype=str)
+
+# --- 2. Define column groups ---
+currency_cols   = ["Cost", "List", "Profit", "30/90 BB", "30/90 Profit", "CPT", "CPT Profit", "Amz"]
+percent_cols    = ["ROI", "%", "CPT ROI", "Amz OOS"]
+int_cols        = ["Offer", "Rank", "# Sold", "Rating", "T Rating"]
+hyperlink_cols  = ["Source", "Amazon"]
+# columns to blank if zero
+blank_zero_cols = ["# Sold", "CPT", "CPT Profit", "CPT ROI", "Amz"]
+
+# --- 3. Convert to true numerics using to_numeric (coerce blanks to 0) ---
+for col in currency_cols:
+    tmp = df[col].fillna("")
+    tmp = tmp.replace(r"\(([^)]+)\)", r"-\1", regex=True)
+    tmp = tmp.replace(r"[\$,]", "", regex=True)
+    df[col] = pd.to_numeric(tmp, errors='coerce').fillna(0.0)
+
+for col in percent_cols:
+    tmp = df[col].fillna("").astype(str)
+    tmp = tmp.replace(r"\(([^)]+)\)", r"-\1", regex=True)
+    tmp = tmp.str.rstrip('%')
+    df[col] = pd.to_numeric(tmp, errors='coerce').fillna(0.0) / 100.0
+
+for col in int_cols:
+    tmp = df[col].fillna("0").replace(",", "", regex=True)
+    df[col] = pd.to_numeric(tmp, errors='coerce').fillna(0).astype(int)
+
+# --- 4. Build dynamic output name & sheet name ---
+first_source = df.loc[0, "Source"]
+netloc = urllib.parse.urlparse(first_source).netloc.replace("www.", "")
+domain = netloc.split(".")[0]
+if domain.lower().endswith("wss"):
+    domain_title = domain[:-3].capitalize() + domain[-3:].upper()
+else:
+    domain_title = domain.capitalize()
+
+date_str    = datetime.now().strftime("%m.%d.%y")
+outfile_base = f"{date_str} {domain_title}"
+OUTPUT_FILE  = f"{outfile_base}.xlsx"
+SHEET_NAME   = outfile_base if len(outfile_base) <= 31 else outfile_base[:31]
+
+# --- 5. Create workbook & sheet ---
+wb = Workbook()
+ws = wb.active
+ws.title = SHEET_NAME
+ws.freeze_panes = "A2"
+
+# --- 6. Header formatting ---
+for idx, header in enumerate(df.columns, start=1):
+    cell = ws.cell(row=1, column=idx, value=header)
+    cell.font = Font(bold=True)
+
+# --- 6.5. Set custom column widths ---
+widths = {
+    "ASIN": 15, "Title": 40, "Cost": 7, "List": 7,
+    "Profit": 6, "ROI": 5, "Offer": 5, "Rank": 6,
+    "# Sold": 6, "30/90 BB": 8, "30/90 Profit": 11,
+    "Rating": 8, "T Rating": 8, "%": 5, "Return": 7,
+    "BB/SUP": 7, "CPT": 7, "CPT Profit": 9,
+    "CPT ROI": 8, "Amz": 6, "Amz OOS": 9
+}
+for idx, col in enumerate(df.columns, start=1):
+    if col in widths:
+        letter = get_column_letter(idx)
+        ws.column_dimensions[letter].width = widths[col]
+
+# --- 7. Data rows with formatting and blanks ---
+green_fill = PatternFill(start_color="00FF00", end_color="00FF00", fill_type="solid")
+for r, row in enumerate(dataframe_to_rows(df, index=False, header=False), start=2):
+    for c, (col_name, value) in enumerate(zip(df.columns, row), start=1):
+        cell = ws.cell(row=r, column=c)
+        # blank if zero
+        if col_name in blank_zero_cols and value == 0:
+            cell.value = None
+            continue
+
+        # hyperlinks
+        if col_name in hyperlink_cols:
+            cell.value = value
+            cell.hyperlink = value
+            cell.style = "Hyperlink"
+        else:
+            cell.value = value
+            # number formats
+            if col_name in currency_cols:
+                if col_name in ["30/90 Profit", "CPT Profit"]:
+                    cell.number_format = '$#,##0.00;[Red]($#,##0.00)'
+                else:
+                    cell.number_format = '$#,##0.00'
+            elif col_name in percent_cols:
+                cell.number_format = "0%"
+            elif col_name in int_cols:
+                cell.number_format = "#,##0"
+
+        # conditional highlights
+        try:
+            if col_name == "Profit" and cell.value > 10:
+                cell.fill = green_fill
+            if col_name == "ROI" and cell.value > 0.25:
+                cell.fill = green_fill
+            if col_name == "CPT ROI" and cell.value > 0.10:
+                cell.fill = green_fill
+            if col_name == "Amz OOS" and cell.value > 0.70:
+                cell.fill = green_fill
+        except TypeError:
+            pass
+        if col_name == "BB/SUP" and value == "BB":
+            cell.fill = green_fill
+
+# --- 8. Save workbook ---
+wb.save(OUTPUT_FILE)
+print(f"✓ Saved formatted file as: {OUTPUT_FILE}")
+
+
+******************************************
+******************************************
+
+ERROR TROUBLE SHOOTING
+
+******************************************
+******************************************
+
+"C:\Users\Fernando Lebeis\Google Drive\Chat GBT\5.3.23 RackRoomShoes\Pycharm\venv\Scripts\python.exe" "C:\Users\Fernando Lebeis\Google Drive\Web Scraping\0 6.17.25 June 2025 v5 CURRENT\6.26.25 - Day 4 Leads List - Scan Unlimited & Keepa\Tony Set Up\Phase 4 - Finalize.py" 
+Traceback (most recent call last):
+  File "C:\Users\Fernando Lebeis\Google Drive\Web Scraping\0 6.17.25 June 2025 v5 CURRENT\6.26.25 - Day 4 Leads List - Scan Unlimited & Keepa\Tony Set Up\Phase 4 - Finalize.py", line 5, in <module>
+    from openpyxl.utils.dataframe import dataframe_to_rows, get_column_letter
+ImportError: cannot import name 'get_column_letter' from 'openpyxl.utils.dataframe' (C:\Users\Fernando Lebeis\Google Drive\Chat GBT\5.3.23 RackRoomShoes\Pycharm\venv\lib\site-packages\openpyxl\utils\dataframe.py)
+
+Process finished with exit code 1
+
+Please update the script to prevent the error and output the fully updated script so I can test it
+
+******************************************
+******************************************
+
+import pandas as pd
+import urllib.parse
+from datetime import datetime
+from openpyxl import Workbook
+from openpyxl.utils.dataframe import dataframe_to_rows
+from openpyxl.utils import get_column_letter
+from openpyxl.styles import Font, PatternFill
+import os
+
+# --- 1. Load the CSV ---
+INPUT_FILE = "Keepa Cleaned.csv"
+if not os.path.exists(INPUT_FILE):
+    raise FileNotFoundError(f"Could not find {INPUT_FILE}")
+
+df = pd.read_csv(INPUT_FILE, dtype=str)
+
+# --- 2. Define column groups ---
+currency_cols   = ["Cost", "List", "Profit", "30/90 BB", "30/90 Profit", "CPT", "CPT Profit", "Amz"]
+percent_cols    = ["ROI", "%", "CPT ROI", "Amz OOS"]
+int_cols        = ["Offer", "Rank", "# Sold", "Rating", "T Rating"]
+hyperlink_cols  = ["Source", "Amazon"]
+# columns to blank if zero
+blank_zero_cols = ["# Sold", "CPT", "CPT Profit", "CPT ROI", "Amz"]
+
+# --- 3. Convert to true numerics using to_numeric (coerce blanks to 0) ---
+for col in currency_cols:
+    tmp = df[col].fillna("")
+    tmp = tmp.replace(r"\(([^)]+)\)", r"-\1", regex=True)
+    tmp = tmp.replace(r"[\$,]", "", regex=True)
+    df[col] = pd.to_numeric(tmp, errors='coerce').fillna(0.0)
+
+for col in percent_cols:
+    tmp = df[col].fillna("").astype(str)
+    tmp = tmp.replace(r"\(([^)]+)\)", r"-\1", regex=True)
+    tmp = tmp.str.rstrip('%')
+    df[col] = pd.to_numeric(tmp, errors='coerce').fillna(0.0) / 100.0
+
+for col in int_cols:
+    tmp = df[col].fillna("0").replace(",", "", regex=True)
+    df[col] = pd.to_numeric(tmp, errors='coerce').fillna(0).astype(int)
+
+# --- 4. Build dynamic output name & sheet name ---
+first_source = df.loc[0, "Source"]
+netloc = urllib.parse.urlparse(first_source).netloc.replace("www.", "")
+domain = netloc.split(".")[0]
+if domain.lower().endswith("wss"):
+    domain_title = domain[:-3].capitalize() + domain[-3:].upper()
+else:
+    domain_title = domain.capitalize()
+
+date_str    = datetime.now().strftime("%m.%d.%y")
+outfile_base = f"{date_str} {domain_title}"
+OUTPUT_FILE  = f"{outfile_base}.xlsx"
+SHEET_NAME   = outfile_base if len(outfile_base) <= 31 else outfile_base[:31]
+
+# --- 5. Create workbook & sheet ---
+wb = Workbook()
+ws = wb.active
+ws.title = SHEET_NAME
+ws.freeze_panes = "A2"
+
+# --- 6. Header formatting ---
+for idx, header in enumerate(df.columns, start=1):
+    cell = ws.cell(row=1, column=idx, value=header)
+    cell.font = Font(bold=True)
+
+# --- 6.5. Set custom column widths ---
+widths = {
+    "ASIN": 15, "Title": 40, "Cost": 7, "List": 7,
+    "Profit": 6, "ROI": 5, "Offer": 5, "Rank": 6,
+    "# Sold": 6, "30/90 BB": 8, "30/90 Profit": 11,
+    "Rating": 8, "T Rating": 8, "%": 5, "Return": 7,
+    "BB/SUP": 7, "CPT": 7, "CPT Profit": 9,
+    "CPT ROI": 8, "Amz": 6, "Amz OOS": 9
+}
+for idx, col in enumerate(df.columns, start=1):
+    if col in widths:
+        letter = get_column_letter(idx)
+        ws.column_dimensions[letter].width = widths[col]
+
+# --- 7. Data rows with formatting and blanks ---
+green_fill = PatternFill(start_color="00FF00", end_color="00FF00", fill_type="solid")
+for r, row in enumerate(dataframe_to_rows(df, index=False, header=False), start=2):
+    for c, (col_name, value) in enumerate(zip(df.columns, row), start=1):
+        cell = ws.cell(row=r, column=c)
+        # blank if zero
+        if col_name in blank_zero_cols and value == 0:
+            cell.value = None
+            continue
+
+        # hyperlinks
+        if col_name in hyperlink_cols:
+            cell.value = value
+            cell.hyperlink = value
+            cell.style = "Hyperlink"
+        else:
+            cell.value = value
+            # number formats
+            if col_name in currency_cols:
+                if col_name in ["30/90 Profit", "CPT Profit"]:
+                    cell.number_format = '$#,##0.00;[Red]($#,##0.00)'
+                else:
+                    cell.number_format = '$#,##0.00'
+            elif col_name in percent_cols:
+                cell.number_format = "0%"
+            elif col_name in int_cols:
+                cell.number_format = "#,##0"
+
+        # conditional highlights
+        try:
+            if col_name == "Profit" and cell.value > 10:
+                cell.fill = green_fill
+            if col_name == "ROI" and cell.value > 0.25:
+                cell.fill = green_fill
+            if col_name == "CPT ROI" and cell.value > 0.10:
+                cell.fill = green_fill
+            if col_name == "Amz OOS" and cell.value > 0.70:
+                cell.fill = green_fill
+        except TypeError:
+            pass
+        if col_name == "BB/SUP" and value == "BB":
+            cell.fill = green_fill
+
+# --- 8. Save workbook ---
+wb.save(OUTPUT_FILE)
+print(f"✓ Saved formatted file as: {OUTPUT_FILE}")
+
+
+******************************************
+******************************************
+
+While the script technically succeeded it did not properly adjust the column widths
+
+These are the values the column widths should be
+ASIN - 15
+Title - 40
+Cost - 7
+List - 7
+Profit - 6
+ROI - 5
+Offer - 5
+Rank - 6
+# Sold - 6
+30/90 BB - 8
+30/90 Profit - 11
+Rating - 8	
+T Rating - 8
+% - 5
+Return - 7
+BB/SUP - 7
+CPT - 7
+CPT Profit - 9
+CPT ROI - 8
+Amz - 6
+Amz OOS - 9
+
+The outputs of some columns are ### which means its to narrow and didn't properly accept the values
+example 
+Profit set to 5.29 instead of 6
+ROI set to 4.29 instead of 5
+
+Please update the script so the column widths are as instructed
+
+output the fully updated script 
+
+
+******************************************
+******************************************
+
+ERROR TROUBLE SHOOTING
+
+******************************************
+******************************************
+
+
+"C:\Users\Fernando Lebeis\Google Drive\Chat GBT\5.3.23 RackRoomShoes\Pycharm\venv\Scripts\python.exe" "C:\Users\Fernando Lebeis\Google Drive\Web Scraping\0 6.17.25 June 2025 v5 CURRENT\6.26.25 - Day 4 Leads List - Scan Unlimited & Keepa\Tony Set Up\Phase 4 - Finalize.py" 
+Traceback (most recent call last):
+  File "C:\Users\Fernando Lebeis\Google Drive\Web Scraping\0 6.17.25 June 2025 v5 CURRENT\6.26.25 - Day 4 Leads List - Scan Unlimited & Keepa\Tony Set Up\Phase 4 - Finalize.py", line 5, in <module>
+    from openpyxl.utils.dataframe import dataframe_to_rows, get_column_letter
+ImportError: cannot import name 'get_column_letter' from 'openpyxl.utils.dataframe' (C:\Users\Fernando Lebeis\Google Drive\Chat GBT\5.3.23 RackRoomShoes\Pycharm\venv\lib\site-packages\openpyxl\utils\dataframe.py)
+
+Process finished with exit code 1
+
+Please update the script to prevent the error and output the fully updated script so I can test it
+
+******************************************
+******************************************
+
+While the script technically succeeded it did not properly adjust the column widths
+
+These are the values the column widths should be
+ASIN - 15
+Title - 40
+Cost - 7
+List - 7
+Profit - 6
+ROI - 5
+Offer - 5
+Rank - 6
+# Sold - 6
+30/90 BB - 8
+30/90 Profit - 11
+Rating - 8	
+T Rating - 8
+% - 5
+Return - 7
+BB/SUP - 7
+CPT - 7
+CPT Profit - 9
+CPT ROI - 8
+Amz - 6
+Amz OOS - 9
+
+The outputs of some columns are ### which means its to narrow and didn't properly accept the values
+example 
+Profit set to 5.29 instead of 6
+ROI set to 4.29 instead of 5
+
+Please update the script so the column widths are as instructed
+
+output the fully updated script 
+
+******************************************
+******************************************
+
+The column widths for profit and ROI are still the same. The widths got narrower after the column width adjustment prompt instead of wider. The purpose of forcing the column width is so that they display all their data without taking out any additional space. If its easier to auto adjust the widths to only the specified columns that is an acceptable outcome
+
+******************************************
+******************************************
+
+It partially worked, it auto adjusted columns I did not want impacted
+
+Remember, these are the only columns I want auto width adjusted
+
+ASIN 
+Cost 
+List 
+Profit 
+ROI 
+Offer 
+Rank 
+# Sold 
+30/90 BB 
+30/90 Profit 
+Rating 
+T Rating 
+% 
+Return 
+BB/SUP 
+CPT 
+CPT Profit 
+CPT ROI 
+Amz 
+Amz OOS 
+
+I want the title column to have a fixed width of 40, as this column can vary wildly in length but I want at least a minimum of 40 for its width to maintain uniformity for the output
+
+******************************************
+******************************************
+
+import pandas as pd
+import urllib.parse
+from datetime import datetime
+from openpyxl import Workbook
+from openpyxl.utils.dataframe import dataframe_to_rows
+from openpyxl.utils import get_column_letter
+from openpyxl.styles import Font, PatternFill
+import os
+
+# --- 1. Load CSV ---
+INPUT_FILE = "Keepa Cleaned.csv"
+if not os.path.exists(INPUT_FILE):
+    raise FileNotFoundError(f"Could not find {INPUT_FILE}")
+
+df = pd.read_csv(INPUT_FILE, dtype=str)
+
+# --- 2. Define column groups ---
+currency_cols   = ["Cost", "List", "Profit", "30/90 BB", "30/90 Profit", "CPT", "CPT Profit", "Amz"]
+percent_cols    = ["ROI", "%", "CPT ROI", "Amz OOS"]
+int_cols        = ["Offer", "Rank", "# Sold", "Rating", "T Rating"]
+hyperlink_cols  = ["Source", "Amazon"]
+blank_zero_cols = ["# Sold", "CPT", "CPT Profit", "CPT ROI", "Amz"]
+
+# --- 3. Convert to numeric types ---
+for col in currency_cols:
+    tmp = df[col].fillna("")
+    tmp = tmp.replace(r"\(([^)]+)\)", r"-\1", regex=True)
+    tmp = tmp.replace(r"[\$,]", "", regex=True)
+    df[col] = pd.to_numeric(tmp, errors="coerce").fillna(0.0)
+for col in percent_cols:
+    tmp = df[col].fillna("").astype(str)
+    tmp = tmp.replace(r"\(([^)]+)\)", r"-\1", regex=True)
+    tmp = tmp.str.rstrip("%")
+    df[col] = pd.to_numeric(tmp, errors="coerce").fillna(0.0) / 100.0
+for col in int_cols:
+    tmp = df[col].fillna("0").replace(",", "", regex=True)
+    df[col] = pd.to_numeric(tmp, errors="coerce").fillna(0).astype(int)
+
+# --- 4. Dynamic output and sheet name ---
+first_source = df.loc[0, "Source"]
+netloc = urllib.parse.urlparse(first_source).netloc.replace("www.", "")
+domain = netloc.split(".")[0]
+if domain.lower().endswith("wss"):
+    domain_title = domain[:-3].capitalize() + domain[-3:].upper()
+else:
+    domain_title = domain.capitalize()
+file_date = datetime.now().strftime("%m.%d.%y")
+out_base = f"{file_date} {domain_title}"
+OUTPUT_FILE = f"{out_base}.xlsx"
+TAB_NAME    = out_base if len(out_base) <= 31 else out_base[:31]
+
+# --- 5. Workbook setup ---
+wb = Workbook()
+ws = wb.active
+ws.title = TAB_NAME
+ws.freeze_panes = "A2"
+
+# --- 6. Header formatting ---
+for idx, header in enumerate(df.columns, start=1):
+    cell = ws.cell(row=1, column=idx, value=header)
+    cell.font = Font(bold=True)
+
+# --- 7. Data rows with formatting and highlights ---
+green_fill = PatternFill(start_color="00FF00", end_color="00FF00", fill_type="solid")
+for r, row in enumerate(dataframe_to_rows(df, index=False, header=False), start=2):
+    for c, (col_name, value) in enumerate(zip(df.columns, row), start=1):
+        cell = ws.cell(row=r, column=c)
+        if col_name in blank_zero_cols and value == 0:
+            cell.value = None
+            continue
+        if col_name in hyperlink_cols:
+            cell.value = value
+            cell.hyperlink = value
+            cell.style = "Hyperlink"
+        else:
+            cell.value = value
+            if col_name in currency_cols:
+                fmt = "$#,##0.00"
+                if col_name in ["30/90 Profit", "CPT Profit"]:
+                    fmt = "$#,##0.00;[Red]($#,##0.00)"
+                cell.number_format = fmt
+            elif col_name in percent_cols:
+                cell.number_format = "0%"
+            elif col_name in int_cols:
+                cell.number_format = "#,##0"
+        try:
+            if col_name == "Profit" and cell.value > 10:
+                cell.fill = green_fill
+            if col_name == "ROI" and cell.value > 0.25:
+                cell.fill = green_fill
+            if col_name == "CPT ROI" and cell.value > 0.10:
+                cell.fill = green_fill
+            if col_name == "Amz OOS" and cell.value > 0.70:
+                cell.fill = green_fill
+        except TypeError:
+            pass
+        if col_name == "BB/SUP" and value == "BB":
+            cell.fill = green_fill
+
+# --- 8. Adjust column widths ---
+min_widths = {
+    "ASIN": 15, "Cost": 7, "List": 7, "Profit": 6, "ROI": 5, "Offer": 5, "Rank": 6,
+    "# Sold": 6, "30/90 BB": 8, "30/90 Profit": 11, "Rating": 8, "T Rating": 8,
+    "%": 5, "Return": 7, "BB/SUP": 7, "CPT": 7, "CPT Profit": 9, "CPT ROI": 8,
+    "Amz": 6, "Amz OOS": 9
+}
+fixed_width_cols = {"Title": 40}
+for idx, col in enumerate(df.columns, start=1):
+    letter = get_column_letter(idx)
+    if col in min_widths:
+        max_len = max(
+            len(str(ws.cell(row=r, column=idx).value or "")) for r in range(1, ws.max_row + 1)
+        )
+        ws.column_dimensions[letter].width = max(max_len + 2, min_widths[col])
+    elif col in fixed_width_cols:
+        ws.column_dimensions[letter].width = fixed_width_cols[col]
+
+# --- 9. Save workbook ---
+wb.save(OUTPUT_FILE)
+print(f"✓ Saved formatted file as: {OUTPUT_FILE}")
+
+
+******************************************
+******************************************
+
+Please help me update this script. Part of the purpose of this script is it needs to be dynamic as they may include custom columns. It could have 0,1,2,3,4 etc custom columns.
+
+In this case, the custom column was Stock Level, however my issue is, the output is being stored as a text and giving the green triangles which looks visually unappealing.
+
+I'm not sure if this is happening due to the conversion of the input CSV file to the Excel output. But I want the script to not modify it at all, it should output the way it was inputted for the custom columns.
+
+I'm attaching the input and output file so you can reference it if you need to see whats happening so you can output the fully updated script for me to test on
+
+Please update the script to preseve all existing functions and print statements. Do not remove any features. Sometimes the custom columns will be blank, nothing needs to be done to them if they are blank, if you need to handle them for data validation it should never output as 0, do blank instead.
+
+
+******************************************
+******************************************
+
+import pandas as pd
+import urllib.parse
+from datetime import datetime
+from openpyxl import Workbook
+from openpyxl.utils import get_column_letter
+from openpyxl.utils.dataframe import dataframe_to_rows
+from openpyxl.styles import Font, PatternFill
+import os
+
+# --- 1. Config / filenames -------------------
+
+INPUT_FILE = "Keepa Cleaned.csv"
+if not os.path.exists(INPUT_FILE):
+    raise FileNotFoundError(f"Could not find {INPUT_FILE}")
+
+# Read everything in as strings, then fill blanks (so custom cols remain "")
+df = pd.read_csv(INPUT_FILE, dtype=str)
+df = df.fillna("")
+
+# --- 2. Define the fixed columns you want to convert / format ---
+currency_cols   = ["Cost", "List", "Profit", "30/90 BB", "30/90 Profit", "CPT", "CPT Profit", "Amz"]
+percent_cols    = ["ROI", "%", "CPT ROI", "Amz OOS"]
+integer_cols    = ["Offer", "Rank", "# Sold", "Rating", "T Rating"]
+hyperlink_cols  = ["Source", "Amazon"]
+
+# --- 3. Convert only these fixed columns to numerics, leaving any custom columns alone ---
+# 3a) Currency: strip $ , parentheses → numbers
+for col in currency_cols:
+    if col in df.columns:
+        df[col] = (
+            df[col]
+              .replace(r"\(([^)]+)\)", r"-\1", regex=True)  # "(13.27)" → "-13.27"
+              .replace(r"[\$,]", "", regex=True)            # remove $ & commas
+              .replace("", "0")                             # blank→0
+        )
+        df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0.0)
+
+# 3b) Percent: strip “%” and parentheses → decimal fraction
+for col in percent_cols:
+    if col in df.columns:
+        df[col] = (
+            df[col]
+              .astype(str)
+              .replace(r"\(([^)]+)\)", r"-\1", regex=True)
+              .str.rstrip("%")
+              .replace("", "0")
+        )
+        df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0.0).div(100)
+
+# 3c) Integers: strip commas → int
+for col in integer_cols:
+    if col in df.columns:
+        df[col] = (
+            df[col]
+              .replace(",", "", regex=True)
+              .replace("", "0")
+        )
+        df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0).astype(int)
+
+# --- 4. Build dynamic output filename & sheet name -------------------
+first_src = df.iloc[0].get("Source", "")
+netloc    = urllib.parse.urlparse(first_src).netloc.replace("www.", "")
+domain    = netloc.split(".")[0] if netloc else "Output"
+# Title-case except keep trailing "wss" uppercase
+if domain.lower().endswith("wss"):
+    domain_title = domain[:-3].capitalize() + domain[-3:].upper()
+else:
+    domain_title = domain.capitalize()
+
+date_str      = datetime.now().strftime("%m.%d.%y")  # e.g. "06.26.25"
+outfile_base  = f"{date_str} {domain_title}"
+OUTPUT_FILE   = f"{outfile_base}.xlsx"
+SHEET_NAME    = outfile_base[:31]  # Excel max-length = 31
+
+# --- 5. Prepare Excel workbook & sheet -------------------
+wb = Workbook()
+ws = wb.active
+ws.title = SHEET_NAME
+ws.freeze_panes = "A2"  # freeze header row
+
+# --- 6. Write header row -------------------
+for idx, header in enumerate(df.columns, start=1):
+    cell = ws.cell(row=1, column=idx, value=header)
+    cell.font = Font(bold=True)
+
+# --- 7. Write data rows with formatting & conditional highlights ---
+green_fill = PatternFill(start_color="00FF00", end_color="00FF00", fill_type="solid")
+
+for r_idx, row in enumerate(dataframe_to_rows(df, index=False, header=False), start=2):
+    for c_idx, (col_name, value) in enumerate(zip(df.columns, row), start=1):
+        cell = ws.cell(row=r_idx, column=c_idx)
+
+        # If this is a fixed numeric column and we have 0 & they're one of the "blank-if-zero" set, clear it:
+        if col_name in ["# Sold", "CPT", "CPT Profit", "CPT ROI", "Amz"]:
+            # treat blank custom columns separately; these are fixed numeric ones only
+            if cell.value == 0:
+                cell.value = None
+                continue
+
+        # Hyperlinks
+        if col_name in hyperlink_cols:
+            if value:
+                cell.value     = value
+                cell.hyperlink = value
+                cell.style     = "Hyperlink"
+            else:
+                cell.value = None
+            continue
+
+        # Currency formatting
+        if col_name in currency_cols:
+            cell.value = value
+            # Special negative-in-parentheses & red for two key cols:
+            if col_name in ["30/90 Profit", "CPT Profit"]:
+                cell.number_format = "$#,##0.00;[Red]($#,##0.00)"
+            else:
+                cell.number_format = "$#,##0.00"
+
+        # Percent formatting
+        elif col_name in percent_cols:
+            cell.value = value
+            cell.number_format = "0%"
+
+        # Integer formatting
+        elif col_name in integer_cols:
+            cell.value = value
+            cell.number_format = "#,##0"
+
+        # Everything else (including custom columns)
+        else:
+            cell.value = value
+
+        # Conditional highlights on fixed columns only
+        try:
+            if col_name == "Profit" and cell.value > 10:
+                cell.fill = green_fill
+            if col_name == "ROI" and cell.value > 0.25:
+                cell.fill = green_fill
+            if col_name == "CPT ROI" and cell.value > 0.10:
+                cell.fill = green_fill
+            if col_name == "Amz OOS" and cell.value > 0.70:
+                cell.fill = green_fill
+        except Exception:
+            pass
+
+        # BB/SUP highlight
+        if col_name == "BB/SUP" and value == "BB":
+            cell.fill = green_fill
+
+# --- 8. Column-width adjustments -------------------
+# Only apply to these fixed columns; leave all others (including custom) alone
+min_widths = {
+    "ASIN": 15, "Title": 40, "Cost":7, "List":7, "Profit":6,
+    "ROI":5, "Offer":5, "Rank":6, "# Sold":6, "30/90 BB":8,
+    "30/90 Profit":11, "Rating":8, "T Rating":8, "%":5,
+    "Return":7, "BB/SUP":7, "CPT":7, "CPT Profit":9,
+    "CPT ROI":8, "Amz":6, "Amz OOS":9
+}
+
+for col_name, width in min_widths.items():
+    if col_name in df.columns:
+        idx = list(df.columns).index(col_name) + 1
+        ws.column_dimensions[get_column_letter(idx)].width = width
+
+# --- 9. Save (overwrite if exists) -------------------
+wb.save(OUTPUT_FILE)
+print(f"✓ Saved formatted file as: {OUTPUT_FILE}")
+
+
+******************************************
+******************************************
+
+import pandas as pd
+import urllib.parse
+from datetime import datetime
+from openpyxl import Workbook
+from openpyxl.utils import get_column_letter
+from openpyxl.utils.dataframe import dataframe_to_rows
+from openpyxl.styles import Font, PatternFill
+import math, os
+
+# 1) Load CSV
+INPUT_FILE = "Keepa Cleaned.csv"
+if not os.path.exists(INPUT_FILE):
+    raise FileNotFoundError(f"Could not find {INPUT_FILE}")
+df = pd.read_csv(INPUT_FILE)
+
+# 2) Define column groups
+currency_cols  = ["Cost","List","Profit","30/90 BB","30/90 Profit","CPT","CPT Profit","Amz"]
+percent_cols   = ["ROI","%","CPT ROI","Amz OOS"]
+integer_cols   = ["Offer","Rank","# Sold","Rating","T Rating"]
+hyperlink_cols = ["Source","Amazon"]
+blank_zero     = ["# Sold","CPT","CPT Profit","CPT ROI","Amz"]
+
+# 3) Convert fixed columns
+for col in currency_cols:
+    if col in df:
+        s = df[col].astype(str)
+        s = s.replace(r"\(([^)]+)\)", r"-\1", regex=True)  # “($X)” → “-X”
+        s = s.replace(r"[\$,]", "", regex=True)
+        df[col] = pd.to_numeric(s, errors="coerce")
+
+for col in percent_cols:
+    if col in df:
+        s = df[col].astype(str)
+        s = s.replace(r"\(([^)]+)\)", r"-\1", regex=True).str.rstrip("%")
+        df[col] = pd.to_numeric(s, errors="coerce").div(100)
+
+for col in integer_cols:
+    if col in df:
+        s = df[col].astype(str).replace(",", "", regex=True)
+        df[col] = pd.to_numeric(s, errors="coerce").dropna().astype(int)
+
+# 4) Build filename & sheet name
+first_src = df.get("Source", pd.Series()).dropna().astype(str).iat[0] if "Source" in df else ""
+netloc    = urllib.parse.urlparse(first_src).netloc.replace("www.","")
+dom       = netloc.split(".")[0] if netloc else "Output"
+if dom.lower().endswith("wss"):
+    dom_title = dom[:-3].capitalize() + dom[-3:].upper()
+else:
+    dom_title = dom.capitalize()
+
+date_str    = datetime.now().strftime("%m.%d.%y")
+base        = f"{date_str} {dom_title}"
+OUTPUT_FILE = f"{base}.xlsx"
+SHEET_NAME  = base[:31]
+
+# 5) Create workbook
+wb = Workbook()
+ws = wb.active
+ws.title        = SHEET_NAME
+ws.freeze_panes = "A2"
+
+# 6) Write header
+for idx, hdr in enumerate(df.columns, start=1):
+    cell = ws.cell(row=1, column=idx, value=hdr)
+    cell.font = Font(bold=True)
+
+# 7) Write data + formatting
+green = PatternFill("solid", fgColor="00FF00")
+for r, row in enumerate(dataframe_to_rows(df, index=False, header=False), start=2):
+    for c, (col, val) in enumerate(zip(df.columns, row), start=1):
+        cell = ws.cell(row=r, column=c)
+        # NaN → blank
+        if isinstance(val, float) and math.isnan(val):
+            continue
+        # blank-if-zero
+        if col in blank_zero and val == 0:
+            continue
+        # hyperlinks
+        if col in hyperlink_cols:
+            if val:
+                cell.value     = val
+                cell.hyperlink = val
+                cell.style     = "Hyperlink"
+            continue
+        # currency
+        if col in currency_cols:
+            cell.value = val
+            if col in ["30/90 Profit","CPT Profit"]:
+                cell.number_format = "$#,##0.00;[Red]($#,##0.00)"
+            else:
+                cell.number_format = "$#,##0.00"
+        # percent
+        elif col in percent_cols:
+            cell.value = val
+            cell.number_format = "0%"
+        # integer
+        elif col in integer_cols:
+            cell.value = val
+            cell.number_format = "#,##0"
+        # custom/other
+        else:
+            cell.value = val
+        # conditional highlights
+        if col=="Profit"   and val>10:    cell.fill = green
+        if col=="ROI"      and val>0.25:  cell.fill = green
+        if col=="CPT ROI"  and val>0.10:  cell.fill = green
+        if col=="Amz OOS"  and val>0.70:  cell.fill = green
+        if col=="BB/SUP"   and val=="BB": cell.fill = green
+
+# 8) Column widths = max(auto_fit, minimum) with +1 padding
+min_widths = {
+    "ASIN":15, "Cost":7,  "List":7,  "Profit":6, "ROI":5,
+    "Offer":5,"Rank":6, "# Sold":6, "30/90 BB":8, "30/90 Profit":11,
+    "Rating":8, "T Rating":8, "%":5, "Return":7, "BB/SUP":7,
+    "CPT":7, "CPT Profit":9, "CPT ROI":8, "Amz":6, "Amz OOS":9
+}
+auto_cols = [c for c in min_widths if c in df.columns]
+
+for col in auto_cols:
+    idx    = list(df.columns).index(col) + 1
+    letter = get_column_letter(idx)
+    max_len = len(str(col))
+    for r in range(2, ws.max_row+1):
+        cell = ws.cell(row=r, column=idx)
+        if cell.value is None:
+            continue
+        # build display string
+        if col in currency_cols:
+            num = float(cell.value)
+            if col in ["30/90 Profit","CPT Profit"] and num<0:
+                disp = f"(${abs(num):,.2f})"
+            else:
+                disp = f"${num:,.2f}"
+        elif col in percent_cols:
+            num  = float(cell.value)
+            disp = f"{num:.0%}"
+        elif col in integer_cols:
+            num  = int(cell.value)
+            disp = f"{num:,}"
+        else:
+            disp = str(cell.value)
+        max_len = max(max_len, len(disp))
+    # apply max of auto and minimum, with +1 padding
+    ws.column_dimensions[letter].width = max(max_len + 1, min_widths[col])
+
+# Title fixed at 40
+if "Title" in df.columns:
+    i = list(df.columns).index("Title") + 1
+    ws.column_dimensions[get_column_letter(i)].width = 40
+
+# 9) Save
+wb.save(OUTPUT_FILE)
+print(f"✓ Saved → {OUTPUT_FILE}")
+
+
+******************************************
+******************************************
+******************************************
+******************************************
+******************************************
+******************************************
+******************************************
+******************************************
+******************************************
+******************************************
+******************************************
+******************************************
+******************************************
+Current Link
+https://chatgpt.com/share/685d8635-ea5c-8009-89cd-9986a9682093
+
+Original Link
+https://chatgpt.com/share/685d7b5d-259c-8009-a6fd-a51a2f0da875
+******************************************
+******************************************
+******************************************
+******************************************
+******************************************
+******************************************
+******************************************
+******************************************
+******************************************
+******************************************
+******************************************
+******************************************
+******************************************
+******************************************
+******************************************
+******************************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+

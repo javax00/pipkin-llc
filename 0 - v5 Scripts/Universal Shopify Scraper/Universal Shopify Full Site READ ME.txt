@@ -1,0 +1,36 @@
+How to use script:
+
+Hard coded to scrape entire website 
+
+Script will automatically capture pagination results, iterate through results and output upcs
+
+*******************************************************
+
+Libraries needed:
+requests
+pandas
+
+
+#######################################################
+Script requires API key to work 
+#######################################################
+
+
+Update API Key or Concurrency 
+	Format 	= Script Name & Line location of API or Concurrency
+
+Phase 1 - Shopify Check
+	Line 40		    apikey = ''
+	Line 71                with ThreadPoolExecutor(max_workers=5) as executor:
+
+Phase 2 - Category Urls
+	Line 15		API_KEY           = ""
+	Line 16		MAX_WORKERS       = 20
+
+
+
+
+
+*******************************************************
+*******************************************************
+*******************************************************

@@ -1,0 +1,1997 @@
+https://chatgpt.com/share/685ce59e-d7c0-8009-9b97-2b42613d6c11
+
+*************************************
+*************************************
+
+Please write a python script that auto detects a CSV file with the name "KeepaExport" in the file name thats in the same directory as the script. 
+
+If it detects an excel file, have a print statement appear saying File format is excel, CSV expected. Please upload CSV file. 
+
+I am attaching the source file so you know what the script will encounter, Analyze it as part of the solution
+
+Have the script check for and only output these headers
+
+Title
+ASIN
+New: Current
+Buy Box 🚚: Current
+Buy Box 🚚: 30 days avg.
+Buy Box 🚚: 90 days avg.
+Reviews: Rating Count - Format Specific
+Reviews: Rating Count
+New Offer Count: Current
+Bought in past month
+Sales Rank: Current
+Amazon: Current
+Amazon: 90 days OOS
+FBA Pick&Pack Fee
+Referral Fee %
+Competitive Price Threshold
+Return Rate
+
+If the header isn't one of the above, the script should delete that header and column
+
+Please Rename these following columns following this format - Source -> New Output Name
+ASIN					-> ASIN
+New: Current				-> New
+Buy Box 🚚: Current			-> BB
+Buy Box 🚚: 30 days avg.			-> BB 30
+Buy Box 🚚: 90 days avg.			-> BB 90
+Reviews: Rating Count - Format Specific	-> Rating
+Reviews: Rating Count			-> T Rating
+New Offer Count: Current		-> Offer
+Bought in past month			-> # Bought
+Sales Rank: Current			-> Rank
+Amazon: Current				-> Amz
+Amazon: 90 days OOS			-> Amz OOS
+FBA Pick&Pack Fee			-> FBA Fee
+Referral Fee %				-> Ref Fee
+Competitive Price Threshold		-> CPT
+Return Rate				-> Return
+
+Save the output file as CSV file named "Keepa Cleaned" and overwrite the file if it already exists. Output a blank CSV file if its an excel file for the input.
+
+*************************************
+*************************************
+
+import os
+import sys
+import pandas as pd
+
+# 1) Find any file with "KeepaExport" in its name
+candidates = [f for f in os.listdir('.') if 'KeepaExport' in f]
+if not candidates:
+    print("No file with 'KeepaExport' found in the current directory.")
+    sys.exit(1)
+
+# Use the first match
+input_file = candidates[0]
+basename, ext = os.path.splitext(input_file.lower())
+
+# 2) If Excel, bail out with blank CSV
+if ext in ('.xls', '.xlsx'):
+    print("File format is excel, CSV expected. Please upload CSV file.")
+    # Write a truly blank CSV
+    open("Keepa Cleaned.csv", "w").close()
+    sys.exit(0)
+
+# 3) Otherwise assume CSV
+if ext != '.csv':
+    print(f"Unrecognized extension '{ext}'. Expected .csv")
+    sys.exit(1)
+
+# Load the CSV
+df = pd.read_csv(input_file)
+
+# Define the only headers to keep
+allowed = [
+    "Title",
+    "ASIN",
+    "New: Current",
+    "Buy Box 🚚: Current",
+    "Buy Box 🚚: 30 days avg.",
+    "Buy Box 🚚: 90 days avg.",
+    "Reviews: Rating Count - Format Specific",
+    "Reviews: Rating Count",
+    "New Offer Count: Current",
+    "Bought in past month",
+    "Sales Rank: Current",
+    "Amazon: Current",
+    "Amazon: 90 days OOS",
+    "FBA Pick&Pack Fee",
+    "Referral Fee %",
+    "Competitive Price Threshold",
+    "Return Rate"
+]
+
+# Filter out any extra columns
+present = [c for c in allowed if c in df.columns]
+df = df[present]
+
+# Rename mapping
+rename_map = {
+    "ASIN": "ASIN",
+    "New: Current": "New",
+    "Buy Box 🚚: Current": "BB",
+    "Buy Box 🚚: 30 days avg.": "BB 30",
+    "Buy Box 🚚: 90 days avg.": "BB 90",
+    "Reviews: Rating Count - Format Specific": "Rating",
+    "Reviews: Rating Count": "T Rating",
+    "New Offer Count: Current": "Offer",
+    "Bought in past month": "# Bought",
+    "Sales Rank: Current": "Rank",
+    "Amazon: Current": "Amz",
+    "Amazon: 90 days OOS": "Amz OOS",
+    "FBA Pick&Pack Fee": "FBA Fee",
+    "Referral Fee %": "Ref Fee",
+    "Competitive Price Threshold": "CPT",
+    "Return Rate": "Return"
+}
+
+# Only rename the columns that are actually present
+to_rename = {k: v for k, v in rename_map.items() if k in df.columns}
+df = df.rename(columns=to_rename)
+
+# 4) Write out the cleaned CSV (overwrite if exists)
+df.to_csv("Keepa Cleaned.csv", index=False)
+print(f"Processed '{input_file}' → 'Keepa Cleaned.csv' with {len(df.columns)} columns and {len(df)} rows.")
+
+*************************************
+*************************************
+
+Let's add some additional formatting:
+
+Please update the script to check these two columns
+FBA Fee	
+Ref Fee
+
+We need them populated otherwise we can't calculate profit. If either row contains a blank value or is zero, delete that row. 
+
+Also have the script check this column
+Offer
+
+If any row is blank or empty, delete that row. This means the offer count is zero and we can't calculate profit on it. 
+
+Some of the rows are populating with - in the event its blank. Please do a find and replace on - and replace with blank so its empty instead. 
+
+For these columns
+Rating	
+T Rating
+# Bought	 
+Rank 
+
+I want it to apply a comma if the value is over 1000 with no decimals
+
+For this column
+Ref Fee
+
+Here are some of the outputs
+15%
+14.99%
+15.01%
+14.99%
+17.01%
+
+Round these to the nearest whole number with no decimals. In this case the output should be
+15%
+15%
+15%
+15%
+17%
+
+Please update the script to make these changes
+
+
+
+*************************************
+*************************************
+
+import os
+import sys
+import pandas as pd
+import numpy as np
+
+# 1) Find any file with "KeepaExport" in its name
+candidates = [f for f in os.listdir('.') if 'KeepaExport' in f]
+if not candidates:
+    print("No file with 'KeepaExport' found in the current directory.")
+    sys.exit(1)
+
+input_file = candidates[0]
+_, ext = os.path.splitext(input_file.lower())
+
+# 2) If Excel, bail out with blank CSV
+if ext in ('.xls', '.xlsx'):
+    print("File format is excel, CSV expected. Please upload CSV file.")
+    open("Keepa Cleaned.csv", "w").close()
+    sys.exit(0)
+
+# 3) Otherwise assume CSV
+if ext != '.csv':
+    print(f"Unrecognized extension '{ext}'. Expected .csv")
+    sys.exit(1)
+
+# Load the CSV
+df = pd.read_csv(input_file, dtype=str)
+
+# 4) Drop any hyphens (“-”) so they become empty strings
+df.replace('-', '', inplace=True)
+
+# 5) Keep only these columns (if present)
+allowed = [
+    "Title",
+    "ASIN",
+    "New: Current",
+    "Buy Box 🚚: Current",
+    "Buy Box 🚚: 30 days avg.",
+    "Buy Box 🚚: 90 days avg.",
+    "Reviews: Rating Count - Format Specific",
+    "Reviews: Rating Count",
+    "New Offer Count: Current",
+    "Bought in past month",
+    "Sales Rank: Current",
+    "Amazon: Current",
+    "Amazon: 90 days OOS",
+    "FBA Pick&Pack Fee",
+    "Referral Fee %",
+    "Competitive Price Threshold",
+    "Return Rate"
+]
+present = [c for c in allowed if c in df.columns]
+df = df[present]
+
+# 6) Rename to your desired output names
+rename_map = {
+    "ASIN": "ASIN",
+    "New: Current": "New",
+    "Buy Box 🚚: Current": "BB",
+    "Buy Box 🚚: 30 days avg.": "BB 30",
+    "Buy Box 🚚: 90 days avg.": "BB 90",
+    "Reviews: Rating Count - Format Specific": "Rating",
+    "Reviews: Rating Count": "T Rating",
+    "New Offer Count: Current": "Offer",
+    "Bought in past month": "# Bought",
+    "Sales Rank: Current": "Rank",
+    "Amazon: Current": "Amz",
+    "Amazon: 90 days OOS": "Amz OOS",
+    "FBA Pick&Pack Fee": "FBA Fee",
+    "Referral Fee %": "Ref Fee",
+    "Competitive Price Threshold": "CPT",
+    "Return Rate": "Return"
+}
+df.rename(columns={k: v for k, v in rename_map.items() if k in df.columns},
+          inplace=True)
+
+# 7) Drop any row where FBA Fee, Ref Fee, or Offer is blank or zero
+#    — first coerce to numeric for filtering
+num_fba = pd.to_numeric(df['FBA Fee'], errors='coerce')
+num_ref = pd.to_numeric(df['Ref Fee'].str.rstrip('%'), errors='coerce')
+num_offer = pd.to_numeric(df['Offer'], errors='coerce')
+
+mask = (
+    num_fba.fillna(0)    > 0  &
+    num_ref.fillna(0)    > 0  &
+    num_offer.fillna(0)  > 0
+)
+df = df.loc[mask].copy()
+
+# 8) Round Ref Fee to nearest whole percent
+df['Ref Fee'] = (num_ref[mask]
+                 .round(0)
+                 .astype(int)
+                 .astype(str)
+                 .add('%'))
+
+# 9) Format large integers with commas (no decimals)
+for col in ['Rating', 'T Rating', '# Bought', 'Rank']:
+    if col in df.columns:
+        # coerce to int then format
+        df[col] = (pd.to_numeric(df[col], errors='coerce')
+                   .fillna(0)
+                   .astype(int)
+                   .map(lambda x: f"{x:,}"))
+
+# 10) Save out
+df.to_csv("Keepa Cleaned.csv", index=False)
+print(f"✅ '{input_file}' → 'Keepa Cleaned.csv' | Rows: {len(df)} | Columns: {len(df.columns)}")
+
+
+*************************************
+*************************************
+
+ERROR OCCURRED - TROUBLESHOOTING
+
+
+*************************************
+*************************************
+
+
+"C:\Users\Fernando Lebeis\Google Drive\Chat GBT\5.3.23 RackRoomShoes\Pycharm\venv\Scripts\python.exe" "C:\Users\Fernando Lebeis\Google Drive\Web Scraping\0 6.17.25 June 2025 v5 CURRENT\6.26.25 - Day 4 Leads List - Scan Unlimited & Keepa\Tony Set Up\Phase 3 - Keepa Clean Up.py" 
+Traceback (most recent call last):
+  File "C:\Users\Fernando Lebeis\Google Drive\Chat GBT\5.3.23 RackRoomShoes\Pycharm\venv\lib\site-packages\pandas\core\ops\array_ops.py", line 311, in na_logical_op
+    result = op(x, y)
+  File "C:\Users\Fernando Lebeis\Google Drive\Chat GBT\5.3.23 RackRoomShoes\Pycharm\venv\lib\site-packages\pandas\core\roperator.py", line 54, in rand_
+    return operator.and_(right, left)
+TypeError: ufunc 'bitwise_and' not supported for the input types, and the inputs could not be safely coerced to any supported types according to the casting rule ''safe''
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Fernando Lebeis\Google Drive\Chat GBT\5.3.23 RackRoomShoes\Pycharm\venv\lib\site-packages\pandas\core\ops\array_ops.py", line 325, in na_logical_op
+    result = libops.scalar_binop(x, y, op)
+  File "pandas\_libs\ops.pyx", line 180, in pandas._libs.ops.scalar_binop
+ValueError: Buffer dtype mismatch, expected 'Python object' but got 'double'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Fernando Lebeis\Google Drive\Web Scraping\0 6.17.25 June 2025 v5 CURRENT\6.26.25 - Day 4 Leads List - Scan Unlimited & Keepa\Tony Set Up\Phase 3 - Keepa Clean Up.py", line 84, in <module>
+    num_fba.fillna(0)    > 0  &
+  File "C:\Users\Fernando Lebeis\Google Drive\Chat GBT\5.3.23 RackRoomShoes\Pycharm\venv\lib\site-packages\pandas\core\ops\common.py", line 81, in new_method
+    return method(self, other)
+  File "C:\Users\Fernando Lebeis\Google Drive\Chat GBT\5.3.23 RackRoomShoes\Pycharm\venv\lib\site-packages\pandas\core\arraylike.py", line 74, in __rand__
+    return self._logical_method(other, roperator.rand_)
+  File "C:\Users\Fernando Lebeis\Google Drive\Chat GBT\5.3.23 RackRoomShoes\Pycharm\venv\lib\site-packages\pandas\core\series.py", line 6103, in _logical_method
+    res_values = ops.logical_op(lvalues, rvalues, op)
+  File "C:\Users\Fernando Lebeis\Google Drive\Chat GBT\5.3.23 RackRoomShoes\Pycharm\venv\lib\site-packages\pandas\core\ops\array_ops.py", line 401, in logical_op
+    res_values = na_logical_op(lvalues, rvalues, op)
+  File "C:\Users\Fernando Lebeis\Google Drive\Chat GBT\5.3.23 RackRoomShoes\Pycharm\venv\lib\site-packages\pandas\core\ops\array_ops.py", line 334, in na_logical_op
+    raise TypeError(
+TypeError: Cannot perform 'rand_' with a dtyped [float64] array and scalar of type [bool]
+
+Process finished with exit code 1
+
+*************************************
+*************************************
+
+This script gave this output. attached is the input file if you need to reference it to help to troubleshoot
+
+*************************************
+*************************************
+
+import os
+import sys
+import pandas as pd
+
+# 1) Auto-detect “KeepaExport” file
+candidates = [f for f in os.listdir('.') if 'KeepaExport' in f]
+if not candidates:
+    print("No file with 'KeepaExport' found in the current directory.")
+    sys.exit(1)
+
+input_file = candidates[0]
+_, ext = os.path.splitext(input_file.lower())
+
+# 2) Excel check → blank CSV
+if ext in ('.xls', '.xlsx'):
+    print("File format is excel, CSV expected. Please upload CSV file.")
+    open("Keepa Cleaned.csv", "w").close()
+    sys.exit(0)
+
+# 3) Only CSV beyond here
+if ext != '.csv':
+    print(f"Unrecognized extension '{ext}'. Expected .csv")
+    sys.exit(1)
+
+# 4) Load everything as strings
+df = pd.read_csv(input_file, dtype=str)
+
+# 5) Turn any lone “-” into an empty cell
+df.replace('-', '', inplace=True)
+
+# 6) Keep only the allowed headers
+allowed = [
+    "Title",
+    "ASIN",
+    "New: Current",
+    "Buy Box 🚚: Current",
+    "Buy Box 🚚: 30 days avg.",
+    "Buy Box 🚚: 90 days avg.",
+    "Reviews: Rating Count - Format Specific",
+    "Reviews: Rating Count",
+    "New Offer Count: Current",
+    "Bought in past month",
+    "Sales Rank: Current",
+    "Amazon: Current",
+    "Amazon: 90 days OOS",
+    "FBA Pick&Pack Fee",
+    "Referral Fee %",
+    "Competitive Price Threshold",
+    "Return Rate"
+]
+present = [c for c in allowed if c in df.columns]
+df = df[present]
+
+# 7) Rename to your output names
+rename_map = {
+    "ASIN": "ASIN",
+    "New: Current": "New",
+    "Buy Box 🚚: Current": "BB",
+    "Buy Box 🚚: 30 days avg.": "BB 30",
+    "Buy Box 🚚: 90 days avg.": "BB 90",
+    "Reviews: Rating Count - Format Specific": "Rating",
+    "Reviews: Rating Count": "T Rating",
+    "New Offer Count: Current": "Offer",
+    "Bought in past month": "# Bought",
+    "Sales Rank: Current": "Rank",
+    "Amazon: Current": "Amz",
+    "Amazon: 90 days OOS": "Amz OOS",
+    "FBA Pick&Pack Fee": "FBA Fee",
+    "Referral Fee %": "Ref Fee",
+    "Competitive Price Threshold": "CPT",
+    "Return Rate": "Return"
+}
+df.rename(columns={k: v for k, v in rename_map.items() if k in df.columns},
+          inplace=True)
+
+# 8) Convert to numeric for filtering
+fba   = pd.to_numeric(df['FBA Fee'],            errors='coerce')
+ref   = pd.to_numeric(df['Ref Fee'].str.rstrip('%'), errors='coerce')
+offer = pd.to_numeric(df['Offer'],              errors='coerce')
+
+# 9) Drop rows where any of FBA Fee, Ref Fee, or Offer is missing or ≤0
+mask = (
+    (fba.fillna(0) > 0) &
+    (ref.fillna(0) > 0) &
+    (offer.fillna(0) > 0)
+)
+df = df.loc[mask].copy()
+
+# 10) Round Ref Fee to nearest whole percent
+df['Ref Fee'] = (
+    ref[mask]
+    .round(0)
+    .astype(int)
+    .astype(str)
+    .add('%')
+)
+
+# 11) Format large integers with commas
+for col in ['Rating', 'T Rating', '# Bought', 'Rank']:
+    if col in df.columns:
+        df[col] = (
+            pd.to_numeric(df[col], errors='coerce')
+              .fillna(0)
+              .astype(int)
+              .map(lambda x: f"{x:,}")
+        )
+
+# 12) Save out
+df.to_csv("Keepa Cleaned.csv", index=False)
+print(f"✅ '{input_file}' → 'Keepa Cleaned.csv' | Rows: {len(df)} | Columns: {len(df.columns)}")
+
+*************************************
+*************************************
+
+ERROR OCCURRED TROUBLESHOOTING
+
+The script failed it created a blank output file, it was working without issue prior
+
+*************************************
+*************************************
+
+import os
+import sys
+import pandas as pd
+
+# 1) Auto-detect “KeepaExport” file
+candidates = [f for f in os.listdir('.') if 'KeepaExport' in f]
+if not candidates:
+    print("No file with 'KeepaExport' found in the current directory.")
+    sys.exit(1)
+
+input_file = candidates[0]
+_, ext = os.path.splitext(input_file.lower())
+
+# 2) Excel check → blank CSV
+if ext in ('.xls', '.xlsx'):
+    print("File format is excel, CSV expected. Please upload CSV file.")
+    open("Keepa Cleaned.csv", "w").close()
+    sys.exit(0)
+
+# 3) Only CSV beyond here
+if ext != '.csv':
+    print(f"Unrecognized extension '{ext}'. Expected .csv")
+    sys.exit(1)
+
+# 4) Load everything as strings
+df = pd.read_csv(input_file, dtype=str)
+
+# 5) Clean up headers & hyphens
+df.columns = df.columns.str.strip()
+df.replace('-', '', inplace=True)
+
+# 6) Keep only your allowed columns
+allowed = [
+    "Title",
+    "ASIN",
+    "New: Current",
+    "Buy Box 🚚: Current",
+    "Buy Box 🚚: 30 days avg.",
+    "Buy Box 🚚: 90 days avg.",
+    "Reviews: Rating Count - Format Specific",
+    "Reviews: Rating Count",
+    "New Offer Count: Current",
+    "Bought in past month",
+    "Sales Rank: Current",
+    "Amazon: Current",
+    "Amazon: 90 days OOS",
+    "FBA Pick&Pack Fee",
+    "Referral Fee %",
+    "Competitive Price Threshold",
+    "Return Rate"
+]
+present = [c for c in allowed if c in df.columns]
+df = df[present]
+
+# 7) Rename to your output names
+rename_map = {
+    "ASIN": "ASIN",
+    "New: Current": "New",
+    "Buy Box 🚚: Current": "BB",
+    "Buy Box 🚚: 30 days avg.": "BB 30",
+    "Buy Box 🚚: 90 days avg.": "BB 90",
+    "Reviews: Rating Count - Format Specific": "Rating",
+    "Reviews: Rating Count": "T Rating",
+    "New Offer Count: Current": "Offer",
+    "Bought in past month": "# Bought",
+    "Sales Rank: Current": "Rank",
+    "Amazon: Current": "Amz",
+    "Amazon: 90 days OOS": "Amz OOS",
+    "FBA Pick&Pack Fee": "FBA Fee",
+    "Referral Fee %": "Ref Fee",
+    "Competitive Price Threshold": "CPT",
+    "Return Rate": "Return"
+}
+df.rename(columns={k: v for k, v in rename_map.items() if k in df.columns},
+          inplace=True)
+
+# 8) Strip $ and commas from FBA Fee so numeric conversion works
+if 'FBA Fee' in df.columns:
+    df['FBA Fee'] = df['FBA Fee'].replace(r'[\$,]', '', regex=True)
+
+# 9) Convert to numeric for filtering
+fba   = pd.to_numeric(df.get('FBA Fee', pd.Series()),            errors='coerce')
+ref   = pd.to_numeric(df.get('Ref Fee', pd.Series()).str.rstrip('%'), errors='coerce')
+offer = pd.to_numeric(df.get('Offer', pd.Series()),              errors='coerce')
+
+# 10) Drop rows where FBA Fee, Ref Fee, or Offer is missing or ≤0
+mask = (
+    (fba.fillna(0) > 0) &
+    (ref.fillna(0) > 0) &
+    (offer.fillna(0) > 0)
+)
+df = df.loc[mask].copy()
+
+# 11) Round Ref Fee to nearest whole percent
+df['Ref Fee'] = (
+    ref[mask]
+    .round(0)
+    .astype(int)
+    .astype(str)
+    .add('%')
+)
+
+# 12) Format large integers with commas
+for col in ['Rating', 'T Rating', '# Bought', 'Rank']:
+    if col in df.columns:
+        df[col] = (
+            pd.to_numeric(df[col], errors='coerce')
+              .fillna(0)
+              .astype(int)
+              .map(lambda x: f"{x:,}")
+        )
+
+# 13) Save out
+df.to_csv("Keepa Cleaned.csv", index=False)
+print(f"✅ '{input_file}' → 'Keepa Cleaned.csv' | Rows: {len(df)} | Columns: {len(df.columns)}")
+
+
+*************************************
+*************************************
+
+Could you please update the script to help merge data from another CSV file named "SU Cleaned"
+
+The script needs to match on the ASIN value in "SU Cleaned" and bring over all the data columns and rows associated with that ASIN. 
+
+Example of the input data
+ASIN	Cost	Profit	ROI	 Tags	Source
+B0D619RMRY	49.99	0		$40 TO $60, 10001 5BN, Classic Clog, Clogs, CROCS, eligible-discount, eligible-discount-clearance, eligible-discount-employee, eligible-discount-friends, festival2025, full-price-eligible-discount, Lifestyle, md2-exclusion, PURPLE, Slides, Slides and Thong	https://www.shopwss.com/products/10001_5bn?variant=41083645067319
+B004026VO8	49.99	0		$40 TO $60, 10001 302, Classic Clog, Clogs, CROCS, eligible-discount, eligible-discount-clearance, eligible-discount-employee, eligible-discount-friends, festival2025, full-price-eligible-discount, GREEN, Lifestyle, md2-exclusion, mens, mens-shoes, mens-sh	https://www.shopwss.com/products/10001_302?variant=40951277813815
+B0CXG7RT5L	49.99	0		$40 TO $60, 10001 302, Classic Clog, Clogs, CROCS, eligible-discount, eligible-discount-clearance, eligible-discount-employee, eligible-discount-friends, festival2025, full-price-eligible-discount, GREEN, Lifestyle, md2-exclusion, mens, mens-shoes, mens-sh	https://www.shopwss.com/products/10001_302?variant=40951277781047
+
+Do not bring over the Profit or ROI. ASIN column will be duplicated so that will not need to come over
+
+We are mainly always looking to bring over the associated cost and source. The last remaining column also needs to be brought over. This will be a custom column and the script needs to be dynamic. It should be the last remaining column and should be brought over. Its possible that future SU Cleaned files will have 0-5 custom columns and they will be brought over because they are not ASIN/Cost/Profit/ROI/Source
+
+*************************************
+*************************************
+
+import os
+import sys
+import pandas as pd
+
+# 1) Auto-detect “KeepaExport” file
+candidates = [f for f in os.listdir('.') if 'KeepaExport' in f]
+if not candidates:
+    print("No file with 'KeepaExport' found in the current directory.")
+    sys.exit(1)
+
+input_file = candidates[0]
+_, ext = os.path.splitext(input_file.lower())
+
+# 2) Excel check → blank CSV
+if ext in ('.xls', '.xlsx'):
+    print("File format is excel, CSV expected. Please upload CSV file.")
+    open("Keepa Cleaned.csv", "w").close()
+    sys.exit(0)
+
+# 3) Only CSV beyond here
+if ext != '.csv':
+    print(f"Unrecognized extension '{ext}'. Expected .csv")
+    sys.exit(1)
+
+# 4) Load everything as strings
+df = pd.read_csv(input_file, dtype=str)
+
+# 5) Clean up headers & hyphens
+df.columns = df.columns.str.strip()
+df.replace('-', '', inplace=True)
+
+# 6) Keep only your allowed columns
+allowed = [
+    "Title",
+    "ASIN",
+    "New: Current",
+    "Buy Box 🚚: Current",
+    "Buy Box 🚚: 30 days avg.",
+    "Buy Box 🚚: 90 days avg.",
+    "Reviews: Rating Count - Format Specific",
+    "Reviews: Rating Count",
+    "New Offer Count: Current",
+    "Bought in past month",
+    "Sales Rank: Current",
+    "Amazon: Current",
+    "Amazon: 90 days OOS",
+    "FBA Pick&Pack Fee",
+    "Referral Fee %",
+    "Competitive Price Threshold",
+    "Return Rate"
+]
+present = [c for c in allowed if c in df.columns]
+df = df[present]
+
+# 7) Rename to your output names
+rename_map = {
+    "ASIN": "ASIN",
+    "New: Current": "New",
+    "Buy Box 🚚: Current": "BB",
+    "Buy Box 🚚: 30 days avg.": "BB 30",
+    "Buy Box 🚚: 90 days avg.": "BB 90",
+    "Reviews: Rating Count - Format Specific": "Rating",
+    "Reviews: Rating Count": "T Rating",
+    "New Offer Count: Current": "Offer",
+    "Bought in past month": "# Bought",
+    "Sales Rank: Current": "Rank",
+    "Amazon: Current": "Amz",
+    "Amazon: 90 days OOS": "Amz OOS",
+    "FBA Pick&Pack Fee": "FBA Fee",
+    "Referral Fee %": "Ref Fee",
+    "Competitive Price Threshold": "CPT",
+    "Return Rate": "Return"
+}
+df.rename(columns={k: v for k, v in rename_map.items() if k in df.columns},
+          inplace=True)
+
+# 8) Strip $ and commas from FBA Fee so numeric conversion works
+if 'FBA Fee' in df.columns:
+    df['FBA Fee'] = df['FBA Fee'].replace(r'[\$,]', '', regex=True)
+
+# 9) Convert to numeric for filtering
+fba   = pd.to_numeric(df.get('FBA Fee', pd.Series()),             errors='coerce')
+ref   = pd.to_numeric(df.get('Ref Fee', pd.Series()).str.rstrip('%'), errors='coerce')
+offer = pd.to_numeric(df.get('Offer', pd.Series()),               errors='coerce')
+
+# 10) Drop rows where FBA Fee, Ref Fee, or Offer is missing or ≤0
+mask = (
+    (fba.fillna(0) > 0) &
+    (ref.fillna(0) > 0) &
+    (offer.fillna(0) > 0)
+)
+df = df.loc[mask].copy()
+
+# 11) Round Ref Fee to nearest whole percent
+df['Ref Fee'] = (
+    ref[mask]
+    .round(0)
+    .astype(int)
+    .astype(str)
+    .add('%')
+)
+
+# 12) Format large integers with commas
+for col in ['Rating', 'T Rating', '# Bought', 'Rank']:
+    if col in df.columns:
+        df[col] = (
+            pd.to_numeric(df[col], errors='coerce')
+              .fillna(0)
+              .astype(int)
+              .map(lambda x: f"{x:,}")
+        )
+
+# 13) Merge in SU Cleaned.csv
+su_file = "SU Cleaned.csv"
+if os.path.exists(su_file):
+    su_df = pd.read_csv(su_file, dtype=str)
+    # Drop Profit & ROI if present
+    for drop_col in ('Profit', 'ROI'):
+        if drop_col in su_df.columns:
+            su_df.drop(columns=drop_col, inplace=True)
+    if 'ASIN' not in su_df.columns:
+        print(f"Warning: '{su_file}' missing an ASIN column; skipping merge.")
+    else:
+        # Keep ASIN + all other SU columns (Cost, Source, plus any custom)
+        su_cols = [c for c in su_df.columns if c != 'ASIN']
+        df = df.merge(su_df[['ASIN'] + su_cols], on='ASIN', how='left')
+        print(f"Merged SU data from '{su_file}', added columns: {', '.join(su_cols)}")
+else:
+    print(f"SU Cleaned file '{su_file}' not found. Skipping SU merge.")
+
+# 14) Save out
+df.to_csv("Keepa Cleaned.csv", index=False)
+print(f"✅ '{input_file}' → 'Keepa Cleaned.csv' | Rows: {len(df)} | Columns: {len(df.columns)}")
+
+
+*************************************
+*************************************
+
+Now that the cost is a part of the data set, we can calculate profit and ROI. This is what the current output looks like
+
+Title	ASIN	New	BB	BB 30	BB 90	Rating	T Rating	Offer	# Bought	Rank	Amz	Amz OOS	FBA Fee	Ref Fee	CPT	Return	Cost	 Tags	Source
+Crocs Unisex Classic Clog Mystic Purple Men's 3, Women's 5 M	B0D619RMRY	$76.40 				0	2	1	0	1		100%	6.21	15%	$49.99 		49.99	$40 TO $60	https://www.shopwss.com/products/10001_5bn?variant=41083645067319
+Crocs Unisex Classic Clog Emerald Mens 11, Womens 13 Medium	B004026VO8	$44.95 		$38.34 	$38.34 	0	626,458	2	400	1		100%	7.32	15%	$33.97 		49.99	$40 TO $60	https://www.shopwss.com/products/10001_302?variant=40951277813815
+
+
+Please update the script to make the following calculations for each row
+
+Make the following new columns at the end of the existing dataset, along with their formula
+
+List = Check the value for BB, if its populated with a number, output the number. If BB is blank, check the value for New and output the value for List as a number formatted as currency with 2 decimals. 
+
+Profit = List - Cost - FBA Fee - (Ref Fee * List)
+
+ROI = Profit / Cost output as a % with no decimals
+
+30/90 BB = Check BB 30 and BB 90, output the lower of the two values. If both are blank, the output should be blank
+
+30/90 Profit = 30/90 BB - Cost - FBA Fee - (Ref Fee * 30/90 BB)
+
+% = Divide Rating / T Rating. Format as % with no decimals. If it results in error, output should be blank
+
+BB/SUP = The purpose of this formula is to check if the buy box is on or suppressed. The only two possible output combinations are BB or SUP. Here is the logic. Check the BB column for that row, if its populated with a number it means buy box is turned on and the output should be BB. If its not populated with a number or is blank then the output should be SUP
+
+Check BB, if its populated with a number the output value should be BB, if its blank, then the output should be SUP. 
+
+CPT Profit = If CPT is populated with a number do this profit calculation. CPT - Cost - FBA Fee - (Ref Fee * CPT), otherwise output blank
+
+CPT ROI = CPT Profit / Cost output as a % with no decimals
+
+Please rename # Bought column to # Sold
+ 
+Please output the fully revised python script so I can copy/paste it and run it
+
+*************************************
+*************************************
+
+import os
+import sys
+import pandas as pd
+import numpy as np
+
+# 1) Auto-detect “KeepaExport” file
+candidates = [f for f in os.listdir('.') if 'KeepaExport' in f]
+if not candidates:
+    print("No file with 'KeepaExport' found in the current directory.")
+    sys.exit(1)
+keepa_file = candidates[0]
+_, ext = os.path.splitext(keepa_file.lower())
+
+# 2) Excel check → blank CSV
+if ext in ('.xls', '.xlsx'):
+    print("File format is excel, CSV expected. Please upload CSV file.")
+    open("Keepa Cleaned.csv", "w").close()
+    sys.exit(0)
+if ext != '.csv':
+    print(f"Unrecognized extension '{ext}'. Expected .csv")
+    sys.exit(1)
+
+# 3) Load Keepa CSV
+df = pd.read_csv(keepa_file, dtype=str)
+df.columns = df.columns.str.strip()
+df.replace('-', '', inplace=True)
+
+# 4) Keep only the allowed Keepa columns
+keepa_allowed = [
+    "Title", "ASIN", "New: Current",
+    "Buy Box 🚚: Current", "Buy Box 🚚: 30 days avg.", "Buy Box 🚚: 90 days avg.",
+    "Reviews: Rating Count - Format Specific", "Reviews: Rating Count",
+    "New Offer Count: Current", "Bought in past month",
+    "Sales Rank: Current", "Amazon: Current", "Amazon: 90 days OOS",
+    "FBA Pick&Pack Fee", "Referral Fee %", "Competitive Price Threshold",
+    "Return Rate"
+]
+keepa_cols = [c for c in keepa_allowed if c in df.columns]
+df = df[keepa_cols]
+
+# 5) Rename columns
+rename_map = {
+    "New: Current": "New",
+    "Buy Box 🚚: Current": "BB",
+    "Buy Box 🚚: 30 days avg.": "BB 30",
+    "Buy Box 🚚: 90 days avg.": "BB 90",
+    "Reviews: Rating Count - Format Specific": "Rating",
+    "Reviews: Rating Count": "T Rating",
+    "New Offer Count: Current": "Offer",
+    "Bought in past month": "# Sold",
+    "Sales Rank: Current": "Rank",
+    "Amazon: Current": "Amz",
+    "Amazon: 90 days OOS": "Amz OOS",
+    "FBA Pick&Pack Fee": "FBA Fee",
+    "Referral Fee %": "Ref Fee",
+    "Competitive Price Threshold": "CPT",
+    "Return Rate": "Return"
+}
+df.rename(columns={k: v for k, v in rename_map.items() if k in df.columns},
+          inplace=True)
+
+# 6) Clean up numeric strings
+if 'FBA Fee' in df.columns:
+    df['FBA Fee'] = df['FBA Fee'].replace(r'[\$,]', '', regex=True)
+if 'New' in df.columns:
+    df['New'] = df['New'].replace(r'[\$,]', '', regex=True)
+for col in ['BB', 'BB 30', 'BB 90', 'CPT']:
+    if col in df.columns:
+        df[col] = df[col].replace(r'[\$,]', '', regex=True)
+
+# 7) Convert to numeric for filtering
+fba   = pd.to_numeric(df.get('FBA Fee', pd.Series()), errors='coerce')
+ref   = pd.to_numeric(df.get('Ref Fee', pd.Series()).str.rstrip('%'), errors='coerce') / 100
+offer = pd.to_numeric(df.get('Offer', pd.Series()), errors='coerce')
+
+# 8) Drop rows where FBA Fee, Ref Fee, or Offer is missing or ≤0
+mask = (fba.fillna(0) > 0) & (ref.fillna(0) > 0) & (offer.fillna(0) > 0)
+df = df.loc[mask].copy()
+
+# 9) Round Ref Fee to whole percent
+df['Ref Fee'] = (ref[mask] * 100).round(0).astype(int).astype(str).add('%')
+
+# 10) Format large counts
+for col in ['Rating', 'T Rating', '# Sold', 'Rank']:
+    if col in df.columns:
+        df[col] = (pd.to_numeric(df[col], errors='coerce')
+                    .fillna(0)
+                    .astype(int)
+                    .map(lambda x: f"{x:,}"))
+
+# 11) Merge in SU Cleaned.csv
+su_file = "SU Cleaned.csv"
+if os.path.exists(su_file):
+    su = pd.read_csv(su_file, dtype=str)
+    su.columns = su.columns.str.strip()
+    # drop Profit & ROI
+    for drop in ('Profit','ROI'):
+        if drop in su.columns:
+            su.drop(columns=drop, inplace=True)
+    if 'ASIN' in su.columns:
+        su_cols = [c for c in su.columns if c != 'ASIN']
+        df = df.merge(su[['ASIN']+su_cols], on='ASIN', how='left')
+        print(f"Merged SU data: {', '.join(su_cols)}")
+    else:
+        print(f"Warning: '{su_file}' missing ASIN; skipped merge.")
+else:
+    print(f"SU file '{su_file}' not found; skipped merge.")
+
+# 12) Prepare numeric series for calculations
+num_BB      = pd.to_numeric(df.get('BB', pd.Series()), errors='coerce')
+num_New     = pd.to_numeric(df.get('New', pd.Series()), errors='coerce')
+num_BB30    = pd.to_numeric(df.get('BB 30', pd.Series()), errors='coerce')
+num_BB90    = pd.to_numeric(df.get('BB 90', pd.Series()), errors='coerce')
+num_CPT     = pd.to_numeric(df.get('CPT', pd.Series()), errors='coerce')
+num_Cost    = pd.to_numeric(df.get('Cost', pd.Series()).replace(r'[\$,]', '', regex=True), errors='coerce')
+num_FBA     = fba
+num_RefPct  = ref
+
+# 13) Calculations
+
+# List
+list_val = num_BB.fillna(num_New)
+df['List'] = list_val.map(lambda x: f"${x:,.2f}" if pd.notna(x) else "")
+
+# Profit
+profit_val = list_val - num_Cost - num_FBA - (num_RefPct * list_val)
+df['Profit'] = profit_val.map(lambda x: f"${x:,.2f}" if pd.notna(x) else "")
+
+# ROI
+roi_val = profit_val / num_Cost
+df['ROI'] = roi_val.map(lambda x: f"{x*100:.0f}%" if pd.notna(x) and np.isfinite(x) else "")
+
+# 30/90 BB
+bb3090 = pd.concat([num_BB30, num_BB90], axis=1).min(axis=1, skipna=True)
+df['30/90 BB'] = bb3090.map(lambda x: f"${x:,.2f}" if pd.notna(x) else "")
+
+# 30/90 Profit
+p3090 = bb3090 - num_Cost - num_FBA - (num_RefPct * bb3090)
+df['30/90 Profit'] = p3090.map(lambda x: f"${x:,.2f}" if pd.notna(x) else "")
+
+# % (Rating / T Rating)
+num_Rating   = pd.to_numeric(df.get('Rating', pd.Series()).str.replace(',',''), errors='coerce')
+num_TRating  = pd.to_numeric(df.get('T Rating', pd.Series()).str.replace(',',''), errors='coerce')
+pct = num_Rating / num_TRating
+df['%'] = pct.map(lambda x: f"{x*100:.0f}%" if pd.notna(x) and np.isfinite(x) else "")
+
+# BB/SUP
+df['BB/SUP'] = np.where(num_BB.fillna(0) > 0, 'BB', 'SUP')
+
+# CPT Profit & CPT ROI
+cpt_profit = num_CPT - num_Cost - num_FBA - (num_RefPct * num_CPT)
+df['CPT Profit'] = cpt_profit.map(lambda x: f"${x:,.2f}" if pd.notna(x) else "")
+cpt_roi = cpt_profit / num_Cost
+df['CPT ROI'] = cpt_roi.map(lambda x: f"{x*100:.0f}%" if pd.notna(x) and np.isfinite(x) else "")
+
+# 14) Save final CSV
+df.to_csv("Keepa Cleaned.csv", index=False)
+print(f"✅ Done: 'Keepa Cleaned.csv' with {len(df)} rows & {len(df.columns)} columns.")
+
+
+*************************************
+*************************************
+
+Please update the script to make 2 more modifications
+
+For the # Sold column, this is how it looks
+
+# Sold
+0
+400
+500
+
+I don't want 0 to output, i want blank to output instead if its 0
+
+Also, make a new column called Amazon which will create a hyperlink using this format
+https://www.amazon.com/dp/{ASIN}?th=1&psc=1
+
+Please output the fully updated script so I can test it
+
+*************************************
+*************************************
+
+import os
+import sys
+import pandas as pd
+import numpy as np
+
+# 1) Auto-detect “KeepaExport” file
+candidates = [f for f in os.listdir('.') if 'KeepaExport' in f]
+if not candidates:
+    print("No file with 'KeepaExport' found in the current directory.")
+    sys.exit(1)
+keepa_file = candidates[0]
+_, ext = os.path.splitext(keepa_file.lower())
+
+# 2) Excel check → blank CSV
+if ext in ('.xls', '.xlsx'):
+    print("File format is excel, CSV expected. Please upload CSV file.")
+    open("Keepa Cleaned.csv", "w").close()
+    sys.exit(0)
+if ext != '.csv':
+    print(f"Unrecognized extension '{ext}'. Expected .csv")
+    sys.exit(1)
+
+# 3) Load Keepa CSV
+df = pd.read_csv(keepa_file, dtype=str)
+df.columns = df.columns.str.strip()
+df.replace('-', '', inplace=True)
+
+# 4) Keep only the allowed Keepa columns
+keepa_allowed = [
+    "Title", "ASIN", "New: Current",
+    "Buy Box 🚚: Current", "Buy Box 🚚: 30 days avg.", "Buy Box 🚚: 90 days avg.",
+    "Reviews: Rating Count - Format Specific", "Reviews: Rating Count",
+    "New Offer Count: Current", "Bought in past month",
+    "Sales Rank: Current", "Amazon: Current", "Amazon: 90 days OOS",
+    "FBA Pick&Pack Fee", "Referral Fee %", "Competitive Price Threshold",
+    "Return Rate"
+]
+keepa_cols = [c for c in keepa_allowed if c in df.columns]
+df = df[keepa_cols]
+
+# 5) Rename columns
+rename_map = {
+    "New: Current": "New",
+    "Buy Box 🚚: Current": "BB",
+    "Buy Box 🚚: 30 days avg.": "BB 30",
+    "Buy Box 🚚: 90 days avg.": "BB 90",
+    "Reviews: Rating Count - Format Specific": "Rating",
+    "Reviews: Rating Count": "T Rating",
+    "New Offer Count: Current": "Offer",
+    "Bought in past month": "# Sold",
+    "Sales Rank: Current": "Rank",
+    "Amazon: Current": "Amz",
+    "Amazon: 90 days OOS": "Amz OOS",
+    "FBA Pick&Pack Fee": "FBA Fee",
+    "Referral Fee %": "Ref Fee",
+    "Competitive Price Threshold": "CPT",
+    "Return Rate": "Return"
+}
+df.rename(columns={k: v for k, v in rename_map.items() if k in df.columns},
+          inplace=True)
+
+# 6) Clean up numeric strings
+for col in ['FBA Fee', 'New', 'BB', 'BB 30', 'BB 90', 'CPT']:
+    if col in df.columns:
+        df[col] = df[col].replace(r'[\$,]', '', regex=True)
+
+# 7) Convert to numeric for filtering
+fba   = pd.to_numeric(df.get('FBA Fee', pd.Series()), errors='coerce')
+ref   = pd.to_numeric(df.get('Ref Fee', pd.Series()).str.rstrip('%'), errors='coerce') / 100
+offer = pd.to_numeric(df.get('Offer', pd.Series()), errors='coerce')
+
+# 8) Drop rows where FBA Fee, Ref Fee, or Offer is missing or ≤0
+mask = (fba.fillna(0) > 0) & (ref.fillna(0) > 0) & (offer.fillna(0) > 0)
+df = df.loc[mask].copy()
+
+# 9) Round Ref Fee to whole percent
+df['Ref Fee'] = (ref[mask] * 100).round(0).astype(int).astype(str).add('%')
+
+# 10) Format large counts
+for col in ['Rating', 'T Rating', 'Rank']:
+    if col in df.columns:
+        df[col] = (
+            pd.to_numeric(df[col], errors='coerce')
+              .fillna(0)
+              .astype(int)
+              .map(lambda x: f"{x:,}")
+        )
+# # Sold: blank instead of 0
+if '# Sold' in df.columns:
+    df['# Sold'] = (
+        pd.to_numeric(df['# Sold'], errors='coerce')
+          .fillna(0)
+          .astype(int)
+          .map(lambda x: f"{x:,}" if x != 0 else '')
+    )
+
+# 11) Merge in SU Cleaned.csv
+su_file = "SU Cleaned.csv"
+if os.path.exists(su_file):
+    su = pd.read_csv(su_file, dtype=str)
+    su.columns = su.columns.str.strip()
+    for drop in ('Profit', 'ROI'):
+        if drop in su.columns:
+            su.drop(columns=drop, inplace=True)
+    if 'ASIN' in su.columns:
+        su_cols = [c for c in su.columns if c != 'ASIN']
+        df = df.merge(su[['ASIN'] + su_cols], on='ASIN', how='left')
+        print(f"Merged SU data: {', '.join(su_cols)}")
+    else:
+        print(f"Warning: '{su_file}' missing ASIN; skipped merge.")
+else:
+    print(f"SU file '{su_file}' not found; skipped merge.")
+
+# 12) Prepare numeric series for calculations
+num_BB      = pd.to_numeric(df.get('BB', pd.Series()), errors='coerce')
+num_New     = pd.to_numeric(df.get('New', pd.Series()), errors='coerce')
+num_BB30    = pd.to_numeric(df.get('BB 30', pd.Series()), errors='coerce')
+num_BB90    = pd.to_numeric(df.get('BB 90', pd.Series()), errors='coerce')
+num_CPT     = pd.to_numeric(df.get('CPT', pd.Series()), errors='coerce')
+num_Cost    = pd.to_numeric(df.get('Cost', pd.Series()).replace(r'[\$,]', '', regex=True), errors='coerce')
+num_FBA     = fba
+num_RefPct  = ref
+num_Rating  = pd.to_numeric(df.get('Rating', pd.Series()).str.replace(',', ''), errors='coerce')
+num_TRating = pd.to_numeric(df.get('T Rating', pd.Series()).str.replace(',', ''), errors='coerce')
+
+# 13) Calculations
+
+# List
+list_val = num_BB.fillna(num_New)
+df['List'] = list_val.map(lambda x: f"${x:,.2f}" if pd.notna(x) else "")
+
+# Profit
+profit_val = list_val - num_Cost - num_FBA - (num_RefPct * list_val)
+df['Profit'] = profit_val.map(lambda x: f"${x:,.2f}" if pd.notna(x) else "")
+
+# ROI
+roi_val = profit_val / num_Cost
+df['ROI'] = roi_val.map(lambda x: f"{x*100:.0f}%" if pd.notna(x) and np.isfinite(x) else "")
+
+# 30/90 BB
+bb3090 = pd.concat([num_BB30, num_BB90], axis=1).min(axis=1, skipna=True)
+df['30/90 BB'] = bb3090.map(lambda x: f"${x:,.2f}" if pd.notna(x) else "")
+
+# 30/90 Profit
+p3090 = bb3090 - num_Cost - num_FBA - (num_RefPct * bb3090)
+df['30/90 Profit'] = p3090.map(lambda x: f"${x:,.2f}" if pd.notna(x) else "")
+
+# % (Rating / T Rating)
+pct = num_Rating / num_TRating
+df['%']    = pct.map(lambda x: f"{x*100:.0f}%" if pd.notna(x) and np.isfinite(x) else "")
+
+# BB/SUP
+df['BB/SUP'] = np.where(num_BB.fillna(0) > 0, 'BB', 'SUP')
+
+# CPT Profit & CPT ROI
+cpt_profit = num_CPT - num_Cost - num_FBA - (num_RefPct * num_CPT)
+df['CPT Profit'] = cpt_profit.map(lambda x: f"${x:,.2f}" if pd.notna(x) else "")
+cpt_roi = cpt_profit / num_Cost
+df['CPT ROI']  = cpt_roi.map(lambda x: f"{x*100:.0f}%" if pd.notna(x) and np.isfinite(x) else "")
+
+# 14) Amazon hyperlink column
+df['Amazon'] = df['ASIN'].map(lambda x: f"https://www.amazon.com/dp/{x}?th=1&psc=1")
+
+# 15) Save final CSV
+df.to_csv("Keepa Cleaned.csv", index=False)
+print(f"✅ Done: 'Keepa Cleaned.csv' with {len(df)} rows & {len(df.columns)} columns.")
+
+
+*************************************
+*************************************
+
+Pre column deletion
+https://chatgpt.com/share/685ce59e-d7c0-8009-9b97-2b42613d6c11
+
+*************************************
+
+Since we had the formulas calculate our outputs correctly can we go ahead and delete columns that will no longer be needed in the final output?
+
+I want these columns deleted after the custom formulas are output
+
+New	
+BB	
+BB 30	
+BB 90
+FBA Fee	
+Ref Fee
+
+Please output the full updated script so I can test it
+
+*************************************
+*************************************
+
+import os
+import sys
+import pandas as pd
+import numpy as np
+
+# 1) Auto-detect “KeepaExport” file
+candidates = [f for f in os.listdir('.') if 'KeepaExport' in f]
+if not candidates:
+    print("No file with 'KeepaExport' found in the current directory.")
+    sys.exit(1)
+keepa_file = candidates[0]
+_, ext = os.path.splitext(keepa_file.lower())
+
+# 2) Excel check → blank CSV
+if ext in ('.xls', '.xlsx'):
+    print("File format is excel, CSV expected. Please upload CSV file.")
+    open("Keepa Cleaned.csv", "w").close()
+    sys.exit(0)
+if ext != '.csv':
+    print(f"Unrecognized extension '{ext}'. Expected .csv")
+    sys.exit(1)
+
+# 3) Load Keepa CSV
+df = pd.read_csv(keepa_file, dtype=str)
+df.columns = df.columns.str.strip()
+df.replace('-', '', inplace=True)
+
+# 4) Keep only the allowed Keepa columns
+keepa_allowed = [
+    "Title", "ASIN", "New: Current",
+    "Buy Box 🚚: Current", "Buy Box 🚚: 30 days avg.", "Buy Box 🚚: 90 days avg.",
+    "Reviews: Rating Count - Format Specific", "Reviews: Rating Count",
+    "New Offer Count: Current", "Bought in past month",
+    "Sales Rank: Current", "Amazon: Current", "Amazon: 90 days OOS",
+    "FBA Pick&Pack Fee", "Referral Fee %", "Competitive Price Threshold",
+    "Return Rate"
+]
+keepa_cols = [c for c in keepa_allowed if c in df.columns]
+df = df[keepa_cols]
+
+# 5) Rename columns
+rename_map = {
+    "New: Current": "New",
+    "Buy Box 🚚: Current": "BB",
+    "Buy Box 🚚: 30 days avg.": "BB 30",
+    "Buy Box 🚚: 90 days avg.": "BB 90",
+    "Reviews: Rating Count - Format Specific": "Rating",
+    "Reviews: Rating Count": "T Rating",
+    "New Offer Count: Current": "Offer",
+    "Bought in past month": "# Sold",
+    "Sales Rank: Current": "Rank",
+    "Amazon: Current": "Amz",
+    "Amazon: 90 days OOS": "Amz OOS",
+    "FBA Pick&Pack Fee": "FBA Fee",
+    "Referral Fee %": "Ref Fee",
+    "Competitive Price Threshold": "CPT",
+    "Return Rate": "Return"
+}
+df.rename(columns={k: v for k, v in rename_map.items() if k in df.columns},
+          inplace=True)
+
+# 6) Clean up numeric strings
+for col in ['FBA Fee', 'New', 'BB', 'BB 30', 'BB 90', 'CPT']:
+    if col in df.columns:
+        df[col] = df[col].replace(r'[\$,]', '', regex=True)
+
+# 7) Convert to numeric for filtering
+fba   = pd.to_numeric(df.get('FBA Fee', pd.Series()), errors='coerce')
+ref   = pd.to_numeric(df.get('Ref Fee', pd.Series()).str.rstrip('%'), errors='coerce') / 100
+offer = pd.to_numeric(df.get('Offer', pd.Series()), errors='coerce')
+
+# 8) Drop rows where FBA Fee, Ref Fee, or Offer is missing or ≤0
+mask = (fba.fillna(0) > 0) & (ref.fillna(0) > 0) & (offer.fillna(0) > 0)
+df = df.loc[mask].copy()
+
+# 9) Round Ref Fee to whole percent
+df['Ref Fee'] = (ref[mask] * 100).round(0).astype(int).astype(str).add('%')
+
+# 10) Format large counts
+for col in ['Rating', 'T Rating', 'Rank']:
+    if col in df.columns:
+        df[col] = (
+            pd.to_numeric(df[col], errors='coerce')
+              .fillna(0)
+              .astype(int)
+              .map(lambda x: f"{x:,}")
+        )
+# # Sold: blank instead of 0
+if '# Sold' in df.columns:
+    df['# Sold'] = (
+        pd.to_numeric(df['# Sold'], errors='coerce')
+          .fillna(0)
+          .astype(int)
+          .map(lambda x: f"{x:,}" if x != 0 else '')
+    )
+
+# 11) Merge in SU Cleaned.csv
+su_file = "SU Cleaned.csv"
+if os.path.exists(su_file):
+    su = pd.read_csv(su_file, dtype=str)
+    su.columns = su.columns.str.strip()
+    for drop in ('Profit', 'ROI'):
+        if drop in su.columns:
+            su.drop(columns=drop, inplace=True)
+    if 'ASIN' in su.columns:
+        su_cols = [c for c in su.columns if c != 'ASIN']
+        df = df.merge(su[['ASIN'] + su_cols], on='ASIN', how='left')
+        print(f"Merged SU data: {', '.join(su_cols)}")
+    else:
+        print(f"Warning: '{su_file}' missing ASIN; skipped merge.")
+else:
+    print(f"SU file '{su_file}' not found; skipped merge.")
+
+# 12) Prepare numeric series for calculations
+num_BB      = pd.to_numeric(df.get('BB', pd.Series()), errors='coerce')
+num_New     = pd.to_numeric(df.get('New', pd.Series()), errors='coerce')
+num_BB30    = pd.to_numeric(df.get('BB 30', pd.Series()), errors='coerce')
+num_BB90    = pd.to_numeric(df.get('BB 90', pd.Series()), errors='coerce')
+num_CPT     = pd.to_numeric(df.get('CPT', pd.Series()), errors='coerce')
+num_Cost    = pd.to_numeric(df.get('Cost', pd.Series()).replace(r'[\$,]', '', regex=True), errors='coerce')
+num_FBA     = fba
+num_RefPct  = ref
+num_Rating  = pd.to_numeric(df.get('Rating', pd.Series()).str.replace(',', ''), errors='coerce')
+num_TRating = pd.to_numeric(df.get('T Rating', pd.Series()).str.replace(',', ''), errors='coerce')
+
+# 13) Calculations
+
+# List
+list_val = num_BB.fillna(num_New)
+df['List'] = list_val.map(lambda x: f"${x:,.2f}" if pd.notna(x) else "")
+
+# Profit
+profit_val = list_val - num_Cost - num_FBA - (num_RefPct * list_val)
+df['Profit'] = profit_val.map(lambda x: f"${x:,.2f}" if pd.notna(x) else "")
+
+# ROI
+roi_val = profit_val / num_Cost
+df['ROI'] = roi_val.map(lambda x: f"{x*100:.0f}%" if pd.notna(x) and np.isfinite(x) else "")
+
+# 30/90 BB
+bb3090 = pd.concat([num_BB30, num_BB90], axis=1).min(axis=1, skipna=True)
+df['30/90 BB'] = bb3090.map(lambda x: f"${x:,.2f}" if pd.notna(x) else "")
+
+# 30/90 Profit
+p3090 = bb3090 - num_Cost - num_FBA - (num_RefPct * bb3090)
+df['30/90 Profit'] = p3090.map(lambda x: f"${x:,.2f}" if pd.notna(x) else "")
+
+# % (Rating / T Rating)
+pct = num_Rating / num_TRating
+df['%']    = pct.map(lambda x: f"{x*100:.0f}%" if pd.notna(x) and np.isfinite(x) else "")
+
+# BB/SUP
+df['BB/SUP'] = np.where(num_BB.fillna(0) > 0, 'BB', 'SUP')
+
+# CPT Profit & CPT ROI
+cpt_profit = num_CPT - num_Cost - num_FBA - (num_RefPct * num_CPT)
+df['CPT Profit'] = cpt_profit.map(lambda x: f"${x:,.2f}" if pd.notna(x) else "")
+cpt_roi = cpt_profit / num_Cost
+df['CPT ROI']  = cpt_roi.map(lambda x: f"{x*100:.0f}%" if pd.notna(x) and np.isfinite(x) else "")
+
+# 14) Amazon hyperlink column
+df['Amazon'] = df['ASIN'].map(lambda x: f"https://www.amazon.com/dp/{x}?th=1&psc=1")
+
+# 15) Drop intermediate columns no longer needed
+to_drop = ['New', 'BB', 'BB 30', 'BB 90', 'FBA Fee', 'Ref Fee']
+df.drop(columns=[c for c in to_drop if c in df.columns], inplace=True)
+
+# 16) Save final CSV
+df.to_csv("Keepa Cleaned.csv", index=False)
+print(f"✅ Done: 'Keepa Cleaned.csv' with {len(df)} rows & {len(df.columns)} columns.")
+
+*************************************
+*************************************
+
+Can we please update the script column order for the final output?
+
+Currently its like this:
+Title	ASIN	Rating	T Rating	Offer	# Sold	Rank	Amz	Amz OOS	CPT	Return	Cost	Tags	Source	List	Profit	ROI	30/90 BB	30/90 Profit	%	BB/SUP	CPT Profit	CPT ROI	Amazon
+
+I want it like this instead
+ASIN	Title	Cost	List	Profit	ROI	Offer	Rank	# Sold	30/90 BB	30/90 Profit	Rating	T Rating	%	Return	BB/SUP	CPT	CPT Profit	CPT ROI	Amz	Amz OOS	Tags	Source	Amazon
+
+I want the script to be dynamic to handle custom columns that may or may not always appear
+
+This is always the expected order
+ASIN	Title	Cost	List	Profit	ROI	Offer	Rank	# Sold	30/90 BB	30/90 Profit	Rating	T Rating	%	Return	BB/SUP	CPT	CPT Profit	CPT ROI	Amz	Amz OOS
+
+Any custom columns should appear after Amz OOS
+
+The final 2 columns should always be
+Source	Amazon
+
+Please update the script and output the full script so I can test it
+
+
+*************************************
+*************************************
+
+import os
+import sys
+import pandas as pd
+import numpy as np
+
+# 1) Auto-detect “KeepaExport” file
+candidates = [f for f in os.listdir('.') if 'KeepaExport' in f]
+if not candidates:
+    print("No file with 'KeepaExport' found in the current directory.")
+    sys.exit(1)
+keepa_file = candidates[0]
+_, ext = os.path.splitext(keepa_file.lower())
+
+# 2) Excel check → blank CSV
+if ext in ('.xls', '.xlsx'):
+    print("File format is excel, CSV expected. Please upload CSV file.")
+    open("Keepa Cleaned.csv", "w").close()
+    sys.exit(0)
+if ext != '.csv':
+    print(f"Unrecognized extension '{ext}'. Expected .csv")
+    sys.exit(1)
+
+# 3) Load Keepa CSV
+df = pd.read_csv(keepa_file, dtype=str)
+df.columns = df.columns.str.strip()
+df.replace('-', '', inplace=True)
+
+# 4) Keep only the allowed Keepa columns
+keepa_allowed = [
+    "Title", "ASIN", "New: Current",
+    "Buy Box 🚚: Current", "Buy Box 🚚: 30 days avg.", "Buy Box 🚚: 90 days avg.",
+    "Reviews: Rating Count - Format Specific", "Reviews: Rating Count",
+    "New Offer Count: Current", "Bought in past month",
+    "Sales Rank: Current", "Amazon: Current", "Amazon: 90 days OOS",
+    "FBA Pick&Pack Fee", "Referral Fee %", "Competitive Price Threshold",
+    "Return Rate"
+]
+keepa_cols = [c for c in keepa_allowed if c in df.columns]
+df = df[keepa_cols]
+
+# 5) Rename columns
+rename_map = {
+    "New: Current": "New",
+    "Buy Box 🚚: Current": "BB",
+    "Buy Box 🚚: 30 days avg.": "BB 30",
+    "Buy Box 🚚: 90 days avg.": "BB 90",
+    "Reviews: Rating Count - Format Specific": "Rating",
+    "Reviews: Rating Count": "T Rating",
+    "New Offer Count: Current": "Offer",
+    "Bought in past month": "# Sold",
+    "Sales Rank: Current": "Rank",
+    "Amazon: Current": "Amz",
+    "Amazon: 90 days OOS": "Amz OOS",
+    "FBA Pick&Pack Fee": "FBA Fee",
+    "Referral Fee %": "Ref Fee",
+    "Competitive Price Threshold": "CPT",
+    "Return Rate": "Return"
+}
+df.rename(columns={k: v for k, v in rename_map.items() if k in df.columns},
+          inplace=True)
+
+# 6) Clean up numeric strings
+for col in ['FBA Fee', 'New', 'BB', 'BB 30', 'BB 90', 'CPT']:
+    if col in df.columns:
+        df[col] = df[col].replace(r'[\$,]', '', regex=True)
+
+# 7) Convert to numeric for filtering
+fba   = pd.to_numeric(df.get('FBA Fee', pd.Series()), errors='coerce')
+ref   = pd.to_numeric(df.get('Ref Fee', pd.Series()).str.rstrip('%'), errors='coerce') / 100
+offer = pd.to_numeric(df.get('Offer', pd.Series()), errors='coerce')
+
+# 8) Drop rows where FBA Fee, Ref Fee, or Offer is missing or ≤0
+mask = (fba.fillna(0) > 0) & (ref.fillna(0) > 0) & (offer.fillna(0) > 0)
+df = df.loc[mask].copy()
+
+# 9) Round Ref Fee to whole percent
+df['Ref Fee'] = (ref[mask] * 100).round(0).astype(int).astype(str).add('%')
+
+# 10) Format large counts
+for col in ['Rating', 'T Rating', 'Rank']:
+    if col in df.columns:
+        df[col] = (
+            pd.to_numeric(df[col], errors='coerce')
+              .fillna(0)
+              .astype(int)
+              .map(lambda x: f"{x:,}")
+        )
+# # Sold: blank instead of 0
+if '# Sold' in df.columns:
+    df['# Sold'] = (
+        pd.to_numeric(df['# Sold'], errors='coerce')
+          .fillna(0)
+          .astype(int)
+          .map(lambda x: f"{x:,}" if x != 0 else '')
+    )
+
+# 11) Merge in SU Cleaned.csv
+su_file = "SU Cleaned.csv"
+if os.path.exists(su_file):
+    su = pd.read_csv(su_file, dtype=str)
+    su.columns = su.columns.str.strip()
+    for drop in ('Profit', 'ROI'):
+        if drop in su.columns:
+            su.drop(columns=drop, inplace=True)
+    if 'ASIN' in su.columns:
+        su_cols = [c for c in su.columns if c != 'ASIN']
+        df = df.merge(su[['ASIN'] + su_cols], on='ASIN', how='left')
+        print(f"Merged SU data: {', '.join(su_cols)}")
+    else:
+        print(f"Warning: '{su_file}' missing ASIN; skipped merge.")
+else:
+    print(f"SU file '{su_file}' not found; skipped merge.")
+
+# 12) Prepare numeric series for calculations
+num_BB      = pd.to_numeric(df.get('BB', pd.Series()), errors='coerce')
+num_New     = pd.to_numeric(df.get('New', pd.Series()), errors='coerce')
+num_BB30    = pd.to_numeric(df.get('BB 30', pd.Series()), errors='coerce')
+num_BB90    = pd.to_numeric(df.get('BB 90', pd.Series()), errors='coerce')
+num_CPT     = pd.to_numeric(df.get('CPT', pd.Series()), errors='coerce')
+num_Cost    = pd.to_numeric(df.get('Cost', pd.Series()).replace(r'[\$,]', '', regex=True), errors='coerce')
+num_FBA     = fba
+num_RefPct  = ref
+num_Rating  = pd.to_numeric(df.get('Rating', pd.Series()).str.replace(',', ''), errors='coerce')
+num_TRating = pd.to_numeric(df.get('T Rating', pd.Series()).str.replace(',', ''), errors='coerce')
+
+# 13) Calculations
+
+# List
+list_val = num_BB.fillna(num_New)
+df['List'] = list_val.map(lambda x: f"${x:,.2f}" if pd.notna(x) else "")
+
+# Profit
+profit_val = list_val - num_Cost - num_FBA - (num_RefPct * list_val)
+df['Profit'] = profit_val.map(lambda x: f"${x:,.2f}" if pd.notna(x) else "")
+
+# ROI
+roi_val = profit_val / num_Cost
+df['ROI'] = roi_val.map(lambda x: f"{x*100:.0f}%" if pd.notna(x) and np.isfinite(x) else "")
+
+# 30/90 BB
+bb3090 = pd.concat([num_BB30, num_BB90], axis=1).min(axis=1, skipna=True)
+df['30/90 BB'] = bb3090.map(lambda x: f"${x:,.2f}" if pd.notna(x) else "")
+
+# 30/90 Profit
+p3090 = bb3090 - num_Cost - num_FBA - (num_RefPct * bb3090)
+df['30/90 Profit'] = p3090.map(lambda x: f"${x:,.2f}" if pd.notna(x) else "")
+
+# % (Rating / T Rating)
+pct = num_Rating / num_TRating
+df['%']    = pct.map(lambda x: f"{x*100:.0f}%" if pd.notna(x) and np.isfinite(x) else "")
+
+# BB/SUP
+df['BB/SUP'] = np.where(num_BB.fillna(0) > 0, 'BB', 'SUP')
+
+# CPT Profit & CPT ROI
+cpt_profit = num_CPT - num_Cost - num_FBA - (num_RefPct * num_CPT)
+df['CPT Profit'] = cpt_profit.map(lambda x: f"${x:,.2f}" if pd.notna(x) else "")
+cpt_roi = cpt_profit / num_Cost
+df['CPT ROI']  = cpt_roi.map(lambda x: f"{x*100:.0f}%" if pd.notna(x) and np.isfinite(x) else "")
+
+# 14) Amazon hyperlink column
+df['Amazon'] = df['ASIN'].map(lambda x: f"https://www.amazon.com/dp/{x}?th=1&psc=1")
+
+# 15) Drop intermediate columns no longer needed
+to_drop = ['New', 'BB', 'BB 30', 'BB 90', 'FBA Fee', 'Ref Fee']
+df.drop(columns=[c for c in to_drop if c in df.columns], inplace=True)
+
+# 16) Reorder columns dynamically
+standard_order = [
+    "ASIN", "Title", "Cost", "List", "Profit", "ROI",
+    "Offer", "Rank", "# Sold", "30/90 BB", "30/90 Profit",
+    "Rating", "T Rating", "%", "Return", "BB/SUP",
+    "CPT", "CPT Profit", "CPT ROI", "Amz", "Amz OOS"
+]
+# only keep those that exist
+std_existing = [c for c in standard_order if c in df.columns]
+
+# custom = any remaining except Source/Amazon
+custom = [c for c in df.columns
+          if c not in std_existing + ["Source", "Amazon"]]
+
+final_order = std_existing + custom + ["Source", "Amazon"]
+df = df[final_order]
+
+# 17) Save final CSV
+df.to_csv("Keepa Cleaned.csv", index=False)
+print(f"✅ Done: 'Keepa Cleaned.csv' with {len(df)} rows & {len(df.columns)} columns.")
+
+*************************************
+*************************************
+
+Could we make one last update to the script?
+
+Check the column ROI and delete every row that is below 10% ROI that way only 
+
+Then sort the remaining results using a custom sort
+
+# Sold - Sort on Largest to Smallest
+
+then
+
+Rating - Sort on largest to smallest
+
+Please update the script and output the full script so I can test it
+
+*************************************
+*************************************
+
+import os
+import sys
+import pandas as pd
+import numpy as np
+
+# 1) Auto-detect “KeepaExport” file
+candidates = [f for f in os.listdir('.') if 'KeepaExport' in f]
+if not candidates:
+    print("No file with 'KeepaExport' found in the current directory.")
+    sys.exit(1)
+keepa_file = candidates[0]
+_, ext = os.path.splitext(keepa_file.lower())
+
+# 2) Excel check → blank CSV
+if ext in ('.xls', '.xlsx'):
+    print("File format is excel, CSV expected. Please upload CSV file.")
+    open("Keepa Cleaned.csv", "w").close()
+    sys.exit(0)
+if ext != '.csv':
+    print(f"Unrecognized extension '{ext}'. Expected .csv")
+    sys.exit(1)
+
+# 3) Load Keepa CSV
+df = pd.read_csv(keepa_file, dtype=str)
+df.columns = df.columns.str.strip()
+df.replace('-', '', inplace=True)
+
+# 4) Keep only the allowed Keepa columns
+keepa_allowed = [
+    "Title", "ASIN", "New: Current",
+    "Buy Box 🚚: Current", "Buy Box 🚚: 30 days avg.", "Buy Box 🚚: 90 days avg.",
+    "Reviews: Rating Count - Format Specific", "Reviews: Rating Count",
+    "New Offer Count: Current", "Bought in past month",
+    "Sales Rank: Current", "Amazon: Current", "Amazon: 90 days OOS",
+    "FBA Pick&Pack Fee", "Referral Fee %", "Competitive Price Threshold",
+    "Return Rate"
+]
+df = df[[c for c in keepa_allowed if c in df.columns]]
+
+# 5) Rename columns
+rename_map = {
+    "New: Current": "New",
+    "Buy Box 🚚: Current": "BB",
+    "Buy Box 🚚: 30 days avg.": "BB 30",
+    "Buy Box 🚚: 90 days avg.": "BB 90",
+    "Reviews: Rating Count - Format Specific": "Rating",
+    "Reviews: Rating Count": "T Rating",
+    "New Offer Count: Current": "Offer",
+    "Bought in past month": "# Sold",
+    "Sales Rank: Current": "Rank",
+    "Amazon: Current": "Amz",
+    "Amazon: 90 days OOS": "Amz OOS",
+    "FBA Pick&Pack Fee": "FBA Fee",
+    "Referral Fee %": "Ref Fee",
+    "Competitive Price Threshold": "CPT",
+    "Return Rate": "Return"
+}
+df.rename(columns={k: v for k, v in rename_map.items() if k in df.columns},
+          inplace=True)
+
+# 6) Clean up numeric strings
+for col in ['FBA Fee', 'New', 'BB', 'BB 30', 'BB 90', 'CPT']:
+    if col in df.columns:
+        df[col] = df[col].replace(r'[\$,]', '', regex=True)
+
+# 7) Convert to numeric for filtering
+fba   = pd.to_numeric(df.get('FBA Fee', pd.Series()), errors='coerce')
+ref   = pd.to_numeric(df.get('Ref Fee', pd.Series()).str.rstrip('%'), errors='coerce') / 100
+offer = pd.to_numeric(df.get('Offer', pd.Series()), errors='coerce')
+
+# 8) Drop rows where FBA Fee, Ref Fee, or Offer is missing or ≤0
+mask = (fba.fillna(0) > 0) & (ref.fillna(0) > 0) & (offer.fillna(0) > 0)
+df = df.loc[mask].copy()
+
+# 9) Round Ref Fee to whole percent
+df['Ref Fee'] = (ref[mask] * 100).round(0).astype(int).astype(str).add('%')
+
+# 10) Format large counts
+for col in ['Rating', 'T Rating', 'Rank']:
+    if col in df.columns:
+        df[col] = (
+            pd.to_numeric(df[col], errors='coerce')
+              .fillna(0)
+              .astype(int)
+              .map(lambda x: f"{x:,}")
+        )
+if '# Sold' in df.columns:
+    df['# Sold'] = (
+        pd.to_numeric(df['# Sold'], errors='coerce')
+          .fillna(0)
+          .astype(int)
+          .map(lambda x: f"{x:,}" if x != 0 else '')
+    )
+
+# 11) Merge in SU Cleaned.csv
+su_file = "SU Cleaned.csv"
+if os.path.exists(su_file):
+    su = pd.read_csv(su_file, dtype=str)
+    su.columns = su.columns.str.strip()
+    for drop in ('Profit', 'ROI'):
+        if drop in su.columns:
+            su.drop(columns=drop, inplace=True)
+    if 'ASIN' in su.columns:
+        cols = [c for c in su.columns if c != 'ASIN']
+        df = df.merge(su[['ASIN'] + cols], on='ASIN', how='left')
+        print(f"Merged SU data: {', '.join(cols)}")
+    else:
+        print(f"Warning: '{su_file}' missing ASIN; skipped merge.")
+else:
+    print(f"SU file '{su_file}' not found; skipped merge.")
+
+# 12) Prepare numeric series for calculations
+num_BB      = pd.to_numeric(df.get('BB', pd.Series()), errors='coerce')
+num_New     = pd.to_numeric(df.get('New', pd.Series()), errors='coerce')
+num_BB30    = pd.to_numeric(df.get('BB 30', pd.Series()), errors='coerce')
+num_BB90    = pd.to_numeric(df.get('BB 90', pd.Series()), errors='coerce')
+num_CPT     = pd.to_numeric(df.get('CPT', pd.Series()), errors='coerce')
+num_Cost    = pd.to_numeric(df.get('Cost', pd.Series()).replace(r'[\$,]', '', regex=True), errors='coerce')
+num_FBA     = fba
+num_RefPct  = ref
+num_Rating  = pd.to_numeric(df.get('Rating', pd.Series()).str.replace(',', ''), errors='coerce')
+num_TRating = pd.to_numeric(df.get('T Rating', pd.Series()).str.replace(',', ''), errors='coerce')
+
+# 13) Calculations
+# List
+list_val = num_BB.fillna(num_New)
+df['List'] = list_val.map(lambda x: f"${x:,.2f}" if pd.notna(x) else "")
+# Profit
+profit_val = list_val - num_Cost - num_FBA - (num_RefPct * list_val)
+df['Profit'] = profit_val.map(lambda x: f"${x:,.2f}" if pd.notna(x) else "")
+# ROI
+roi_val = profit_val / num_Cost
+df['ROI'] = roi_val.map(lambda x: f"{x*100:.0f}%" if pd.notna(x) and np.isfinite(x) else "")
+# 30/90 BB
+bb3090 = pd.concat([num_BB30, num_BB90], axis=1).min(axis=1, skipna=True)
+df['30/90 BB'] = bb3090.map(lambda x: f"${x:,.2f}" if pd.notna(x) else "")
+# 30/90 Profit
+p3090 = bb3090 - num_Cost - num_FBA - (num_RefPct * bb3090)
+df['30/90 Profit'] = p3090.map(lambda x: f"${x:,.2f}" if pd.notna(x) else "")
+# % (Rating / T Rating)
+pct = num_Rating / num_TRating
+df['%'] = pct.map(lambda x: f"{x*100:.0f}%" if pd.notna(x) and np.isfinite(x) else "")
+# BB/SUP
+df['BB/SUP'] = np.where(num_BB.fillna(0) > 0, 'BB', 'SUP')
+# CPT Profit & CPT ROI
+cpt_profit = num_CPT - num_Cost - num_FBA - (num_RefPct * num_CPT)
+df['CPT Profit'] = cpt_profit.map(lambda x: f"${x:,.2f}" if pd.notna(x) else "")
+cpt_roi = cpt_profit / num_Cost
+df['CPT ROI'] = cpt_roi.map(lambda x: f"{x*100:.0f}%" if pd.notna(x) and np.isfinite(x) else "")
+# Amazon hyperlink column
+df['Amazon'] = df['ASIN'].map(lambda x: f"https://www.amazon.com/dp/{x}?th=1&psc=1")
+
+# 14) Drop intermediate columns no longer needed
+to_drop = ['New', 'BB', 'BB 30', 'BB 90', 'FBA Fee', 'Ref Fee']
+df.drop(columns=[c for c in to_drop if c in df.columns], inplace=True)
+
+# 15) Filter out ROI < 10%
+df['ROI_numeric'] = pd.to_numeric(df['ROI'].str.rstrip('%'), errors='coerce') / 100
+df = df[df['ROI_numeric'] >= 0.10].copy()
+df.drop(columns=['ROI_numeric'], inplace=True)
+
+# 16) Sort by # Sold (desc), then Rating (desc)
+df['# Sold Sort'] = pd.to_numeric(df['# Sold'].str.replace(',', ''), errors='coerce').fillna(0)
+df['Rating Sort'] = pd.to_numeric(df['Rating'].str.replace(',', ''), errors='coerce').fillna(0)
+df.sort_values(by=['# Sold Sort', 'Rating Sort'], ascending=[False, False], inplace=True)
+df.drop(columns=['# Sold Sort', 'Rating Sort'], inplace=True)
+
+# 17) Reorder columns dynamically
+standard_order = [
+    "ASIN", "Title", "Cost", "List", "Profit", "ROI",
+    "Offer", "Rank", "# Sold", "30/90 BB", "30/90 Profit",
+    "Rating", "T Rating", "%", "Return", "BB/SUP",
+    "CPT", "CPT Profit", "CPT ROI", "Amz", "Amz OOS"
+]
+std_existing = [c for c in standard_order if c in df.columns]
+custom = [c for c in df.columns if c not in std_existing + ["Source", "Amazon"]]
+final_order = std_existing + custom + ["Source", "Amazon"]
+df = df[final_order]
+
+# 18) Save final CSV
+df.to_csv("Keepa Cleaned.csv", index=False)
+print(f"✅ Done: 'Keepa Cleaned.csv' with {len(df)} rows & {len(df.columns)} columns.")
+
+
+*************************************
+*************************************
+
+Can we format the cost column as currency set to the 2nd decimal
+
+Please output the fully updated script so I can test it
+
+*************************************
+*************************************
+
+import os
+import sys
+import pandas as pd
+import numpy as np
+
+# 1) Auto-detect “KeepaExport” file
+candidates = [f for f in os.listdir('.') if 'KeepaExport' in f]
+if not candidates:
+    print("No file with 'KeepaExport' found in the current directory.")
+    sys.exit(1)
+keepa_file = candidates[0]
+_, ext = os.path.splitext(keepa_file.lower())
+
+# 2) Excel check → blank CSV
+if ext in ('.xls', '.xlsx'):
+    print("File format is excel, CSV expected. Please upload CSV file.")
+    open("Keepa Cleaned.csv", "w").close()
+    sys.exit(0)
+if ext != '.csv':
+    print(f"Unrecognized extension '{ext}'. Expected .csv")
+    sys.exit(1)
+
+# 3) Load Keepa CSV
+df = pd.read_csv(keepa_file, dtype=str)
+df.columns = df.columns.str.strip()
+df.replace('-', '', inplace=True)
+
+# 4) Keep only the allowed Keepa columns
+keepa_allowed = [
+    "Title", "ASIN", "New: Current",
+    "Buy Box 🚚: Current", "Buy Box 🚚: 30 days avg.", "Buy Box 🚚: 90 days avg.",
+    "Reviews: Rating Count - Format Specific", "Reviews: Rating Count",
+    "New Offer Count: Current", "Bought in past month",
+    "Sales Rank: Current", "Amazon: Current", "Amazon: 90 days OOS",
+    "FBA Pick&Pack Fee", "Referral Fee %", "Competitive Price Threshold",
+    "Return Rate"
+]
+df = df[[c for c in keepa_allowed if c in df.columns]]
+
+# 5) Rename columns
+rename_map = {
+    "New: Current": "New",
+    "Buy Box 🚚: Current": "BB",
+    "Buy Box 🚚: 30 days avg.": "BB 30",
+    "Buy Box 🚚: 90 days avg.": "BB 90",
+    "Reviews: Rating Count - Format Specific": "Rating",
+    "Reviews: Rating Count": "T Rating",
+    "New Offer Count: Current": "Offer",
+    "Bought in past month": "# Sold",
+    "Sales Rank: Current": "Rank",
+    "Amazon: Current": "Amz",
+    "Amazon: 90 days OOS": "Amz OOS",
+    "FBA Pick&Pack Fee": "FBA Fee",
+    "Referral Fee %": "Ref Fee",
+    "Competitive Price Threshold": "CPT",
+    "Return Rate": "Return"
+}
+df.rename(columns={k: v for k, v in rename_map.items() if k in df.columns},
+          inplace=True)
+
+# 6) Clean up numeric strings
+for col in ['FBA Fee', 'New', 'BB', 'BB 30', 'BB 90', 'CPT']:
+    if col in df.columns:
+        df[col] = df[col].replace(r'[\$,]', '', regex=True)
+
+# 7) Convert to numeric for filtering
+fba   = pd.to_numeric(df.get('FBA Fee', pd.Series()), errors='coerce')
+ref   = pd.to_numeric(df.get('Ref Fee', pd.Series()).str.rstrip('%'), errors='coerce') / 100
+offer = pd.to_numeric(df.get('Offer', pd.Series()), errors='coerce')
+
+# 8) Drop rows where FBA Fee, Ref Fee, or Offer is missing or ≤0
+mask = (fba.fillna(0) > 0) & (ref.fillna(0) > 0) & (offer.fillna(0) > 0)
+df = df.loc[mask].copy()
+
+# 9) Round Ref Fee to whole percent
+df['Ref Fee'] = (ref[mask] * 100).round(0).astype(int).astype(str).add('%')
+
+# 10) Format large counts
+for col in ['Rating', 'T Rating', 'Rank']:
+    if col in df.columns:
+        df[col] = (
+            pd.to_numeric(df[col], errors='coerce')
+              .fillna(0)
+              .astype(int)
+              .map(lambda x: f"{x:,}")
+        )
+if '# Sold' in df.columns:
+    df['# Sold'] = (
+        pd.to_numeric(df['# Sold'], errors='coerce')
+          .fillna(0)
+          .astype(int)
+          .map(lambda x: f"{x:,}" if x != 0 else '')
+    )
+
+# 11) Merge in SU Cleaned.csv
+su_file = "SU Cleaned.csv"
+if os.path.exists(su_file):
+    su = pd.read_csv(su_file, dtype=str)
+    su.columns = su.columns.str.strip()
+    for drop in ('Profit', 'ROI'):
+        if drop in su.columns:
+            su.drop(columns=drop, inplace=True)
+    if 'ASIN' in su.columns:
+        su_cols = [c for c in su.columns if c != 'ASIN']
+        df = df.merge(su[['ASIN'] + su_cols], on='ASIN', how='left')
+        print(f"Merged SU data: {', '.join(su_cols)}")
+    else:
+        print(f"Warning: '{su_file}' missing ASIN; skipped merge.")
+else:
+    print(f"SU file '{su_file}' not found; skipped merge.")
+
+# 12) Prepare numeric series for calculations
+num_BB      = pd.to_numeric(df.get('BB', pd.Series()), errors='coerce')
+num_New     = pd.to_numeric(df.get('New', pd.Series()), errors='coerce')
+num_BB30    = pd.to_numeric(df.get('BB 30', pd.Series()), errors='coerce')
+num_BB90    = pd.to_numeric(df.get('BB 90', pd.Series()), errors='coerce')
+num_CPT     = pd.to_numeric(df.get('CPT', pd.Series()), errors='coerce')
+num_Cost    = pd.to_numeric(df.get('Cost', pd.Series()).replace(r'[\$,]', '', regex=True), errors='coerce')
+num_FBA     = fba
+num_RefPct  = ref
+num_Rating  = pd.to_numeric(df.get('Rating', pd.Series()).str.replace(',', ''), errors='coerce')
+num_TRating = pd.to_numeric(df.get('T Rating', pd.Series()).str.replace(',', ''), errors='coerce')
+
+# 13) Calculations
+list_val    = num_BB.fillna(num_New)
+profit_val  = list_val - num_Cost - num_FBA - (num_RefPct * list_val)
+roi_val     = profit_val / num_Cost
+bb3090      = pd.concat([num_BB30, num_BB90], axis=1).min(axis=1, skipna=True)
+p3090       = bb3090 - num_Cost - num_FBA - (num_RefPct * bb3090)
+pct         = num_Rating / num_TRating
+cpt_profit  = num_CPT - num_Cost - num_FBA - (num_RefPct * num_CPT)
+cpt_roi     = cpt_profit / num_Cost
+
+df['List']        = list_val.map(lambda x: f"${x:,.2f}" if pd.notna(x) else "")
+df['Profit']      = profit_val.map(lambda x: f"${x:,.2f}" if pd.notna(x) else "")
+df['ROI']         = roi_val.map(lambda x: f"{x*100:.0f}%" if pd.notna(x) and np.isfinite(x) else "")
+df['30/90 BB']    = bb3090.map(lambda x: f"${x:,.2f}" if pd.notna(x) else "")
+df['30/90 Profit']= p3090.map(lambda x: f"${x:,.2f}" if pd.notna(x) else "")
+df['%']           = pct.map(lambda x: f"{x*100:.0f}%" if pd.notna(x) and np.isfinite(x) else "")
+df['BB/SUP']      = np.where(num_BB.fillna(0) > 0, 'BB', 'SUP')
+df['CPT Profit']  = cpt_profit.map(lambda x: f"${x:,.2f}" if pd.notna(x) else "")
+df['CPT ROI']     = cpt_roi.map(lambda x: f"{x*100:.0f}%" if pd.notna(x) and np.isfinite(x) else "")
+df['Amazon']      = df['ASIN'].map(lambda x: f"https://www.amazon.com/dp/{x}?th=1&psc=1")
+
+# 14) Drop intermediate columns no longer needed
+df.drop(columns=[c for c in ['New','BB','BB 30','BB 90','FBA Fee','Ref Fee'] if c in df.columns],
+        inplace=True)
+
+# 15) Filter out ROI < 10%
+df['ROI_numeric'] = pd.to_numeric(df['ROI'].str.rstrip('%'), errors='coerce') / 100
+df = df[df['ROI_numeric'] >= 0.10].copy()
+df.drop(columns=['ROI_numeric'], inplace=True)
+
+# 16) Sort by # Sold (desc), then Rating (desc)
+df['# Sold Sort']   = pd.to_numeric(df['# Sold'].str.replace(',', ''), errors='coerce').fillna(0)
+df['Rating Sort']   = pd.to_numeric(df['Rating'].str.replace(',', ''), errors='coerce').fillna(0)
+df.sort_values(by=['# Sold Sort','Rating Sort'], ascending=[False,False], inplace=True)
+df.drop(columns=['# Sold Sort','Rating Sort'], inplace=True)
+
+# 17) Format Cost as currency with two decimals
+df['Cost'] = pd.to_numeric(df['Cost'], errors='coerce')\
+               .map(lambda x: f"${x:,.2f}" if pd.notna(x) else "")
+
+# 18) Reorder columns dynamically
+standard_order = [
+    "ASIN","Title","Cost","List","Profit","ROI",
+    "Offer","Rank","# Sold","30/90 BB","30/90 Profit",
+    "Rating","T Rating","%","Return","BB/SUP",
+    "CPT","CPT Profit","CPT ROI","Amz","Amz OOS"
+]
+std_existing = [c for c in standard_order if c in df.columns]
+custom       = [c for c in df.columns if c not in std_existing + ["Source","Amazon"]]
+final_order  = std_existing + custom + ["Source","Amazon"]
+df = df[final_order]
+
+# 19) Save final CSV
+df.to_csv("Keepa Cleaned.csv", index=False)
+print(f"✅ Done: 'Keepa Cleaned.csv' with {len(df)} rows & {len(df.columns)} columns.")
+
+
+*************************************
+*************************************
+*************************************
+*************************************
+*************************************
+*************************************
+*************************************
+*************************************
+*************************************
+*************************************
+*************************************
+*************************************
+*************************************
+*************************************
+*************************************
+*************************************
+*************************************
+*************************************
+*************************************
+*************************************
+*************************************
+*************************************
+*************************************
+*************************************
+*************************************
+*************************************
+*************************************
+*************************************
+*************************************
+*************************************
+*************************************
+*************************************
+*************************************
+*************************************
+*************************************
+*************************************
+*************************************
+*************************************
+*************************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

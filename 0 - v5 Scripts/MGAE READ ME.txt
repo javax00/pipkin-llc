@@ -1,0 +1,37 @@
+How to use script:
+
+Hard coded to scrape:
+https://shop.mgae.com/collections/all-1
+
+User inputs total number of pages
+Visit above link, scroll to bottom to see number of pages
+Enter number of Pages
+
+Script will automatically capture pagination results, iterate through results and output upcs
+
+*******************************************************
+
+Libraries needed:
+requests
+beautifulsoup4
+
+
+#######################################################
+Script requires API key to work 
+#######################################################
+
+
+Update API Key or Concurrency 
+	Format 	= Script Name & Line location of API or Concurrency
+
+Phase 2 - Category Urls
+	Line 10		apikey = ''	
+	Line 72		with ThreadPoolExecutor(max_workers=5) as executor:
+
+Phase 3 - UPC Extraction
+	Line 12		apikey      = ''
+	Line 73		with ThreadPoolExecutor(max_workers=5) as executor:
+
+*******************************************************
+*******************************************************
+*******************************************************

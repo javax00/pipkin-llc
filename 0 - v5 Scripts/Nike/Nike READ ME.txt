@@ -1,0 +1,34 @@
+How to use script:
+
+Hard coded to scrape entire website 
+
+Script will automatically capture pagination results, iterate through results and output upcs
+
+*******************************************************
+
+Libraries needed:
+requests
+pandas
+
+
+#######################################################
+Script requires API key to work 
+#######################################################
+
+
+Update API Key or Concurrency 
+	Format 	= Script Name & Line location of API or Concurrency
+
+
+Phase 2 - Category Urls
+	Line 9		API_KEY     = ''
+	Line 100	with ThreadPoolExecutor(max_workers=40) as executor:
+
+Phase 3 - UPC Extraction
+	Line 8 		API_KEY = ''
+	Line 75		    with ThreadPoolExecutor(max_workers=40) as executor:
+
+
+*******************************************************
+*******************************************************
+*******************************************************

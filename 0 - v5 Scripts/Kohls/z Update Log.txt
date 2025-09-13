@@ -1,0 +1,2 @@
+7.9.25 
+	Updated Phase 4. Script was suppose to add 1 to cart but was adding inventory levels instead. Fixed to only add 1 to cart. 

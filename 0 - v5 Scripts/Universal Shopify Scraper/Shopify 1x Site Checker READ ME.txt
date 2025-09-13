@@ -1,0 +1,33 @@
+How to use script:
+
+PURPOSE - Checks list of websites to see if they are shopify and tests the first 30 product links of each website to see if they have valid UPCs. Will only process shopify sites for output. Check "P1 Shopify Check" for results, non shopify sites will output as "Not Shopify"
+
+Open CSV P1 Check Links and input list of links to check
+
+
+*******************************************************
+
+Libraries needed:
+requests
+
+#######################################################
+Script requires API key to work 
+#######################################################
+
+
+Update API Key or Concurrency 
+	Format 	= Script Name & Line location of API or Concurrency
+
+Phase 1 - Shopify Check
+	Line 7 		API_KEY = ''
+	
+Phase 2 - UPC Check
+	Line 15		API_KEY           = ""
+	Line 16		MAX_WORKERS       = 20
+
+
+
+
+*******************************************************
+*******************************************************
+*******************************************************

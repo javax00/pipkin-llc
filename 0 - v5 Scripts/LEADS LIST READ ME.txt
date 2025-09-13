@@ -1,0 +1,21 @@
+How to use leads list:
+
+Copy/Paste Scan Unlimited results into the same folder the leads list script is
+
+It will copy ASINs to clipboard -> Paste into Keepa Product Viewer
+https://keepa.com/#!viewer
+
+After pasting, Export & Download results as CSV 
+Paste CSV into same folder as leads list script
+Type yes on prompt
+
+Script will finalize formatting
+
+####################################
+Important - Keepa output file needs to be CSV
+
+If presets are needed, open Tony Keepa Presets folder and import them into keepa
+Use those presets to export
+
+####################################
+

@@ -1,0 +1,23 @@
+https://chatgpt.com/share/67aae7a6-2258-8009-878b-855bdead6420
+
+
+Please write a python script that prints "When Keepa source file is pasted into the directory, type yes: "
+
+The purpose of this script is to wait for confirmation from the user before proceeding
+
+If the user inputs any variation of yes (not case sensitive) then print "Confirmation received. Script complete."
+
+**************************************
+# Wait for the user to confirm that the Keepa source file has been pasted into the directory
+user_input = input("When Keepa source file is pasted into the directory, type yes: ")
+
+# Check if the user's input is 'yes' (case-insensitive)
+if user_input.strip().lower() == "yes":
+    print("Confirmation received. Script complete.")
+
+https://chatgpt.com/share/67aae7a6-2258-8009-878b-855bdead6420
+
+
+**************************************
+**************************************
+**************************************

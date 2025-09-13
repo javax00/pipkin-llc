@@ -1,0 +1,929 @@
+{
+  "props": {
+    "pageProps": {
+      "colorwayImages": [
+        {
+          "statusModifier": "BUYABLE_BUY",
+          "id": "1015782474",
+          "squarishImg": "https://static.nike.com/a/images/t_default/1e53391b-1b58-4314-b37b-e9d6ef5fc62a/NHN+NIKE+12PC+GIFT+SET.png",
+          "portraitImg": "https://static.nike.com/a/images/t_default/a2e0b16e-b9a7-4945-9286-1aba35be48e8/NHN+NIKE+12PC+GIFT+SET.png",
+          "styleColor": "NN0934-A9Y",
+          "colorCode": "A9Y",
+          "groupLabel": null,
+          "colorDescription": "Pink Foam",
+          "altText": "Nike 12-Piece Sift Set Baby 12-Piece Boxed Gift Set",
+          "path": "/t/12-piece-sift-set-baby-12-piece-boxed-gift-set-JxWmWN/NN0934-A9Y",
+          "globalProductId": "a232f809-5c57-4617-82f2-bff47b652363",
+          "pdpUrl": "https://www.nike.com/t/12-piece-sift-set-baby-12-piece-boxed-gift-set-JxWmWN/NN0934-A9Y"
+        }
+      ],
+      "productGroups": [
+        {
+          "groupLabel": null,
+          "groupIndex": 0,
+          "products": {
+            "NN0934-A9Y": {
+              "availabilityDate": "2025-01-01T08:00:00.000Z",
+              "badge": null,
+              "brands": [
+                "Nike"
+              ],
+              "gender": null,
+              "sportTags": [
+                "Training & Gym"
+              ],
+              "colorCode": "A9Y",
+              "colorDescription": "Pink Foam",
+              "consumerReleaseType": "RELEASE",
+              "contentImages": [
+                {
+                  "cardType": "image",
+                  "properties": {
+                    "altText": "Nike 12-Piece Sift Set Baby 12-Piece Boxed Gift Set",
+                    "squarish": {
+                      "aspectRatio": 1,
+                      "url": "https://static.nike.com/a/images/t_default/1e53391b-1b58-4314-b37b-e9d6ef5fc62a/NHN+NIKE+12PC+GIFT+SET.png",
+                      "id": "1e53391b-1b58-4314-b37b-e9d6ef5fc62a"
+                    },
+                    "portrait": {
+                      "aspectRatio": 0.8,
+                      "url": "https://static.nike.com/a/images/t_default/a2e0b16e-b9a7-4945-9286-1aba35be48e8/NHN+NIKE+12PC+GIFT+SET.png",
+                      "id": "a2e0b16e-b9a7-4945-9286-1aba35be48e8"
+                    }
+                  }
+                },
+                {
+                  "cardType": "image",
+                  "properties": {
+                    "altText": "Nike 12-Piece Sift Set Baby 12-Piece Boxed Gift Set",
+                    "squarish": {
+                      "aspectRatio": 1,
+                      "url": "https://static.nike.com/a/images/t_default/43e923b9-4b7e-4f59-8648-815af10b9388/NHN+NIKE+12PC+GIFT+SET.png",
+                      "id": "43e923b9-4b7e-4f59-8648-815af10b9388"
+                    },
+                    "portrait": {
+                      "aspectRatio": 0.8,
+                      "url": "https://static.nike.com/a/images/t_default/bbb9cfd9-a919-4f6f-8510-95eb2a7acef8/NHN+NIKE+12PC+GIFT+SET.png",
+                      "id": "bbb9cfd9-a919-4f6f-8510-95eb2a7acef8"
+                    }
+                  }
+                },
+                {
+                  "cardType": "image",
+                  "properties": {
+                    "altText": "Nike 12-Piece Sift Set Baby 12-Piece Boxed Gift Set",
+                    "squarish": {
+                      "aspectRatio": 1,
+                      "url": "https://static.nike.com/a/images/t_default/b60c1b54-b96d-4632-8bf9-2e4231bbd5e9/NHN+NIKE+12PC+GIFT+SET.png",
+                      "id": "b60c1b54-b96d-4632-8bf9-2e4231bbd5e9"
+                    },
+                    "portrait": {
+                      "aspectRatio": 0.8,
+                      "url": "https://static.nike.com/a/images/t_default/e91bb122-ce7f-4f2f-8129-fa624269f42e/NHN+NIKE+12PC+GIFT+SET.png",
+                      "id": "e91bb122-ce7f-4f2f-8129-fa624269f42e"
+                    }
+                  }
+                }
+              ],
+              "customizationPathName": "",
+              "enhancedPDP": [],
+              "hasNewEPDPContent": false,
+              "featuredAttributes": [],
+              "fitRecommendationMessage": "",
+              "globalProductId": "a232f809-5c57-4617-82f2-bff47b652363",
+              "groupIndex": 0,
+              "groupKey": "JxWmWN",
+              "groupLabel": null,
+              "id": "1015782474",
+              "isDigitalGiftCard": false,
+              "isLaunchProduct": false,
+              "isMemberProduct": false,
+              "isSustainableMaterials": false,
+              "isNikeSkims": false,
+              "isPhysicalGiftCard": false,
+              "isPromoExclusion": false,
+              "isReservedForYou": false,
+              "isRestrictedAccess": false,
+              "isJerseyID": false,
+              "isSkusRequestInFlight": false,
+              "launchAttributes": null,
+              "manufacturingCountriesOfOrigin": [],
+              "merchProductId": "774848d5-6ceb-5ced-9681-2819b0b99125",
+              "moreInfo": [],
+              "netQuantity": null,
+              "styleCode": "NN0934",
+              "styleColor": "NN0934-A9Y",
+              "searchRecsTaxonomyIds": [
+                "5e3a7953-7afc-4afc-8de0-af5cee16b3a3",
+                "91064b0a-0ee6-441b-8b09-de2105660311",
+                "2f5ae5c6-a1cf-4223-a7c4-f51d9572b2fa",
+                "7817e756-7721-4cfb-b404-04df79c685e4",
+                "05392778-fff6-4fa0-a375-2506d27f009e",
+                "3478c984-5156-46a1-8bfc-43c51c9aef12"
+              ],
+              "taxonomyLabels": {
+                "Gender": [
+                  "Boys",
+                  "Girls"
+                ],
+                "Sports": [
+                  "Workouts",
+                  "Training & Gym"
+                ],
+                "Brand": [
+                  "Nike"
+                ],
+                "Product Type": [
+                  "Bodysuits"
+                ]
+              },
+              "pdpUrl": {
+                "url": "https://www.nike.com/t/12-piece-sift-set-baby-12-piece-boxed-gift-set-JxWmWN/NN0934-A9Y",
+                "canonicalUrl": "https://www.nike.com/t/12-piece-sift-set-baby-12-piece-boxed-gift-set-JxWmWN",
+                "path": "/t/12-piece-sift-set-baby-12-piece-boxed-gift-set-JxWmWN/NN0934-A9Y"
+              },
+              "prices": {
+                "currency": "USD",
+                "currentPrice": 85.97,
+                "initialPrice": 100,
+                "employeePrice": 51.58,
+                "discountPercentage": 14,
+                "employeeDiscountPercentage": 48
+              },
+              "productInfo": {
+                "badge": null,
+                "sizeFitSections": [],
+                "title": "Nike 12-Piece Sift Set",
+                "subtitle": "Baby 12-Piece Boxed Gift Set",
+                "fullTitle": "Nike 12-Piece Sift Set Baby 12-Piece Boxed Gift Set",
+                "productDescription": "The perfect gift for the smallest athletes, this set contains multiple head-to-toe coordinated looks. The short sleeve bodysuits have lapped shoulders and snap closures at the crotch make changing and dressing easy, the matching bibs have hook-and-loop closures for a comfy fit. The cozy, footed coverall has a full-zip closure to make changing, dressing and layering easy. The rib knit pants are tapered and have an encased elastic waistband for a comfy fit. The handy burp cloths help protect your little as well as your own clothes from accidents.",
+                "moreDescriptions": [],
+                "featuresAndBenefits": [
+                  {
+                    "header": "Benefits",
+                    "body": [
+                      "The bodysuits have lapped shouders and snap closures at the crotch to make changing and dressing easy.",
+                      "The bibs have hook-and-loop closures for comfy wear.",
+                      "The coverall has a full-zip closure and footed bottoms add extra warmth."
+                    ]
+                  }
+                ],
+                "enhancedBenefits": [],
+                "productDetails": [
+                  {
+                    "header": "Product Details",
+                    "body": [
+                      "Includes 2 short sleeve bodysuits, 2 beanies, 2 pairs of booties, 2 burp cloths, a pair of pants and a footed coverall.",
+                      "Beanie/Bodysuits/Bibs/Coverall/Pants: 60% Cotton, 40% Polyester; Booties: 62% Cotton, 34% Polyester, 4% Elastane; Burp Cloths: 80% Cotton, 20% Polyester",
+                      "Machine Wash",
+                      "Imported",
+                      "Shown: Pink Foam",
+                      "Style: NN0934-A9Y"
+                    ]
+                  }
+                ],
+                "origins": [],
+                "url": "https://www.nike.com/t/12-piece-sift-set-baby-12-piece-boxed-gift-set-JxWmWN/NN0934-A9Y",
+                "canonicalUrl": "https://www.nike.com/t/12-piece-sift-set-baby-12-piece-boxed-gift-set-JxWmWN",
+                "path": "/t/12-piece-sift-set-baby-12-piece-boxed-gift-set-JxWmWN/NN0934-A9Y",
+                "sustainabilityMessage": null
+              },
+              "productType": "APPAREL",
+              "selectedSku": "",
+              "sizes": [
+                {
+                  "label": "0-6M",
+                  "localizedLabel": "0-6M",
+                  "gtins": [
+                    {
+                      "gtin": "00196327054403"
+                    }
+                  ],
+                  "sortSequence": 2,
+                  "status": "ACTIVE",
+                  "merchSkuId": "77ecbb41-4913-5e16-aeec-1c1c8646fffc"
+                }
+              ],
+              "sizeSelectError": false,
+              "sizeChartUrl": "https://www.nike.com/size-fit/infant-toddler-clothing",
+              "showAvailabilityDate": false,
+              "statusModifier": "BUYABLE_BUY",
+              "sustainabilityDisclaimerMessage": null,
+              "localizedLabelPrefix": "",
+              "giftCardMessageValueAddedServiceId": null,
+              "unlock": null
+            }
+          }
+        }
+      ],
+      "selectedProduct": {
+        "availabilityDate": "2025-01-01T08:00:00.000Z",
+        "badge": null,
+        "brands": [
+          "Nike"
+        ],
+        "gender": null,
+        "sportTags": [
+          "Training & Gym"
+        ],
+        "colorCode": "A9Y",
+        "colorDescription": "Pink Foam",
+        "consumerReleaseType": "RELEASE",
+        "contentImages": [
+          {
+            "cardType": "image",
+            "properties": {
+              "altText": "Nike 12-Piece Sift Set Baby 12-Piece Boxed Gift Set",
+              "squarish": {
+                "aspectRatio": 1,
+                "url": "https://static.nike.com/a/images/t_default/1e53391b-1b58-4314-b37b-e9d6ef5fc62a/NHN+NIKE+12PC+GIFT+SET.png",
+                "id": "1e53391b-1b58-4314-b37b-e9d6ef5fc62a"
+              },
+              "portrait": {
+                "aspectRatio": 0.8,
+                "url": "https://static.nike.com/a/images/t_default/a2e0b16e-b9a7-4945-9286-1aba35be48e8/NHN+NIKE+12PC+GIFT+SET.png",
+                "id": "a2e0b16e-b9a7-4945-9286-1aba35be48e8"
+              }
+            }
+          },
+          {
+            "cardType": "image",
+            "properties": {
+              "altText": "Nike 12-Piece Sift Set Baby 12-Piece Boxed Gift Set",
+              "squarish": {
+                "aspectRatio": 1,
+                "url": "https://static.nike.com/a/images/t_default/43e923b9-4b7e-4f59-8648-815af10b9388/NHN+NIKE+12PC+GIFT+SET.png",
+                "id": "43e923b9-4b7e-4f59-8648-815af10b9388"
+              },
+              "portrait": {
+                "aspectRatio": 0.8,
+                "url": "https://static.nike.com/a/images/t_default/bbb9cfd9-a919-4f6f-8510-95eb2a7acef8/NHN+NIKE+12PC+GIFT+SET.png",
+                "id": "bbb9cfd9-a919-4f6f-8510-95eb2a7acef8"
+              }
+            }
+          },
+          {
+            "cardType": "image",
+            "properties": {
+              "altText": "Nike 12-Piece Sift Set Baby 12-Piece Boxed Gift Set",
+              "squarish": {
+                "aspectRatio": 1,
+                "url": "https://static.nike.com/a/images/t_default/b60c1b54-b96d-4632-8bf9-2e4231bbd5e9/NHN+NIKE+12PC+GIFT+SET.png",
+                "id": "b60c1b54-b96d-4632-8bf9-2e4231bbd5e9"
+              },
+              "portrait": {
+                "aspectRatio": 0.8,
+                "url": "https://static.nike.com/a/images/t_default/e91bb122-ce7f-4f2f-8129-fa624269f42e/NHN+NIKE+12PC+GIFT+SET.png",
+                "id": "e91bb122-ce7f-4f2f-8129-fa624269f42e"
+              }
+            }
+          }
+        ],
+        "customizationPathName": "",
+        "enhancedPDP": [],
+        "hasNewEPDPContent": false,
+        "featuredAttributes": [],
+        "fitRecommendationMessage": "",
+        "globalProductId": "a232f809-5c57-4617-82f2-bff47b652363",
+        "groupIndex": 0,
+        "groupKey": "JxWmWN",
+        "groupLabel": null,
+        "id": "1015782474",
+        "isDigitalGiftCard": false,
+        "isLaunchProduct": false,
+        "isMemberProduct": false,
+        "isSustainableMaterials": false,
+        "isNikeSkims": false,
+        "isPhysicalGiftCard": false,
+        "isPromoExclusion": false,
+        "isReservedForYou": false,
+        "isRestrictedAccess": false,
+        "isJerseyID": false,
+        "isSkusRequestInFlight": false,
+        "launchAttributes": null,
+        "manufacturingCountriesOfOrigin": [],
+        "merchProductId": "774848d5-6ceb-5ced-9681-2819b0b99125",
+        "moreInfo": [],
+        "netQuantity": null,
+        "styleCode": "NN0934",
+        "styleColor": "NN0934-A9Y",
+        "searchRecsTaxonomyIds": [
+          "5e3a7953-7afc-4afc-8de0-af5cee16b3a3",
+          "91064b0a-0ee6-441b-8b09-de2105660311",
+          "2f5ae5c6-a1cf-4223-a7c4-f51d9572b2fa",
+          "7817e756-7721-4cfb-b404-04df79c685e4",
+          "05392778-fff6-4fa0-a375-2506d27f009e",
+          "3478c984-5156-46a1-8bfc-43c51c9aef12"
+        ],
+        "taxonomyLabels": {
+          "Gender": [
+            "Boys",
+            "Girls"
+          ],
+          "Sports": [
+            "Workouts",
+            "Training & Gym"
+          ],
+          "Brand": [
+            "Nike"
+          ],
+          "Product Type": [
+            "Bodysuits"
+          ]
+        },
+        "pdpUrl": {
+          "url": "https://www.nike.com/t/12-piece-sift-set-baby-12-piece-boxed-gift-set-JxWmWN/NN0934-A9Y",
+          "canonicalUrl": "https://www.nike.com/t/12-piece-sift-set-baby-12-piece-boxed-gift-set-JxWmWN",
+          "path": "/t/12-piece-sift-set-baby-12-piece-boxed-gift-set-JxWmWN/NN0934-A9Y"
+        },
+        "prices": {
+          "currency": "USD",
+          "currentPrice": 85.97,
+          "initialPrice": 100,
+          "employeePrice": 51.58,
+          "discountPercentage": 14,
+          "employeeDiscountPercentage": 48
+        },
+        "productInfo": {
+          "badge": null,
+          "sizeFitSections": [],
+          "title": "Nike 12-Piece Sift Set",
+          "subtitle": "Baby 12-Piece Boxed Gift Set",
+          "fullTitle": "Nike 12-Piece Sift Set Baby 12-Piece Boxed Gift Set",
+          "productDescription": "The perfect gift for the smallest athletes, this set contains multiple head-to-toe coordinated looks. The short sleeve bodysuits have lapped shoulders and snap closures at the crotch make changing and dressing easy, the matching bibs have hook-and-loop closures for a comfy fit. The cozy, footed coverall has a full-zip closure to make changing, dressing and layering easy. The rib knit pants are tapered and have an encased elastic waistband for a comfy fit. The handy burp cloths help protect your little as well as your own clothes from accidents.",
+          "moreDescriptions": [],
+          "featuresAndBenefits": [
+            {
+              "header": "Benefits",
+              "body": [
+                "The bodysuits have lapped shouders and snap closures at the crotch to make changing and dressing easy.",
+                "The bibs have hook-and-loop closures for comfy wear.",
+                "The coverall has a full-zip closure and footed bottoms add extra warmth."
+              ]
+            }
+          ],
+          "enhancedBenefits": [],
+          "productDetails": [
+            {
+              "header": "Product Details",
+              "body": [
+                "Includes 2 short sleeve bodysuits, 2 beanies, 2 pairs of booties, 2 burp cloths, a pair of pants and a footed coverall.",
+                "Beanie/Bodysuits/Bibs/Coverall/Pants: 60% Cotton, 40% Polyester; Booties: 62% Cotton, 34% Polyester, 4% Elastane; Burp Cloths: 80% Cotton, 20% Polyester",
+                "Machine Wash",
+                "Imported",
+                "Shown: Pink Foam",
+                "Style: NN0934-A9Y"
+              ]
+            }
+          ],
+          "origins": [],
+          "url": "https://www.nike.com/t/12-piece-sift-set-baby-12-piece-boxed-gift-set-JxWmWN/NN0934-A9Y",
+          "canonicalUrl": "https://www.nike.com/t/12-piece-sift-set-baby-12-piece-boxed-gift-set-JxWmWN",
+          "path": "/t/12-piece-sift-set-baby-12-piece-boxed-gift-set-JxWmWN/NN0934-A9Y",
+          "sustainabilityMessage": null
+        },
+        "productType": "APPAREL",
+        "selectedSku": "",
+        "sizes": [
+          {
+            "label": "0-6M",
+            "localizedLabel": "0-6M",
+            "gtins": [
+              {
+                "gtin": "00196327054403"
+              }
+            ],
+            "sortSequence": 2,
+            "status": "ACTIVE",
+            "merchSkuId": "77ecbb41-4913-5e16-aeec-1c1c8646fffc"
+          }
+        ],
+        "sizeSelectError": false,
+        "sizeChartUrl": "https://www.nike.com/size-fit/infant-toddler-clothing",
+        "showAvailabilityDate": false,
+        "statusModifier": "BUYABLE_BUY",
+        "sustainabilityDisclaimerMessage": null,
+        "localizedLabelPrefix": "",
+        "giftCardMessageValueAddedServiceId": null,
+        "unlock": null
+      },
+      "selectedGroup": 0,
+      "styleColor": "NN0934-A9Y",
+      "isGiftCard": false,
+      "groupKey": "JxWmWN",
+      "customizableProductUrl": null,
+      "messages": {
+        "AU": {
+          "NikeCom_PDP_SEO_Desc1": "Find the {Product_Full_Title} at Nike.com.",
+          "NikeCom_PDP_SEO_Desc2": "Free 30-day member returns.",
+          "shippingMessage": "<p>Free standard shipping on orders over $80 and free returns for Nike Members (exclusions apply).<br>Guest delivery and returns $9.95<br><a href=\"https://www.nike.com/au/help/a/returns-policy\"><u>Learn More</u></a>"
+        },
+        "BR": {
+          "NikeCom_PDP_SEO_Desc1": "Find the {Product_Full_Title} at Nike.com. ",
+          "NikeCom_PDP_SEO_Desc2": "Free delivery and returns on select orders."
+        },
+        "CN": {
+          "NikeCom_PDP_SEO_Desc1": "Find the {Product_Full_Title} at Nike.com. ",
+          "NikeCom_PDP_SEO_Desc2": "Free delivery and returns on select orders.",
+          "NikeCom_Suffix": "-Nike China official website",
+          "pdp_sale_price_message_first": "Price description (this description is valid only when price comparison occurs)",
+          "pdp_sale_price_message_second": "Crossed the price: the price of the cross may be the price of the counter price tag or genuine retail price guide price or the goods have been displayed in the sales price, etc., for your reference only. Uncorrected price: The price of the unmarked price is the sales price of the goods on the platform. The specific transaction price may be changed by the customer using the coupon, the gift card and so on. Finally, the price of the order settlement page shall prevail",
+          "shippingMessage": "Back translation: Some cities offer same-day and next-day services. Nike Members or single orders which are full RMB 399 are free of charge"
+        },
+        "CZ": {
+          "NikeCom_PDP_SEO_Desc1": "Find the {Product_Full_Title} at Nike.com. ",
+          "NikeCom_PDP_SEO_Desc2": "Free delivery and returns on select orders.",
+          "shippingMessage": "<p>Free standard delivery with your Nike Membership.</p><ul class=\"ncss-list-ul mt4-sm mb4-sm\"><li class=\"ncss-li\">You can return your order free of charge, within 30 days.<u><a href=\"https://www.nike.com/cz/en/help/a/return-exceptions-eu\">Some exclusions apply</a></u>.</li></ul>"
+        },
+        "DE": {
+          "NikeCom_PDP_SEO_Desc1": "Find the {Product_Full_Title} at Nike.com.  ",
+          "NikeCom_PDP_SEO_Desc2": "Free delivery and returns on select orders.",
+          "pdp_vat_message": "<div> Prices incl. VAT and plus delivery costs. You can find details of shipping costs <a href = \"https://www.nike.com/help/a/shipping-delivery\" class = \"exp-pdp-tc-disclaimer-url \"> here </a> </ div>",
+          "shippingMessage": "<p>Free standard delivery with your Nike Membership.</p><ul class=\"ncss-list-ul mt4-sm mb4-sm\"><li class=\"ncss-li\">You can return your order free of charge, within 30 days.<u><a href=\"https://www.nike.com/de/help/a/ruckgabe-ausnahmen-eu\">Some exclusions apply</a></u>.</li></ul>"
+        },
+        "DK": {
+          "NikeCom_PDP_SEO_Desc1": "Find the {Product_Full_Title} at Nike.com. ",
+          "NikeCom_PDP_SEO_Desc2": "Free delivery and returns on select orders.",
+          "shippingMessage": "<p>Free standard delivery with your Nike Membership.</p><ul class=\"ncss-list-ul mt4-sm mb4-sm\"><li class=\"ncss-li\">You can return your order free of charge, within 30 days.<u><a href=\"https://www.nike.com/dk/en/help/a/return-exceptions-eu\">Some exclusions apply</a></u>.</li></ul>"
+        },
+        "ES": {
+          "NikeCom_PDP_SEO_Desc1": "Find the {Product_Full_Title} at Nike.com. ",
+          "NikeCom_PDP_SEO_Desc2": "Free delivery and returns on select orders.",
+          "shippingMessage": "<p>Free standard delivery with your Nike Membership.</p><ul class=\"ncss-list-ul mt4-sm mb4-sm\"><li class=\"ncss-li\">You can return your order free of charge, within 30 days.<u><a href=\"https://www.nike.com/es/help/a/excepciones-devolucion-ue\">Some exclusions apply</a></u>.</li></ul>"
+        },
+        "FR": {
+          "NikeCom_PDP_SEO_Desc1": "Find the {Product_Full_Title} at Nike.com. ",
+          "NikeCom_PDP_SEO_Desc2": "Free delivery and returns on select orders.",
+          "pdp_recycle_message": "This product may be recyclable. <a href=\"https://www.nike.com/fr/help/a/triman\"> Learn more </a>",
+          "shippingMessage": "<p>Free standard delivery with your Nike Membership.</p><ul class=\"ncss-list-ul mt4-sm mb4-sm\"><li class=\"ncss-li\">You can return your order free of charge, within 30 days.<u><a href=\"https://www.nike.com/fr/help/a/exceptions-retour-ue\">Some exclusions apply</a></u>.</li></ul>"
+        },
+        "GB": {
+          "NikeCom_PDP_SEO_Desc1": "Find the {Product_Full_Title} at Nike.com. ",
+          "NikeCom_PDP_SEO_Desc2": "Free delivery and returns.",
+          "NikeCom_Suffix": ". Nike UK",
+          "shippingMessage": "<p>Free standard delivery with your Nike Membership.</p><ul class=\"ncss-list-ul mt4-sm mb4-sm\"><li class=\"ncss-li\">You can return your order free of charge, within 30 days.<u><a href=\"https://www.nike.com/gb/help/a/return-exceptions-eu\">Some exclusions apply</a></u>.</li></ul>"
+        },
+        "GR": {
+          "NikeCom_PDP_SEO_Desc1": "Find the {Product_Full_Title} at Nike.com. ",
+          "NikeCom_PDP_SEO_Desc2": "Free delivery and returns on select orders.",
+          "shippingMessage": "<p>Free standard delivery with your Nike Membership.</p><ul class=\"ncss-list-ul mt4-sm mb4-sm\"><li class=\"ncss-li\">You can return your order free of charge, within 30 days.<u><a href=\"https://www.nike.com/gr/help/a/return-exceptions-eu\">Some exclusions apply</a></u>.</li></ul>"
+        },
+        "HU": {
+          "NikeCom_PDP_SEO_Desc1": "Find the {Product_Full_Title} at Nike.com. ",
+          "NikeCom_PDP_SEO_Desc2": "Free delivery and returns on select orders.",
+          "shippingMessage": "<p>Free standard delivery with your Nike Membership.</p><ul class=\"ncss-list-ul mt4-sm mb4-sm\"><li class=\"ncss-li\">You can return your order free of charge, within 30 days.<u><a href=\"https://www.nike.com/hu/en/help/a/return-exceptions-eu\">Some exclusions apply</a></u>.</li></ul>"
+        },
+        "IT": {
+          "NikeCom_PDP_SEO_Desc1": "Find the {Product_Full_Title} at Nike.com. ",
+          "NikeCom_PDP_SEO_Desc2": "Free delivery and returns on select orders.",
+          "shippingMessage": "<p>Free standard delivery with your Nike Membership.</p><ul class=\"ncss-list-ul mt4-sm mb4-sm\"><li class=\"ncss-li\">You can return your order free of charge, within 30 days.<u><a href=\"https://www.nike.com/it/help/a/eccezioni-restituzioni-ue\">Some exclusions apply</a></u>.</li></ul>"
+        },
+        "JP": {
+          "NikeCom_PDP_SEO_Desc1": "Find the {Product_Full_Title} at Nike.com. ",
+          "NikeCom_PDP_SEO_Desc2": "Try-on within 30 days can be returned (except some products). [Free shipping for Nike members anytime]",
+          "NikeCom_Prefix": "",
+          "NikeCom_Suffix": ". Nike JP",
+          "discount_addendum": "Sale Price",
+          "pdp_sale_price_message": "All prices are inclusive of tax",
+          "shippingMessage": "<p>Returns are free for both Members and guests (only for items that are unused and within 30 days upon delivery. Exceptions apply).<br> <u><a href=\"https://www.nike.com/jp/en/help/a/returns-policy-jp\">About Returns</a></u>\n<br></br>\n<p>Members get free standard shipping (for guests, only for purchases over ¥15,000) and discounted expedited shipping.</br>\n<u><a href=\"https://www.nike.com/jp/en/register\">Join Us</a></u> or <a href=\"https://www.nike.com/jp/en/login\"><u>Sign In</a></u></p>",
+          "tax_included": "(Tax Incl.)"
+        },
+        "KR": {
+          "NikeCom_Suffix": ". Nike KR",
+          "shippingMessage": "<p><strong>Standard Shipping&nbsp;</strong></p> <p>&bull; Delivery areas: nationwide (excluding some areas)</p> <p>&bull; Shipping cost: Free shipping</p> <p>&bull; Delivery period: within approximately 3 business days after payment.</p><p>&bull; Nike does not offer exchange services.</p> <p><a href=\"https://www.nike.com/kr/help/a/shipping-delivery-kr\">Learn more about Shipping &amp; Delivery</a></p> <p><a href=\"https://www.nike.com/kr/help/a/how-to-return-kr\">Learn more about Returns</a></p> <p><br></p> <p><strong>Sameday Delivery</strong></p> <p>&bull; Hours of use: Payment by 10:30am, arriving on the same day (excluding Sundays and holidays)</p> <p>&bull; Service area: Seoul, Gwacheon, Uiwang, Gunpo, Suwon, Seongnam, Anyang, Suji-gu, Giheung-gu, Bucheon-si, Jung-dong, Sangdong, and Simgok-dong</p> <p>&bull; Service cost: KRW 5,000</p> <p><a href=\"https://www.nike.com/kr/help/a/shipping-delivery-kr\">Learn more </a></p> <p>&nbsp;</p> <p><strong>A/S&nbsp;</strong></p> <p>&bull; A/S for products purchased on Nike Online can only be received by wire at Nike Korea Customer Center <a href=\"tel:080-022-0182\">(080-022-0182)</a>.</p> <p><a href=\"https://www.nike.com/kr/help/a/a-s-apply-kr\">Learn more</a></p>\n"
+        },
+        "NL": {
+          "NikeCom_PDP_SEO_Desc1": "Find the {Product_Full_Title} at Nike.com. ",
+          "NikeCom_PDP_SEO_Desc2": "Free delivery and returns on select orders.",
+          "shippingMessage": "<p>Free standard delivery with your Nike Membership.</p><ul class=\"ncss-list-ul mt4-sm mb4-sm\"><li class=\"ncss-li\">You can return your order free of charge, within 30 days.<u><a href=\"https://www.nike.com/nl/en/help/a/return-exceptions-eu\">Some exclusions apply</a></u>.</li></ul>"
+        },
+        "NO": {
+          "NikeCom_PDP_SEO_Desc1": "Find the {Product_Full_Title} at Nike.com. ",
+          "NikeCom_PDP_SEO_Desc2": "Free delivery and returns on select orders.",
+          "shippingMessage": "<p>Nike Members enjoy <a href=\"https://www.nike.com/no/help/a/returer-vilkar-gs\"> free returns (exclusions apply)</a>. </p>"
+        },
+        "NikeCom_PDP_SEO_Desc1": "Find the {Product_Full_Title} at Nike.com. ",
+        "NikeCom_PDP_SEO_Desc2": "Free delivery and returns.",
+        "NikeCom_PDP_SEO_Keywords": "{Product_Full_Title}",
+        "NikeCom_PDP_SEO_Title": "{NikeCom_Prefix}{Product_Full_Title}{NikeCom_Suffix}",
+        "NikeCom_Suffix": ". Nike.com",
+        "PL": {
+          "NikeCom_PDP_SEO_Desc1": "Find the {Product_Full_Title} at Nike.com. ",
+          "NikeCom_PDP_SEO_Desc2": "Free delivery and returns on select orders.",
+          "shippingMessage": "<p>Free standard delivery with your Nike Membership.</p><ul class=\"ncss-list-ul mt4-sm mb4-sm\"><li class=\"ncss-li\">You can return your order free of charge, within 30 days.<u><a href=\"https://www.nike.com/pl/help/a/wyjatki-dotyczace-zwrotow-ue\">Some exclusions apply</a></u>.</li></ul>"
+        },
+        "PT": {
+          "NikeCom_PDP_SEO_Desc1": "Find the {Product_Full_Title} at Nike.com. ",
+          "NikeCom_PDP_SEO_Desc2": "Free delivery and returns on select orders.",
+          "shippingMessage": "<p>Free standard delivery with your Nike Membership.</p><ul class=\"ncss-list-ul mt4-sm mb4-sm\"><li class=\"ncss-li\">You can return your order free of charge, within 30 days.<u><a href=\"https://www.nike.com/pt/en/help/a/return-exceptions-eu\">Some exclusions apply</a></u>.</li></ul>"
+        },
+        "RU": {
+          "NikeCom_PDP_SEO_Desc1": "Find the {Product_Full_Title} at Nike.com. ",
+          "NikeCom_PDP_SEO_Desc2": "Free delivery and returns on select orders.",
+          "shippingMessage": "<p>Free standard delivery on orders over 7 500 pyб.</p><ul class=\"ncss-list-ul mt4-sm mb4-sm\"><li class=\"ncss-li\">Standard deliveries arrive in 3-12 days; we deliver 5 days a week.</li><li class=\"ncss-li\">You can return your order for any reason, free of charge, within 60 days.</li></ul><p>Some Exclusions Apply. Learn more about Nike.com <a href=“https://ru-ru-help.nike.com/app/answer/article/shipping-delivery/country/ru“>delivery options</a> and <a class=\"u-underline\" href=\"https://ru-ru-help.nike.com/app/answer/article/returns-policy/country/ru\">return policy</a>.</p>"
+        },
+        "SE": {
+          "NikeCom_PDP_SEO_Desc1": "Find the {Product_Full_Title} at Nike.com. ",
+          "NikeCom_PDP_SEO_Desc2": "Free delivery and returns on select orders.",
+          "shippingMessage": "<p>Free standard delivery with your Nike Membership.</p><ul class=\"ncss-list-ul mt4-sm mb4-sm\"><li class=\"ncss-li\">You can return your order free of charge, within 30 days.<u><a href=\"https://www.nike.com/se/en/help/a/return-exceptions-eu\">Some exclusions apply</a></u>.</li></ul>"
+        },
+        "TH": {
+          "NikeCom_PDP_SEO_Desc1": "Find the {Product_Full_Title} at Nike.com. ",
+          "NikeCom_PDP_SEO_Desc2": "Free delivery and returns on select orders.",
+          "shippingMessage": "<p>Free shipping for orders of 5,500 baht or more</p><br><strong>Bangkok:</strong><br><ul class=\"ncss-list-ul mt4-sm mb4-sm\"><li class=\"ncss-li\">Standard shipping: Delivered in 3-6 business days</li></ul><strong>Samut Prakan:</strong><ul class=\"ncss-list-ul mt4-sm mb4-sm\"><li class=\"ncss-li\">Standard shipping: Delivered in 4-7 business days</li></ul><strong>Nonthaburi:</strong><ul class=\"ncss-list-ul mt4-sm mb4-sm\"><li class=\"ncss-li\">Standard shipping: Delivered in 4-7 business days</li></ul><strong>Other Provinces:</strong><ul class=\"ncss-list-ul mt4-sm mb4-sm\"><li class=\"ncss-li\">Standard shipping: Delivered in 5-8 business days</li></ul><br><p>Orders will be processed and delivered Monday-Friday, excluding public holidays.<br>Holiday exceptions apply to Nike members. <u><a href=\"https://www.nike.com/th/help/a/returns-policy-gs\">Free shipping on returns</a></u>. <u><a href=\"https://www.nike.com/th/help/a/return-exceptions-gs\">Return Policy Exceptions</a></u></p>"
+        },
+        "TR": {
+          "NikeCom_PDP_SEO_Desc1": "Find the {Product_Full_Title} at Nike.com. ",
+          "NikeCom_PDP_SEO_Desc2": "Free delivery and returns on select orders.",
+          "shippingMessage": "<p>Nike Members enjoy <a href=\"https://www.nike.com/tr/help/a/iade-politikasi-gs\">free returns (exclusions apply)</a>. </p>"
+        },
+        "TW": {
+          "NikeCom_PDP_SEO_Desc1": "Find the {Product_Full_Title} at Nike.com. ",
+          "NikeCom_PDP_SEO_Desc2": "Free delivery and returns on select orders.",
+          "shippingMessage": "<p>Free standard shipping on orders over TWD 4,500<p>Taipei City:</p><ul class=\"ncss-list-ul mt4-sm mb4-sm\"><li class=\"ncss-li\">Standard shipping items arrive within 2-5 business days</li></ul></p><p>Other counties:</p><ul class=\"ncss-list-ul mt4-sm mb4-sm\"><li class=\"ncss-li\">Standard shipping items arrive within 3-6 business days</li></ul></p><p>Orders are processed and dispatched from Monday to Friday (excluding national holidays)<p>Free returns for <u><a href=\"https://www.nike.com/tw/help/a/returns-policy-gs\">Nike members</a></u>. <u><a href=\"https://www.nike.com/tw/help/a/return-exceptions-gs\">Return Policy Exceptions</a></u>."
+        },
+        "US": {
+          "NikeCom_PDP_SEO_Desc1": "Find the {Product_Full_Title} at Nike.com. ",
+          "NikeCom_PDP_SEO_Desc2": "Free delivery and returns.",
+          "NikeCom_Suffix": ". Nike.com",
+          "shippingMessage": "<div class=\"exp-pdp-promo-message-image\"></div><div class=\"exp-pdp-promo-message-text-link-wrapper\"><span class=\"exp-pdp-promo-message-text\">Free standard shipping on orders $50+ and free 60-day returns for Nike Members. <u><a href=\"https://www.nike.com/help/a/free-shipping\">Learn more</a></u>. <u><a href=\"https://www.nike.com/help/a/return-exceptions\">Return policy exclusions apply</a></u>.</span></div><br><u><a href=\"https://www.nike.com/help/a/store-pickup\">Pick-up available at select Nike Stores.</a></u>"
+        },
+        "otherStylesCarouselTitle": "Other Zenvy Styles",
+        "otherStylesCarouselTitleGo": "Other Go Styles",
+        "otherStylesCarouselTitleUniversa": "Other Universa Styles",
+        "pdp_a11y_video_pause": "Pause",
+        "pdp_a11y_video_play": "Play",
+        "pdp_buying_tools_add_to_wishlist": "Favorite",
+        "pdp_buying_tools_added_to_wishlist": "Favorited",
+        "pdp_crosssell_title": "You Might Also Like",
+        "pdp_fetch_reviews_failed": "Reviews (Error)",
+        "pdp_nikeid_thumbnail_alt_text": "Design your own Nike By You product",
+        "pdp_remove_customized_jersey": "Remove",
+        "stylitics_item_link_cta": "SHOP",
+        "pdp_3pe_explore": "Explore",
+        "pdp_3pe_more_to_explore_header": "There’s more to explore",
+        "pdp_3pe_similar_styles_text": "Shop a larger selection of similar styles.",
+        "pdp_3pe_we_recommend_header": "We Also Recommend",
+        "pdp_BOPIS_Click_and_Collect_Messaging": "Available for click and collect at checkout",
+        "pdp_CarouselBtn_Next": "Next product image",
+        "pdp_CarouselBtn_Prev": "Previous product image",
+        "pdp_NBYButtonTitle": "Customize",
+        "pdp_NBYShareYourDesign": "Share Your Design",
+        "pdp_NotifyMeButtonTitle": "Notify Me",
+        "pdp_NotifyMeCancel": "Cancel",
+        "pdp_NotifyMeDefaultEmailAddressText": "Email Address",
+        "pdp_NotifyMeDone": "Done",
+        "pdp_NotifyMeInvalidEmail": "Please enter a valid email.",
+        "pdp_NotifyMeLegalText": "{privacyLinkText} and {termsOfUseLinkText}",
+        "pdp_NotifyMeModalBody": "Get a one-time email alert the moment this product drops",
+        "pdp_NotifyMeModalPrivacyPolicyLinkText": "Privacy Policy",
+        "pdp_NotifyMeModalTermsOfUseLinkText": "Terms of Use",
+        "pdp_NotifyMeModalTitle": "Don't Miss Out",
+        "pdp_NotifyMeOk": "OK",
+        "pdp_NotifyMeOkModalTitle": "You're on the List",
+        "pdp_NotifyMeServerError": "There was an error creating this notification.  Please try again later.",
+        "pdp_NotifyMeSubmit": "Submit",
+        "pdp_NotifyMeThanks": "We'll send a one-time email to {email} when this product drops.",
+        "pdp_NotifyMe_AddAPhoneNumber": "Add a phone number to get notified",
+        "pdp_NotifyMe_ConsentRefusal": "You may refuse to consent, in which case you will not be able to receive information about Nike product releases. Nike is not responsible if the notification message fails to deliver.",
+        "pdp_NotifyMe_DefaultHeaderSubtitle": "Get a one-time notification when this product drops.",
+        "pdp_NotifyMe_NotifyWithSMS": "Notify with SMS",
+        "pdp_NotifyMe_OverseasTransfer": "I agree to <a href=\"{infoTransferLink}\">3rd Party and Overseas Transfer of Personal Information</a>",
+        "pdp_NotifyMe_PersonalInfo": "I agree to the <a href=\"{infoCollectionLink}\">collection and use of personal information</a>",
+        "pdp_NotifyMe_PrivacyPolicyLegal": "I agree to Nike’s <a href=\"{privacyPolicyLink}\">Privacy Policy</a> and <a href=\"{termsOfUseLink}\">Terms of Use</a>",
+        "pdp_NotifyMe_SendSMSTo": "We’ll send an SMS to",
+        "pdp_NotifyMe_TermsOfUseLegal": "I agree to Nike’s <a href=\"{termsOfUseLink}\">Terms of Use</a>",
+        "pdp_NotifyMe_YouAreAllSet": "You're all set!",
+        "pdp_RFYNotAuthorized": "Sorry, this product is not reserved for you.",
+        "pdp_RFYProductRedeemedOn": "Redeemed on {redeemedOn}",
+        "pdp_RFYRedeemProduct": "Redeem",
+        "pdp_a11y_discountedPrice_aria-label": "current price {currentPrice}, original price {originalPrice}",
+        "pdp_a11y_initialPrice_aria-label": "List: {initialPrice}",
+        "pdp_a11y_learn_more_about": "Learn more about {title}",
+        "pdp_a11y_signin_to_favorite": "Sign in to favorite",
+        "pdp_addToCart": "Add to Bag",
+        "pdp_addedToCart": "Added to Bag",
+        "pdp_addedToWishlist": "Added to Favorites",
+        "pdp_additionalInfo": "More Info",
+        "pdp_also_includes_all_applicable_duties": "Also includes all applicable duties",
+        "pdp_card_percentageOff": "{number}% off",
+        "pdp_checkout": "Checkout",
+        "pdp_chooseSize": "Select Size",
+        "pdp_comingSoon": "Coming Soon",
+        "pdp_copyLink": "Copy Link",
+        "pdp_copyLinkConfirmation": "Copied",
+        "pdp_country_of_origin": "Country/Region of Origin:",
+        "pdp_currently_viewing_badge": "Viewing",
+        "pdp_default_title": "Nike Store. Shoes, Clothing & Gear.",
+        "pdp_fasterShippingOptions": "Faster Shipping options may be available",
+        "pdp_feature_alert_loading_title": "There was an error loading this page. Please try again.",
+        "pdp_features_youll_love": "Features That Perform",
+        "pdp_gcChooseAnAmount": "Choose an amount",
+        "pdp_gcColorwayTitle": "Choose a design",
+        "pdp_gcCustomAmount": "Custom amount:",
+        "pdp_gcCustomAmountMaxValueError": "Gift card amount cannot exceed {maxValue}",
+        "pdp_gcCustomAmountMinValueError": "Gift card amount must be at least {minValue}",
+        "pdp_gcCustomAmountRestrictedCharacterError": "This contains a restricted character, please choose another.",
+        "pdp_gcDeliveryDetailsTitle": "Add recipient delivery details",
+        "pdp_gcDeliveryMethod": "Choose a delivery method",
+        "pdp_gcLargeOrderButton": "Need a Larger Order?",
+        "pdp_gcLargeOrderModalEmailLink": "giftcards@nike.com",
+        "pdp_gcLargeOrderModalMainText": "Just e-mail {emailLink} for more information or call Nike directly at 1-877-220-6453 for assistance. You will receive a reply or call-back during Nike corporate business hours (Monday through Friday, 8 AM – 5 PM Pacific Time, excluding holiday). Please do not send credit card information over email.",
+        "pdp_gcLargeOrderModalSubTitle": "Need to order more than 10 cards or to put in an order totaling more than $5,000?",
+        "pdp_gcLargeOrderModalTitle": "Need to Place a Larger Order?",
+        "pdp_gcOptionalMessageErrorText": "Your message is invalid, please try again.",
+        "pdp_gcOptionalMessageLabel": "Add an optional message",
+        "pdp_gcOptionalMessageText": "Enter a personalized message for the recipient.",
+        "pdp_gcRecipientEmailAddress": "Email",
+        "pdp_gcRecipientEmailAddressError": "Please enter a valid email address.",
+        "pdp_gcRecipientFirstName": "First Name",
+        "pdp_gcRecipientFirstNameError": "Please enter recipient's first name.",
+        "pdp_gcRecipientLastName": "Last Name",
+        "pdp_gcRecipientLastNameError": "Please enter recipient's last name.",
+        "pdp_gcTCLink": "Gift Card Terms and Conditions",
+        "pdp_highly_rated": "Highly Rated",
+        "pdp_incl_of_taxes": "Inclusive of All Taxes",
+        "pdp_jp_promotional_review_legal_text": "*Includes incentivized reviews/ratings.",
+        "pdp_just_a_few_left_order_soon": "Just a few left. Order soon.",
+        "pdp_just_a_few_left_order_soon_kr": "Almost sold out. Order soon.",
+        "pdp_klarna_message_short": "<span>Klarna</span> Available at checkout.",
+        "pdp_launchAvailableDate": "Available {Launch_Date} at {Launch_Time}",
+        "pdp_launchCSGuestIntro": "Create or sign in to your free Nike Member account for a chance to buy this product the moment it's released. {learnMoreButtonText}",
+        "pdp_launchCSMemberIntro": "Nike Members like you are the only ones who have a chance to purchase this product when it's released. {learnMoreButtonText}",
+        "pdp_launchCheckoutErrorBody": "There was a problem processing your payment.  Check your payment information and try again.",
+        "pdp_launchCheckoutErrorTitle": "Let's try this again.",
+        "pdp_launchCheckoutNotLoggedIn": "Your session has expired.  Please refresh and login to continue.",
+        "pdp_launchCheckoutNumberNotVerified": "Your session has expired.  Please refresh and login to continue.",
+        "pdp_launchComingSoon": "Coming Soon",
+        "pdp_launchDismissModalButton": "Continue Shopping",
+        "pdp_launchGetInLine": "Get in Line",
+        "pdp_launchGetInLineTitle": "Download the Nike App and get notified.",
+        "pdp_launchInLineBodyModal": "If your turn comes up, we'll complete your order. ",
+        "pdp_launchLMModalBePreparedBullet": "Be prepared",
+        "pdp_launchLMModalBePreparedSubBullet": "Make sure you're signed in to your Nike Member account and ready when the product launches.",
+        "pdp_launchLMModalContinueShoppingCTA": "Continue Shopping",
+        "pdp_launchLMModalFirstTitle": "How Line Checkout Works",
+        "pdp_launchLMModalGuestJoinBullet": "Become a Nike Member",
+        "pdp_launchLMModalGuestJoinSubBullet": "Line Checkout is available only to Nike Members. Not a Member? {JoinForFree}",
+        "pdp_launchLMModalJoinForFree": "Join for Free",
+        "pdp_launchLMModalJoinNikePlusCTA": "Become a Nike Member",
+        "pdp_launchLMModalLineOne": "To make sure Nike Members have an equal chance to purchase high-demand items on our site, we use a Line Checkout system.",
+        "pdp_launchLMModalLineThree": "Wait times vary based on demand. Limit one item per Nike Member.",
+        "pdp_launchLMModalLineTwo": "If your chosen size and color is available when you're selected, we'll process your order. If your selection sells out before that, we'll let you know.",
+        "pdp_launchLMModalSecondTitle": "Improve Your Odds",
+        "pdp_launchLMModalSecondTitleSubtitle": "Here's how to make your Line Checkout experience as easy as possible:",
+        "pdp_launchLMModalUpdateProfileBullet": "Update your Nike Member profile",
+        "pdp_launchLMModalUpdateProfileSubBullet": "Make sure your shipping and payment information is current.",
+        "pdp_launchLMModalUpdateSettingsCTA": "Update Account Settings",
+        "pdp_launchLMModalVerifyMobileBullet": "Verify your mobile number",
+        "pdp_launchLMModalVerifyMobileSubBullet": "This layer of added security helps keep the Line Checkout process fair.",
+        "pdp_launchLearnMoreButtonText": "Learn more",
+        "pdp_launchSessionExpiredTitle": "Session expired",
+        "pdp_launchSoldOut": "Sold Out",
+        "pdp_launchUnavailableTitle": "Product unavailable",
+        "pdp_launchWinnerBody": "Congratulations on your purchase. A confirmation email is on the way.",
+        "pdp_launchWinnerTitle": "You Got It",
+        "pdp_launchYouAreInLine": "You're Currently In Line",
+        "pdp_launch_entered": "Launch Entered",
+        "pdp_launch_unavailable": "This product is no longer available.",
+        "pdp_learn_more_header": "Learn More",
+        "pdp_manufacturerAccordionCopy": "Declaration of Importer: Direct import by the individual customer<br><br>Marketed by: Nike Global Trading B.V. Singapore Branch, 30 Pasir Panjang Road, #10-31/32, Mapletree Business City, Singapore 117 440",
+        "pdp_manufacturerAccordionHeader": "Product Information",
+        "pdp_one_size": "ONE SIZE",
+        "pdp_pl_price_reduction_msg": "The crossed out price is the lowest price of the period of 30 days before the introduction of the price reduction.",
+        "pdp_pleaseSelectASize": "Please select a size.",
+        "pdp_pre_order": "Pre-Order",
+        "pdp_productNotFound": "THE PRODUCT YOU ARE LOOKING FOR IS NO LONGER AVAILABLE",
+        "pdp_productSoldOutMessage": "This product is currently unavailable",
+        "pdp_product_carousel_section_description": "You may also like product carousel",
+        "pdp_product_details_title": "Product Details",
+        "pdp_promoMessaging": "This product is excluded from site promotions and discounts.",
+        "pdp_reviewSubmissionForm_shopperQuestionProductRecNo": "No",
+        "pdp_review_text": "Product received for free, or reviewed as part of a prize-draws/giveaway or in exchange for a discount.\n<br>#productsprovidedbynike",
+        "pdp_review_text_na": "Product received for free, or reviewed as part of a sweepstakes/giveaway or in exchange for a discount.\n<br>#teamnike",
+        "pdp_reviews_add_review_button": "Write a Review",
+        "pdp_reviews_mobile_showLess_button": "Less",
+        "pdp_reviews_mobile_showmore_button": "More",
+        "pdp_reviews_more_review_button": "More Reviews",
+        "pdp_reviews_no_reviews_txt": "Have your say. Be the first to review the {{pTitle}}.",
+        "pdp_reviews_noreviews": "No Reviews",
+        "pdp_reviews_overall_rating_unit": "Stars",
+        "pdp_reviews_rating": "{StarCount} Stars",
+        "pdp_reviews_singlereview": "1 Star",
+        "pdp_reviews_sort_criterion_size_and_fit": "Size & Fit",
+        "pdp_select_width": "Select Fit",
+        "pdp_shareButton": "Share",
+        "pdp_shareFacebook": "Share on Facebook",
+        "pdp_sharePinterest": "Share on Pinterest",
+        "pdp_shareTwitter": "Share on Twitter",
+        "pdp_shipping": "Free Shipping & Returns",
+        "pdp_shipping_in": "Delivery & Returns",
+        "pdp_shipping_us": "Shipping & Returns",
+        "pdp_shown": "Shown:",
+        "pdp_signin_to_buy_button_text": "Sign In to Buy",
+        "pdp_similar_styles": "Shop Similar Styles",
+        "pdp_size": "Size",
+        "pdp_sizeGuide": "Size Guide",
+        "pdp_soldOutLabel": "Sold Out:",
+        "pdp_soldOutMessage": "This color is currently unavailable",
+        "pdp_soldOutTooltip": "Sold Out",
+        "pdp_specifications_header": "Tech Specs",
+        "pdp_staticShippingText": "You'll see our shipping options at checkout",
+        "pdp_style": "Style:",
+        "pdp_sustainableAccordion": "How This Was Made",
+        "pdp_viewCart": "View Bag",
+        "pdp_viewWishlist": "View Favorites",
+        "pdp_view_product_details_button": "View Product Details",
+        "pdp_whats_new_header": "What's New?",
+        "stylitics_component_title": "Complete the Look",
+        "stylitics_hover_viewlook": "View Entire Look",
+        "AE": {
+          "shippingMessage": "<p>Free standard delivery on orders over AED 750.</p><ul class=\"ncss-list-ul mt4-sm mb4-sm\"><li class=\"ncss-li\">You can return your order for any reason, free of charge, within 30 days.</li></ul>"
+        },
+        "AT": {
+          "shippingMessage": "<p>Free standard delivery with your Nike Membership.</p><ul class=\"ncss-list-ul mt4-sm mb4-sm\"><li class=\"ncss-li\">You can return your order free of charge, within 30 days.<u><a href=\"https://www.nike.com/at/en/help/a/return-exceptions-eu\">Some exclusions apply</a></u>.</li></ul>"
+        },
+        "BE": {
+          "shippingMessage": "<p>Free standard delivery with your Nike Membership.</p><ul class=\"ncss-list-ul mt4-sm mb4-sm\"><li class=\"ncss-li\">You can return your order free of charge, within 30 days.<u><a href=\"https://www.nike.com/be/en/help/a/return-exceptions-eu\">Some exclusions apply</a></u>.</li></ul>"
+        },
+        "BG": {
+          "shippingMessage": "<p>Nike Members enjoy <a href=\"https://www.nike.com/bg/help/a/returns-policy-gs\">  free returns (exclusions apply). </a> </p>"
+        },
+        "CA": {
+          "shippingMessage": "<p>Free standard shipping on orders +$190.<br>Nike Members enjoy 30-day free returns.<a href=\"https://www.nike.com/ca/help/a/returns-policy-gs\">Learn More.</a></p>\n"
+        },
+        "CH": {
+          "shippingMessage": "<p>Nike Members enjoy <a href=\"https://www.nike.com/ch/en/help/a/returns-policy-gs\">free returns (exclusions apply)</a>.</p>"
+        },
+        "CL": {
+          "shippingMessage": "<p>Free standard delivery on orders over $200,000.</p><ul class=\"ncss-list-ul mt4-sm mb4-sm\"><li class=\"ncss-li\">Standard deliveries arrive in 4-12 days; we deliver 6 days a week.</li><li class=\"ncss-li\">Members can return an order for any reason, free of charge, within 60 days.</li></ul><p>Some Exclusions Apply. Learn more about Nike.com <a href=“https://es-la-help.nike.com/app/answer/article/shipping-delivery/country/cl“>delivery options</a> and <a class=\"u-underline\" href=\"https://es-la-help.nike.com/app/answer/article/returns-policy/country/cl\">return policy</a>.</p>"
+        },
+        "EG": {
+          "shippingMessage": "<p>Free standard delivery on orders over EGP 3,000.</p><ul class=\"ncss-list-ul mt4-sm mb4-sm\"><li class=\"ncss-li\">Standard deliveries arrive in 4-9 days; we deliver 5 days a week.</li><li class=\"ncss-li\">You can return your order for any reason, free of charge, within 60 days.</li></ul><p>Some Exclusions Apply. Learn more about Nike.com <a href=“https://en-eu-help.nike.com/app/answer/article/shipping-delivery/country/eg“>delivery options</a> and <a class=\"u-underline\" href=\"https://en-eu-help.nike.com/app/answer/article/returns-policy/country/eg\">return policy</a>.</p>"
+        },
+        "FI": {
+          "shippingMessage": "<p>Free standard delivery with your Nike Membership.</p><ul class=\"ncss-list-ul mt4-sm mb4-sm\"><li class=\"ncss-li\">You can return your order free of charge, within 30 days.<u><a href=\"https://www.nike.com/fi/help/a/return-exceptions-eu\">Some exclusions apply</a></u>.</li></ul>"
+        },
+        "HR": {
+          "shippingMessage": "<p>Nike Members enjoy <a href=\"https://www.nike.com/hr/help/a/returns-policy-gs\">free returns (exclusions apply)</a>. </p>"
+        },
+        "ID": {
+          "shippingMessage": "<p>Your order of Rp 3.000.000 or more gets <u><a href=\"https://www.nike.com/id/help/a/shipping-delivery-gs\">free standard shipping</a></u>.</p></p><br><ul class=\"ncss-list-ul mt4-sm mb4-sm\"><li class=\"ncss-li\">Standard delivered 6-12 Business Days</li><li class=\"ncss-li\">Express delivered 3-10 Business Days</li></ul><br><p>During checkout, we’ll provide you with the estimated delivery date based on your order’s delivery address. Orders are processed and delivered Monday-Friday (excluding public holidays).</p><br /><p>Nike Members enjoy <u><a class=\"u-underline\" href=\"https://en-gb-help.nike.com/app/answer/article/returns-policy/country/id\">free returns</a></u>. <u><a href=\"https://www.nike.com/id/help/a/return-exceptions-gs\">Exclusions Apply</a></u>.</p>"
+        },
+        "IE": {
+          "shippingMessage": "<p>Free standard delivery with your Nike Membership.</p><ul class=\"ncss-list-ul mt4-sm mb4-sm\"><li class=\"ncss-li\">You can return your order free of charge, within 30 days.<u><a href=\"https://www.nike.com/ie/help/a/return-exceptions-eu\">Some exclusions apply</a></u>.</li></ul>"
+        },
+        "IL": {
+          "shippingMessage": "<p>Nike Members enjoy <a href=\"https://www.nike.com/il/help/a/returns-policy-gs\">free returns (exclusions apply)</a>. </p>"
+        },
+        "IN": {
+          "shippingMessage": "<p>All purchases are subject to delivery fees.<p><ul class=\"ncss-list-ul mt4-sm mb4-sm\"><li class=\"ncss-li\">Standard delivery 4-9 Business Days</li></ul><p>Orders are processed and delivered Monday-Friday (excluding public holidays)</p><br /><p>Nike Members enjoy <a class=\"u-underline\" href=\"https://www.nike.com/in/help/a/returns-policy-gs\">free returns</a>.</p>"
+        },
+        "LU": {
+          "shippingMessage": "<p>Free standard delivery with your Nike Membership.</p><ul class=\"ncss-list-ul mt4-sm mb4-sm\"><li class=\"ncss-li\">You can return your order free of charge, within 30 days.<u><a href=\"https://www.nike.com/lu/en/help/a/return-exceptions-eu\">Some exclusions apply</a></u>.</li></ul>"
+        },
+        "MA": {
+          "shippingMessage": "<p>Free standard delivery on orders over 2,400 DH.</p><ul class=\"ncss-list-ul mt4-sm mb4-sm\"><li class=\"ncss-li\">Standard deliveries arrive in 4-10 days; we deliver 5 days a week.</li><li class=\"ncss-li\">You can return your order for any reason, free of charge, within 60 days.</li></ul><p>Some Exclusions Apply. Learn more about Nike.com <a href=“https://en-gb-help.nike.com/app/answer/article/shipping-delivery/country/ma“>delivery options</a> and <a class=\"u-underline\" href=\"https://en-gb-help.nike.com/app/answer/article/returns-policy/country/ma\">return policy</a>.</p>"
+        },
+        "MX": {
+          "shippingMessage": "<p>Free delivery on orders over $999 and free 30-day returns for Nike Members. </p><p><a href=\"https://www.nike.com/mx/help/a/envio-entrega-gs\"><p><ul>Learn More. </a></p></ul><p><ul><a href=\"https://www.nike.com/mx/help/a/politica-de-devoluciones-gs\"></br>Return policy exclusions apply.</ul></p>"
+        },
+        "MY": {
+          "shippingMessage": "<p>Your order of RM 400 or more gets free standard delivery.</p><ul class=\"ncss-list-ul mt4-sm mb4-sm\"><li class=\"ncss-li\">Standard delivered 6-12 Business Days</li><li class=\"ncss-li\">Express delivered 4-6 Business Days</li></ul><p>Orders are processed and delivered Monday-Friday (excluding public holidays)</p><br /><p>Nike Members enjoy <a class=\"u-underline\" href=\"https://www.nike.com/my/help/a/returns-policy-gs\">free returns</a>.</p>"
+        },
+        "NZ": {
+          "shippingMessage": "<p>Free standard delivery on orders over $370.</p><ul class=\"ncss-list-ul mt4-sm mb4-sm\"><li class=\"ncss-li\">You can return your order for any reason, free of charge, within 30 days.</li></ul>"
+        },
+        "PH": {
+          "shippingMessage": "[Placeholder message for Philippines]"
+        },
+        "PR": {
+          "shippingMessage": "<p>Free standard delivery on orders over $200.</p><ul class=\"ncss-list-ul mt4-sm mb4-sm\"><li class=\"ncss-li\">Standard deliveries arrive in 3-10 days; we deliver 5 days a week.</li><li class=\"ncss-li\">You can return your order for any reason, free of charge, within 60 days.</li></ul><p>Some Exclusions Apply. Learn more about Nike.com <a href=“https://help-es-la.nike.com/app/answer/article/shipping-delivery/country/pr“>delivery options</a> and <a class=\"u-underline\" href=\"https://help-es-la.nike.com/app/answer/article/returns-policy/country/pr\">return policy</a>.</p>"
+        },
+        "RO": {
+          "shippingMessage": "<p>Nike Members enjoy <a href=\"https://www.nike.com/ro/help/a/returns-policy-gs\">free returns (exclusions apply)</a>. </p>"
+        },
+        "SA": {
+          "shippingMessage": "<p>Free standard delivery on orders over SAR 900.</p><ul class=\"ncss-list-ul mt4-sm mb4-sm\"><li class=\"ncss-li\">You can return your order for any reason, free of charge, within 30 days.</li></ul>"
+        },
+        "SG": {
+          "shippingMessage": "<p>Your order of S$75 or more gets free standard delivery.</p><ul class=\"ncss-list-ul mt4-sm mb4-sm\"><li class=\"ncss-li\">Standard delivered 3-6 Business Days</li><li class=\"ncss-li\">Express delivered 2-4 Business Days</li></ul><p>Orders are processed and delivered Monday-Friday (excluding public holidays)</p><br /><p>Nike Members enjoy <a class=\"u-underline\" href=\"https://www.nike.com/sg/help/a/returns-policy-gs\">free returns</a>.</p>"
+        },
+        "SI": {
+          "shippingMessage": "<p>Free standard delivery with your Nike Membership.</p><ul class=\"ncss-list-ul mt4-sm mb4-sm\"><li class=\"ncss-li\">You can return your order free of charge, within 30 days.<u><a href=\"https://www.nike.com/si/help/a/return-exceptions-eu\">Some exclusions apply</a></u>.</li></ul>"
+        },
+        "SK": {
+          "shippingMessage": "<p>Nike Members enjoy <a href=\"https://www.nike.com/sk/help/a/returns-policy-gs\">free returns (exclusions apply)</a>.</p>"
+        },
+        "VN": {
+          "shippingMessage": "<p>Your order of 5.000.000₫ or more gets free standard delivery.</p><ul class=\"ncss-list-ul mt4-sm mb4-sm\"><li class=\"ncss-li\">Standard delivered 4-5 Business Days</li><li class=\"ncss-li\">Express delivered 2-4 Business Days</li></ul><p>Orders are processed and delivered Monday-Friday (excluding public holidays)</p><br /><p>Nike Members enjoy <a class=\"u-underline\" href=\"https://www.nike.com/vn/help/a/returns-policy-gs\">free returns</a>.</p>"
+        },
+        "ZA": {
+          "shippingMessage": "<p>Nike Members enjoy<a href=\"https://www.nike.com/za/help/a/returns-policy-gs\">free returns (exclusions apply)</a>. </p>"
+        },
+        "arrivesByMessage": "Arrives by",
+        "arrivesMessage": "Arrives",
+        "arrivesToMessage": "to",
+        "editLocationMessage": "Edit Location",
+        "freeShippingHeaderMessage": "Free Shipping",
+        "genericArrivesByMessage": "To get accurate shipping information",
+        "learnMoreMessage": "Learn More",
+        "pickupAtMessage": "at",
+        "pickupFindStoreMessage": "Find a Store",
+        "pickupHeaderMessage": "Free Pickup",
+        "pickupNotAvailable": "This item is not available for pickup",
+        "pickupTodayMessage": "Today",
+        "pickupTomorrowMessage": "Tomorrow",
+        "shippingHeaderMessage": "Shipping"
+      },
+      "slug": "12-piece-sift-set-baby-12-piece-boxed-gift-set-JxWmWN",
+      "locale": {
+        "urlParam": "en",
+        "language": "en",
+        "intl": "en-US",
+        "langRegion": "en-US",
+        "hreflang": "en-US",
+        "default": true,
+        "country": "us",
+        "currency": "USD",
+        "countryName": "United States",
+        "countryNames": {
+          "en": "United States"
+        },
+        "currencySymbol": "$",
+        "cloudUrlFragment": "",
+        "translationsLanguage": "en-US",
+        "merchGroup": "US"
+      },
+      "marketPlace": "US",
+      "flags": {
+        "enableChat": true,
+        "enableReservedForYou": true,
+        "globalNavUseGeoPrivacy": true,
+        "incentivizedReviewsMessageNA": true,
+        "incentivizedReviewsMessage": false,
+        "loadStylitics": true,
+        "showStaticShippingMessage": true,
+        "showKlarna": true,
+        "showKlarnaPayMessage": true,
+        "showLargeGiftCardOrder": true,
+        "hideEDDFasterShippingOptionMsg": false,
+        "showEstimatedDeliveryDate": false,
+        "showEstimatedDeliveryDateAndPickup": false,
+        "showLowInventoryMessage": true,
+        "showPickupLocation": true,
+        "showPromoMsg": true,
+        "skipPercentOff": false,
+        "showCgc": true,
+        "showComingSoonAvailabilityDate": false,
+        "showEnhancedContent": true,
+        "showEPdpLite": true,
+        "showEPDPFull": true,
+        "showShopMore": false,
+        "showGeoMismatch": true,
+        "showRecommendations": true,
+        "showMobileWriteReview": true,
+        "showMoreReviews": true,
+        "showReviews": true,
+        "showSizeAndFit": true,
+        "showAthleteTestimonial": false,
+        "showSpecs": false,
+        "showKeyFeatures": false,
+        "showBenefits": false,
+        "showWhatsNew": false,
+        "showSustainability": true,
+        "showFavoriteBtn": true,
+        "swooshEligibleGeo": true,
+        "useSwitchboardRecommendations": false,
+        "useNotifyMeSMS": false,
+        "useWomensBrandTheme": false,
+        "showPromoExclusionMessage": true,
+        "showWhileStockLasts": false,
+        "skipSustainability": false,
+        "showEnhancedDetails": true,
+        "showEnhancedFeatures": true,
+        "showEnhancedBlockquotes": true,
+        "useThirdPartySearchRecs": true,
+        "useStyleVariations": true,
+        "asyncChatEnabled": false,
+        "useMarketplaceId": false,
+        "isGlobalStoreCountry": false
+      },
+      "params": {},
+      "otherStylesCarouselProducts": [],
+      "nikeSkimsThemeEnabled": false
+    },
+    "__N_SSP": true
+  },
+  "page": "/t/[slug]/[styleColor]",
+  "query": {
+    "slug": "12-piece-sift-set-baby-12-piece-boxed-gift-set-JxWmWN",
+    "styleColor": "NN0934-A9Y"
+  },
+  "buildId": "9N4Zj37P6gfvOoxrbXDtL",
+  "assetPrefix": "//www.nike.com/assets/experience/dotcom-pdp/pdp-experience",
+  "isFallback": false,
+  "gssp": true,
+  "customServer": true,
+  "scriptLoader": []
+}

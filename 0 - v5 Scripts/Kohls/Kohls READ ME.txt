@@ -1,0 +1,37 @@
+How to use kohls script:
+
+User inputs category link & number of products
+Script will automatically capture pagination results, iterate through results and output upcs including add to cart.
+
+Update blacklist results to file name "P9 Kohls Black List"
+
+*******************************************************
+
+Libraries Needed:
+requests
+beautifulsoup4 (provides the bs4 module)
+pandas
+
+#######################################################
+Script requires API key to work 
+#######################################################
+
+
+Update API Key or Concurrency 
+	Format 	= Script Name & Line location of API or Concurrency
+
+Phase 2 - Category Urls
+	Line 9		API_KEY = ''	
+	Line 67 	with ThreadPoolExecutor(max_workers=5) as executor:
+
+Phase 3 - UPC Extraction
+	Line 10		API_KEY      = ''
+	Line 13		MAX_WORKERS  = 5
+
+Phase 4 - Add to Cart
+	Line 10 	API_KEY     = ''
+	Line 115	with ThreadPoolExecutor(max_workers=5) as executor:
+
+*******************************************************
+*******************************************************
+*******************************************************
